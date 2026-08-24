@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materi & Soal TKA Bahasa Indonesia - Standar KBBI</title>
+    <title>Materi & Soal TKA Bahasa Indonesia - Standar Pusmendik KBBI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -50,6 +50,28 @@
             background: rgba(100, 116, 139, 0.3);
             border-radius: 9999px;
         }
+        .pusmendik-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8125rem;
+        }
+        .pusmendik-table th, .pusmendik-table td {
+            border: 1px solid #e2e8f0;
+            padding: 6px 10px;
+            text-align: left;
+        }
+        .dark .pusmendik-table th, .dark .pusmendik-table td {
+            border-color: #334155;
+        }
+        .pusmendik-table td:first-child {
+            font-weight: 700;
+            width: 28%;
+            background-color: #f8fafc;
+        }
+        .dark .pusmendik-table td:first-child {
+            background-color: #1e293b;
+            color: #cbd5e1;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
@@ -58,7 +80,7 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Data Materi Pembelajaran TKA Bahasa Indonesia (Sesuai Kisi-Kisi TKA & Standard KBBI - Global & Akademis)
+        // Data Materi Pembelajaran TKA Bahasa Indonesia (Global & Akademis)
         const materiData = [
             {
                 id: 'sub1',
@@ -79,7 +101,7 @@
                         text: 'Penyusunan kerangka bertujuan memetakan hierarki gagasan dalam wacana secara sistematis:\n• Memisahkan antara <b>pernyataan umum/tesis</b> (gagasan dasar), <b>deretan penjelas</b> (data, bukti, argumen pendukung), hingga <b>kesimpulan logis</b>.\n• Menyusun bagan alur wacana baik berupa alur kronologis, sebab-akibat, maupun hierarki konsep dari umum ke khusus.'
                     }
                 ],
-                relatedQuestions: [1, 2, 6]
+                relatedQuestions: [1, 11, 14, 17]
             },
             {
                 id: 'sub2',
@@ -100,7 +122,7 @@
                         text: 'Merumuskan estimasi atau simpulan logis mengenai kelanjutan wacana berdasarkan petunjuk (<i>clues</i>) tekstual yang disediakan oleh penulis. Prediksi harus bersifat objektif, terukur, dan konsisten dengan alur argumentasi sebelumnya.'
                     }
                 ],
-                relatedQuestions: [3, 4, 5]
+                relatedQuestions: [2, 3, 5, 6, 8, 9, 12, 15, 18, 19]
             },
             {
                 id: 'sub3',
@@ -121,122 +143,459 @@
                         text: 'Mengapresiasi karya sastra (puisi, prosa, dan drama) dengan menganalisis nada (<i>tone</i>), suasana batin, simpati/empati pembaca, serta pesan estetis-filosofis yang disampaikan pengarang melalui karya tersebut.'
                     }
                 ],
-                relatedQuestions: [1, 6]
+                relatedQuestions: [4, 7, 10, 13, 16, 20]
             }
         ];
 
-        // Data Soal Sesuai KBBI & PUEBI (Bentuk Paragraf Utuh Tanpa Pemisah Line Shift)
         const examData = [
+            // SOAL 1
             {
                 id: 1,
+                noSoal: 1,
+                kompetensi: "Pemahaman Tekstual",
+                subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
+                bentukSoal: "Pilihan Ganda (PG)",
                 subMateriId: 'sub1',
-                contextTitle: "Teks 1: Undang-Undang Nomor 5 Tahun 2014 & Sistem Merit",
-                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) <i>Merit system</i> manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. <i>Mismatch</i> antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik <i>spoil system</i> dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
-                question: "Berdasarkan teks tersebut, salah satu masalah yang bisa diuraikan dalam sebuah karya ilmiah adalah....",
+                contextTitle: "Teks untuk soal nomor 1 s.d. 4",
+                contextText: `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`,
+                question: "Makna istilah <i>mobilisasi</i> pada paragraf kedua teks tersebut adalah ....",
                 options: [
-                    "Mengapa permasalahan dalam birokrasi sulit dipecahkan, walaupun berbagai <i>system</i> manajemen sudah diterapkan?",
-                    "Bagaimanakah menjalankan sistem baru dalam memperbaiki kinerja ASN dalam birokrasi yang bermasalah?",
-                    "Apakah perubahan dari sistem lama ke sistem baru memberikan dampak positif bagi perbaikan birokrasi?",
-                    "Bagaimanakah mengetahui kelemahan sistem merit dalam memperbaiki manajemen birokrasi?",
-                    "Bagaimanakah implementasi sistem merit dalam memecahkan masalah manajemen birokrasi?"
+                    "bergerak bersama",
+                    "melangkah cepat",
+                    "beradu cepat",
+                    "mengatur bersama",
+                    "berpikir Bersama"
                 ],
-                correctAnswer: 4, // E
-                explanation: "Opsi E merupakan rumusan masalah yang paling presisi dengan konteks teks. Teks membahas penerapan sistem merit sebagai solusi untuk mengurai masalah manajemen ASN dan birokrasi.",
+                correctAnswer: 0,
+                explanation: "Makna istilah <b>mobilisasi</b> dalam konteks wacana tersebut adalah <i>bergerak bersama</i> untuk menggalang potensi masyarakat dan sektor swasta.",
                 imageName: null
             },
+            // SOAL 2
             {
                 id: 2,
-                subMateriId: 'sub1',
-                contextTitle: "Infografis: Bangunan dan Fondasi Sistem Merit ASN",
-                contextText: `Cermati gambar infografis di bawah ini untuk menjawab soal nomor 2. Gambar menunjukkan 6 komponen penting (6P) dalam sistem merit ASN serta nilai positifnya bagi pengembangan aparatur negara.`,
-                question: "Gambar tersebut menyatakan bahwa salah satu nilai positif dalam menerapkan sistem merit pada ASN adalah mengurangi kesenjangan kompetensi dan mendapatkan talenta terbaik. Hal itu berhubungan dengan pemecahan masalah agar tercipta....",
+                noSoal: 2,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal nomor 1 s.d. 4",
+                contextText: `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`,
+                question: "Apa gagasan utama yang disampaikan pada paragraf pertama teks tersebut?",
                 options: [
-                    "Ketidaksesuaian antara kualitas pegawai dan kualifikasi jabatan",
-                    "Struktur kepegawaian tentang kualitas dan kuantitas tenaga administrasi",
-                    "Intervensi pejabat politik dalam proses pengawasan birokrasi",
-                    "Pengangkatan jabatan ASN dipromosikan oleh politisasi birokrasi",
-                    "Sistem dan pola karier pegawai yang cukup jelas dan transparan"
+                    "Ancaman plastik terhadap lautan.",
+                    "Efek dari pemanasan laut.",
+                    "Kadar tingkat keasaman laut.",
+                    "Pemompaan CO2 ke atmosfer.",
+                    "Ancaman bagi negara berkembang."
                 ],
-                correctAnswer: 4, // E
-                explanation: "Tujuan utama dari pengurangan kesenjangan kompetensi dan pemenuhan talenta terbaik adalah terwujudnya sistem dan pola karier pegawai yang jelas, transparan, serta kompetitif.",
-                imageName: "soal-2.png",
-                defaultImage: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXe9eB1O6x1t-F9Y0j9p4yZ2J-h3Z_L9-4i0hM"
+                correctAnswer: 0,
+                explanation: "Gagasan utama paragraf pertama berfokus pada <b>ancaman plastik terhadap lautan</b> di samping isu pemanasan dan keasaman air laut.",
+                imageName: null
             },
+            // SOAL 3
             {
                 id: 3,
+                noSoal: 3,
+                kompetensi: "Pemahaman Literal",
+                subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
+                bentukSoal: "PGK MCMA",
                 subMateriId: 'sub2',
-                contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
-                question: "Jika pernyataan pada paragraf tersebut dijadikan pernyataan definisi, maka definisi yang tepat untuk politisasi birokrasi adalah...",
+                contextTitle: "Teks untuk soal nomor 1 s.d. 4",
+                contextText: `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`,
+                question: "Mengapa lautan menghadapi ancaman pada 2050?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
                 options: [
-                    "Sebuah upaya untuk mengintervensi manajemen ASN melalui kekuatan politik dalam hal pengangkatan dan promosi serta pencopotan dan demosi ASN.",
-                    "Sebuah pemikiran untuk memberikan masukan terhadap pengangkatan karier, promosi, pemecatan, dan demosi ASN.",
-                    "Upaya membangun kekuatan politik dalam menentukan jalannya pemerintahan melalui perekrutan ASN.",
-                    "Sistem pengembangan intervensi partai penguasa untuk memberikan kekuatan manajemen dalam memperkuat manajemen ASN.",
-                    "Upaya untuk memberikan gambaran kekuatan politik jika terjadi intervensi dalam semua proses manajemen ASN di pemerintahan."
+                    "Sampah plastik di laut akan lebih banyak daripada jumlah ikan.",
+                    "Lautan akan terus mengalami pemanasan dan semakin asam.",
+                    "Manusia terus memompa lebih banyak CO2 ke atmosfer.",
+                    "Jumlah ikan yang terancam punah semakin banyak.",
+                    "Penggunaan plastik terus meningkat dan tidak dikelola dengan baik"
                 ],
-                correctAnswer: 0, // A
-                explanation: "Definisi politisasi birokrasi secara eksplisit dijelaskan pada kalimat (1) dan (3), yaitu intervensi pejabat politik terhadap manajemen ASN dalam hal pengangkatan, promosi, pencopotan, dan demosi.",
+                correctAnswer: [0, 4], // A & E
+                explanation: "Jawaban yang benar adalah <b>A</b> (sampah plastik lebih banyak daripada ikan) dan <b>E</b> (penggunaan plastik meningkat tanpa pengelolaan baik).",
                 imageName: null
             },
+            // SOAL 4
             {
                 id: 4,
-                subMateriId: 'sub2',
-                contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
-                question: "Pernyataan pada paragraf tersebut termasuk dalam pola pengembangan....",
-                options: [
-                    "analogi",
-                    "definisi",
-                    "perbandingan",
-                    "pertentangan",
-                    "klimaks"
+                noSoal: 4,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai ketepatan dan kesesuaian penggunaan bahasa dalam teks",
+                bentukSoal: "PGK Kategori",
+                subMateriId: 'sub3',
+                contextTitle: "Teks untuk soal nomor 1 s.d. 4",
+                contextText: `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`,
+                question: "“Solusi tersebut tidak mudah.”<br>Mengapa penulis menggunakan kalimat tersebut pada teks?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+                categories: ["Benar", "Salah"],
+                statements: [
+                    { id: 'A', text: "Menginformasikan kepada pembaca bahwa pemecahan masalah sampah merupakan tanggung jawab utama kita sebagai masyarakat sipil sehingga sulit untuk diselesaikan." },
+                    { id: 'B', text: "Menunjukkan kepada pembaca bahwa permasalahan sampah plastik sangat rumit dan tidak bisa diselesaikan dalam jangka waktu singkat." },
+                    { id: 'C', text: "Membuktian kepada pembaca bahwa permasalahan sampah yang rumit disebabkan pemecahan masalah yang bergantung pada perekonomian negara berkembang." }
                 ],
-                correctAnswer: 1, // B
-                explanation: "Paragraf tersebut berfokus mendefinisikan dan memberikan batas makna istilah politisasi birokrasi dalam ranah administrasi ASN (pola pengembangan definisi).",
+                correctAnswer: { A: "Salah", B: "Benar", C: "Salah" },
+                explanation: "Kunci Jawaban: A: <b>Salah</b> | B: <b>Benar</b> | C: <b>Salah</b>.",
                 imageName: null
             },
+            // SOAL 5
             {
                 id: 5,
+                noSoal: 5,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks",
+                bentukSoal: "PGK Kategori",
                 subMateriId: 'sub2',
-                contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
-                question: "Pernyataan-pernyataan pada paragraf tersebut dapat diklasifikasikan sebagai permasalahan yang berhubungan dengan....",
-                options: [
-                    "politisasi SDM birokrasi",
-                    "cara berpolitik ASN",
-                    "masalah politisasi ASN",
-                    "politisasi pengangkatan ASN",
-                    "masalah karier jabatan ASN"
+                contextTitle: "Teks untuk soal 5 s.d. 7",
+                contextText: `“E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim <i>maddongi</i> (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah.”\nAku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. “Bagaimana kalau aku ke rumah <i>iyye-ku</i> (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah.”\nEsok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah <i>iyye-ku</i>.\n“Kenapa kamu lesu?” <i>Iyye</i> menanyakan keadaanku. Aku pun menceritakan semuanya kepada <i>iyye</i>.\n“Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang,” ujar <i>iyye-ku</i>.\n    (<i>Piala di Atas Dangau</i>, Muhammad Isrul, dengan penyesuaian)`,
+                question: "Apa permasalahan yang dihadapi tokoh aku dalam kutipan tersebut?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+                categories: ["Benar", "Salah"],
+                statements: [
+                    { id: 'A', text: "Kekecewaan dan kesedihan tokoh aku terhadap sikap Ayahnya yang tidak mengizinkannya masuk sekolah di musim <i>maddongi</i>, padahal dia harus mempersiapkan diri untuk bersaing dalam lomba dengan siswa sekolah lain." },
+                    { id: 'B', text: "Kemarahan hati tokoh aku terhadap Ayahnya yang melarang dia pergi sekolah karena sedang musim <i>maddongi</i> di sawah dan dia diberi tugas menghalau burung yang hinggap pada padi di sawah mereka." },
+                    { id: 'C', text: "Perasaan tertekan tokoh aku terhadap peraturan keluarganya yang mengharuskan dia tidak masuk sekolah setiap musim <i>maddongi</i>, padahal dia ingin sekali belajar dan tidak mau ketinggalan pelajaran." }
                 ],
-                correctAnswer: 3, // D
-                explanation: "Garis besar paragraf adalah fenomena campur tangan pejabat politik dalam proses pengangkatan serta pemindahan jabatan karier pegawai ASN (politisasi pengangkatan ASN).",
+                correctAnswer: { A: "Benar", B: "Salah", C: "Salah" },
+                explanation: "Kunci Jawaban: A: <b>Benar</b> | B: <b>Salah</b> | C: <b>Salah</b>.",
                 imageName: null
             },
+            // SOAL 6
             {
                 id: 6,
-                subMateriId: 'sub3',
-                contextTitle: "Teks 1: Undang-Undang Nomor 5 Tahun 2014 & Sistem Merit",
-                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) <i>Merit system</i> manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. <i>Mismatch</i> antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik <i>spoil system</i> dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
-                question: "Pada karya ilmiah, kalimat ke-4 pada paragraf tersebut sebaiknya diletakkan pada bagian....",
+                noSoal: 6,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
+                bentukSoal: "PGK MCMA",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal 5 s.d. 7",
+                contextText: `“E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim <i>maddongi</i> (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah.”\nAku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. “Bagaimana kalau aku ke rumah <i>iyye-ku</i> (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah.”\nEsok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah <i>iyye-ku</i>.\n“Kenapa kamu lesu?” <i>Iyye</i> menanyakan keadaanku. Aku pun menceritakan semuanya kepada <i>iyye</i>.\n“Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang,” ujar <i>iyye-ku</i>.\n    (<i>Piala di Atas Dangau</i>, Muhammad Isrul, dengan penyesuaian)`,
+                question: "Apa yang akan terjadi jika tokoh aku tidak datang ke rumah <i>iyye</i>?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
                 options: [
-                    "latar belakang",
-                    "masalah penelitian",
-                    "tujuan penelitian",
-                    "kajian teori",
-                    "simpulan"
+                    "<i>Iyye</i> akan datang menasehati Ayah karena melarang tokoh aku untuk belajar.",
+                    "Tokoh aku akan kehilangan kesempatan belajar untuk mengikuti lomba.",
+                    "Ayah akan tetap melarang tokoh aku untuk belajar dan mengikuti lomba.",
+                    "Permasalahan tokoh aku dan ayah akan berlarut karena tidak terselesaikan.",
+                    "Tokoh aku tidak akan bisa fokus untuk belajar dan mengikuti lomba yang diadakan sekolah."
                 ],
-                correctAnswer: 3, // D
-                explanation: "Kalimat (4) memuat sitasi pendapat ahli ('Ashari, 2010:4') sebagai rujukan teoretis, sehingga ditempatkan pada Bab II (Kajian Teori) dalam sistematika karya ilmiah.",
+                correctAnswer: [1, 3], // B & D
+                explanation: "Jawaban yang benar adalah <b>B</b> dan <b>D</b>.",
+                imageName: null
+            },
+            // SOAL 7
+            {
+                id: 7,
+                noSoal: 7,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai relevansi peristiwa dalam teks dengan kehidupan sehari-hari",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub3',
+                contextTitle: "Teks untuk soal 5 s.d. 7",
+                contextText: `“E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim <i>maddongi</i> (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah.”\nAku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. “Bagaimana kalau aku ke rumah <i>iyye-ku</i> (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah.”\nEsok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah <i>iyye-ku</i>.\n“Kenapa kamu lesu?” <i>Iyye</i> menanyakan keadaanku. Aku pun menceritakan semuanya kepada <i>iyye</i>.\n“Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang,” ujar <i>iyye-ku</i>.\n    (<i>Piala di Atas Dangau</i>, Muhammad Isrul, dengan penyesuaian)`,
+                question: "Keterkaitan nilai sosial dalam kutipan cerpen tersebut dengan kehidupan sehari-hari adalah …",
+                options: [
+                    "Masih ditemukan orang tua yang tidak memedulikan pendidikan anaknya demi membantu pekerjaan mereka.",
+                    "Terbenturnya cita-cita anak karena tradisi sebuah keluarga yang mengutamakan anak mampu bekerja mandiri.",
+                    "Asumsi bahwa bekerja lebih bermanfaat daripada sekolah yang dianggap tidak menghasilkan apa-apa untuk keluarga.",
+                    "Kebiasaan anak-anak tidak sekolah di musim <i>maddongi</i> demi menjalankan tradisi di lingkungan keluarga mereka.",
+                    "Orang tua mengarahkan anak-anak untuk rajin bekerja membantu mereka di sawah agar bisa melanjutkan kehidupannya kelak."
+                ],
+                correctAnswer: 0,
+                explanation: "Kunci Jawaban: <b>A</b> (Masih ditemukan orang tua yang tidak memedulikan pendidikan anaknya demi membantu pekerjaan mereka).",
+                imageName: null
+            },
+            // SOAL 8
+            {
+                id: 8,
+                noSoal: 8,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks.",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal nomor 8 s.d. 10",
+                contextText: `<b>Teks 1</b>\nRhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.\n\n<b>Teks 2</b>\nRhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan <i>xanthenes dyes</i>, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.`,
+                question: "Tujuan penulis sesuai teks 1 adalah ...",
+                options: [
+                    "Menginformasikan jenis dan rasa makanan yang mengandung Rhodamin B.",
+                    "Menjelaskan dampak penggunaan Rhodamin B pada bahan-bahan industri.",
+                    "Mengimbau agar masyarakat tidak menggunakan barang-barang yang mengandung Rhodamin B.",
+                    "Menginformasikan dampak mengonsumsi makanan yang mengandung Rhodamin B bagi tubuh.",
+                    "Menjelaskan gejala yang timbul akibat mengkonsumsi makanan yang mengandung Rhodamin B."
+                ],
+                correctAnswer: 3,
+                explanation: "Tujuan penulis Teks 1 adalah <b>D</b> (Menginformasikan dampak mengonsumsi makanan yang mengandung Rhodamin B bagi tubuh).",
+                imageName: null
+            },
+            // SOAL 9
+            {
+                id: 9,
+                noSoal: 9,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal nomor 8 s.d. 10",
+                contextText: `<b>Teks 1</b>\nRhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.\n\n<b>Teks 2</b>\nRhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan <i>xanthenes dyes</i>, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.`,
+                question: "Pernyataan yang tepat sesuai isi kedua teks tersebut berkaitan dengan Rhodamin B adalah ...",
+                options: [
+                    "Rhodamin B sering disalahgunakan sebagai pewarna makanan karena menawarkan cita rasa yang tinggi.",
+                    "Rhodamin B berdampak buruk bagi kesehatan, tetapi diperlukan pada industri, seperti tekstil dan kertas.",
+                    "Rhodamin B berdampak buruk bagi kesehatan, tetapi mudah ditemukan pada kembang gula dan sirup.",
+                    "Rhodamin B yang berbentuk serbuk kristal dan berwarna hijau digunakan pada industri tekstil dan kertas.",
+                    "Rhodamin B berdampak buruk bagi kesehatan, meskipun dampak itu baru terlihat beberapa tahun kemudian."
+                ],
+                correctAnswer: 1,
+                explanation: "Kunci Jawaban: <b>B</b> (Rhodamin B berdampak buruk bagi kesehatan, tetapi diperlukan pada industri, seperti tekstil dan kertas).",
+                imageName: null
+            },
+            // SOAL 10
+            {
+                id: 10,
+                noSoal: 10,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
+                bentukSoal: "PGK MCMA",
+                subMateriId: 'sub3',
+                contextTitle: "Teks untuk soal nomor 8 s.d. 10",
+                contextText: `<b>Teks 1</b>\nRhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.\n\n<b>Teks 2</b>\nRhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan <i>xanthenes dyes</i>, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.`,
+                question: "Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+                options: [
+                    "Mendorong masyarakat untuk menghindari Rhodamin B dalam berbagai keperluan.",
+                    "Meningkatkan kesadaran masyarakat tentang bahaya Rhodamin B dalam makanan",
+                    "Menunjukkan bahwa Rhodamin B aman digunakan dalam industri tekstil dan kertas.",
+                    "Menjelaskan bahwa Rhodamin B adalah zat berbahaya jika dikonsumsi, terutama dalam jangka panjang.",
+                    "Memperingatkan masyarakat agar menghindari makanan berwarna mencolok yang berisiko mengandung Rhodamin B."
+                ],
+                correctAnswer: [1, 3, 4], // B, D, E
+                explanation: "Jawaban yang benar adalah <b>B</b>, <b>D</b>, dan <b>E</b>.",
+                imageName: null
+            },
+            // SOAL 11
+            {
+                id: 11,
+                noSoal: 11,
+                kompetensi: "Pemahaman Tekstual",
+                subKompetensi: "Menyusun kerangka atau bagan berdasarkan bagian-bagian penting dalam teks",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub1',
+                contextTitle: "Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)",
+                contextText: `Ekonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan <i>e-commerce</i>, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan (<i>artificial intelligence</i>).\nSalah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform <i>e-commerce</i>. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai <i>marketplace</i> daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.\nSelain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.\nMeskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.\n(Sumber: Kementerian Koperasi dan UKM Republik Indonesia)`,
+                question: "Bagan yang tepat untuk menggambarkan bagian-bagian penting dalam teks tersebut adalah …",
+                options: [
+                    "Bagan A: Ekonomi Digital (Dampak ekonomi digital, Manfaat teknis yang diperoleh, Tantangan adaptasi teknologi dan keamanan digital, Peluang pertumbuhan dan keberlanjutan UKM)",
+                    "Bagan B: Peluang UKM (Dukungan pemerintah daerah, Promosi pariwisata lokal, Peningkatan ekspor, Digitalisasi layanan publik)",
+                    "Bagan C: Ekonomi berbasis teknologi informasi (Akses marketplace, Pembayaran nontunai, Analisis perilaku konsumen, Keterbatasan jangkauan)",
+                    "Bagan D: Peluang UKM tradisional (Toko fisik, Penjualan langsung, Ketepatan jangkauan, Tantangan digitalisasi, Solusi pelatihan offline)",
+                    "Bagan E: Inovasi UKM (e-Commerce, Promosi digital, Sertifikasi halal produk lokal, Literasi Keuangan)"
+                ],
+                optionImages: [
+                    "soal-11-a.png",
+                    "soal-11-b.png",
+                    "soal-11-c.png",
+                    "soal-11-d.png",
+                    "soal-11-e.png"
+                ],
+                correctAnswer: 0,
+                explanation: "Bagan A merupakan bagan paling komprehensif yang memetakan seluruh komponen struktur penting teks (Dampak, Manfaat teknis, Tantangan, dan Peluang pertumbuhan UKM).",
+                imageName: null
+            },
+            // SOAL 12
+            {
+                id: 12,
+                noSoal: 12,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
+                bentukSoal: "PGK Kategori",
+                subMateriId: 'sub2',
+                contextTitle: "Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)",
+                contextText: `Ekonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan <i>e-commerce</i>, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan (<i>artificial intelligence</i>).\nSalah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform <i>e-commerce</i>. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai <i>marketplace</i> daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.\nSelain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.\nMeskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.\n(Sumber: Kementerian Koperasi dan UKM Republik Indonesia)`,
+                question: "Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</span>",
+                categories: ["Benar", "Salah"],
+                statements: [
+                    { id: 'A', text: "Paragraf pertama (1) menggunakan pola sebab-akibat karena menjelaskan bagaimana teknologi digital menyebabkan perubahan bagi UKM." },
+                    { id: 'B', text: "Paragraf kedua (2) menggunakan pola proses karena menjelaskan langkah-langkah bagaimana UKM memanfaatkan <i>e-commerce</i>." },
+                    { id: 'C', text: "Paragraf ketiga (3) menggunakan pola klasifikasi karena membagi sistem pembayaran UKM menjadi beberapa kategori yang berbeda." }
+                ],
+                correctAnswer: { A: "Benar", B: "Benar", C: "Salah" },
+                explanation: "Kunci Jawaban: A: <b>Benar</b> | B: <b>Benar</b> | C: <b>Salah</b>.",
+                imageName: null
+            },
+            // SOAL 13
+            {
+                id: 13,
+                noSoal: 13,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
+                bentukSoal: "PGK Kategori",
+                subMateriId: 'sub3',
+                contextTitle: "Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)",
+                contextText: `Ekonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan <i>e-commerce</i>, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan (<i>artificial intelligence</i>).\nSalah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform <i>e-commerce</i>. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai <i>marketplace</i> daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.\nSelain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.\nMeskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.\n(Sumber: Kementerian Koperasi dan UKM Republik Indonesia)`,
+                question: "Dini : Teks tersebut sangat menarik dan bisa menambah wawasan kita, terutama jika kita berencana untuk mengembangkan suatu bisnis kecil.<br>Rio : Iya, pilihan katanya juga sangat mudah dimengerti sehingga orang yang awam terhadap istilah di bidang ekonomi juga mudah untuk memahami isi informasi yang disajikan.<br>Sena : Aku sependapat dengan kalian berdua, tetapi rasanya teks tersebut akan lebih baik jika disertai data pertumbuhan UKM dalam kurun waktu lima tahun terakhir atau pendapat ahli di bidang ekonomi.<br><br>Berdasarkan percakapan tersebut, mengapa pendapat Sena sangat baik dalam menilai keakuratan dari informasi yang disajikan tersebut?",
+                categories: ["Setuju", "Tidak Setuju"],
+                statements: [
+                    { id: 'A', text: "Sena menyoroti bahwa teks harus mudah dipahami oleh semua kalangan, termasuk yang awam terhadap ekonomi." },
+                    { id: 'B', text: "Sena mempertimbangkan kelengkapan dan dasar bukti dari informasi yang merupakan bagian dari menilai keakuratan teks." },
+                    { id: 'C', text: "Sena memiliki inisiatif untuk memperbaiki isi teks dengan pendapat pribadinya sebagai ahli ekonomi agar lebih informatif." }
+                ],
+                correctAnswer: { A: "Tidak Setuju", B: "Setuju", C: "Tidak Setuju" },
+                explanation: "Kunci Jawaban: A: <b>Tidak Setuju</b> | B: <b>Setuju</b> (kelengkapan bukti empiris 5 tahun terakhir merupakan tolak ukur keakuratan teks) | C: <b>Tidak Setuju</b>.",
+                imageName: null
+            },
+            // SOAL 14
+            {
+                id: 14,
+                noSoal: 14,
+                kompetensi: "Pemahaman Tekstual",
+                subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub1',
+                contextTitle: "Kutipan Cerpen Seragam karya Aris Kurniawan Basuki",
+                contextText: `Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.\nBertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.\nSaat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. ”Tidak ganti baju?” tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.\nSaya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.\n(Kutipan Cerpen <i>Seragam</i> karya Aris Kurniawan Basuki dengan penyesuaian)`,
+                question: "“Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau.”<br>Penggunaan kata serapan <i>boyongan</i> dapat memperjelas peristiwa yang dialami tokoh saya, yaitu ...",
+                options: [
+                    "Peristiwa pindahan yang sering dialami pegawai suatu instansi untuk kepentingan promosi jabatan.",
+                    "Peristiwa pindah rumah dari kampung halaman ke tempat yang jauh untuk jangka waktu lama.",
+                    "Pindah rumah bersama seluruh anggota keluarga dengan membawa semua barang rumah tangga.",
+                    "Pindah rumah untuk mengikuti tugas kedinasan orang tua di tempat baru yang letaknya sangat jauh.",
+                    "Kegiatan pindah rumah untuk sementara waktu dan akan berpindah lagi ke rumah dinas yang lain."
+                ],
+                correctAnswer: 2,
+                explanation: "Kunci Jawaban: <b>C</b> (Pindah rumah bersama seluruh anggota keluarga dengan membawa semua barang rumah tangga).",
+                imageName: null
+            },
+            // SOAL 15
+            {
+                id: 15,
+                noSoal: 15,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
+                bentukSoal: "PGK Kategori",
+                subMateriId: 'sub2',
+                contextTitle: "Kutipan Cerpen Seragam karya Aris Kurniawan Basuki",
+                contextText: `Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.\nBertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.\nSaat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. ”Tidak ganti baju?” tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.\nSaya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.\n(Kutipan Cerpen <i>Seragam</i> karya Aris Kurniawan Basuki dengan penyesuaian)`,
+                question: "Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh saya tidak ikut mencari jangkrik malam itu?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</span>",
+                categories: ["Tepat", "Tidak Tepat"],
+                statements: [
+                    { id: 'A', text: "Sahabat tokoh saya masih memiliki seragam pramuka untuk dipakai." },
+                    { id: 'B', text: "Punggung sahabat tokoh saya tidak akan memiliki luka bakar." },
+                    { id: 'C', text: "Sahabat tokoh saya akan mencari jangkrik tanpa perlu berlari." }
+                ],
+                correctAnswer: { A: "Tepat", B: "Tidak Tepat", C: "Tepat" },
+                explanation: "Kunci Jawaban: A: <b>Tepat</b> | B: <b>Tidak Tepat</b> | C: <b>Tepat</b>.",
+                imageName: null
+            },
+            // SOAL 16
+            {
+                id: 16,
+                noSoal: 16,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai ketepatan bagian teks untuk menggambarkan karakter, peristiwa, atau latar dalam teks fiksi",
+                bentukSoal: "PGK MCMA",
+                subMateriId: 'sub3',
+                contextTitle: "Kutipan Cerpen Seragam karya Aris Kurniawan Basuki",
+                contextText: `Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.\nBertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.\nSaat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. ”Tidak ganti baju?” tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.\nSaya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.\n(Kutipan Cerpen <i>Seragam</i> karya Aris Kurniawan Basuki dengan penyesuaian)`,
+                question: "Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh saya merupakan seorang yang setia kawan?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+                options: [
+                    "Saya langsung menyatakan ingin ikut, tapi dia keberatan.",
+                    "Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja.",
+                    "Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya.",
+                    "Dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang.",
+                    "Rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya."
+                ],
+                correctAnswer: [2, 3, 4], // C, D, E
+                explanation: "Jawaban yang benar adalah <b>C</b>, <b>D</b>, dan <b>E</b>.",
+                imageName: null
+            },
+            // SOAL 17
+            {
+                id: 17,
+                noSoal: 17,
+                kompetensi: "Pemahaman Tekstual",
+                subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
+                bentukSoal: "PGK Kategori",
+                subMateriId: 'sub1',
+                contextTitle: "Teks untuk soal nomor 17 s.d. 20!",
+                contextText: `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\nSumber: https://www.rri.co.id/iptek/1281411/`,
+                question: "Manakah kalimat yang memiliki penggunaan kata serapan yang tepat?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut</span>",
+                categories: ["Tepat", "Tidak Tepat"],
+                statements: [
+                    { id: 'A', text: "Kata “deforestasi” pada kalimat (2) paragraf kedua." },
+                    { id: 'B', text: "Kata “menginvestigasi” pada kalimat (2) paragraf ketiga." },
+                    { id: 'C', text: "Kata “polusi” pada kalimat (1) paragraf keempat." }
+                ],
+                correctAnswer: { A: "Tepat", B: "Tidak Tepat", C: "Tepat" },
+                explanation: "Kunci Jawaban: A: <b>Tepat</b> | B: <b>Tidak Tepat</b> | C: <b>Tepat</b>.",
+                imageName: null
+            },
+            // SOAL 18
+            {
+                id: 18,
+                noSoal: 18,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks.",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal nomor 17 s.d. 20!",
+                contextText: `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\nSumber: https://www.rri.co.id/iptek/1281411/`,
+                question: "Hubungan makna antara kalimat (2) dan (3) pada paragraf kedua adalah …",
+                options: [
+                    "Akibat-sebab yang diperkuat dengan contoh deforestasi dan kerusakan lingkungan",
+                    "Sebab-akibat yang mengajak pembaca untuk mengambil langkah tegas",
+                    "Penegasan yang diperinci dengan contoh konkret yang bisa diaplikasikan pembaca",
+                    "Perbandingan dari dua pandangan terkait dampak negatif deforestasi",
+                    "Penyimpulan bahwa teknologi hijau merupakan solusi masalah deforestasi"
+                ],
+                correctAnswer: 1,
+                explanation: "Kunci Jawaban: <b>B</b> (Sebab-akibat yang mengajak pembaca untuk mengambil langkah tegas).",
+                imageName: null
+            },
+            // SOAL 19
+            {
+                id: 19,
+                noSoal: 19,
+                kompetensi: "Pemahaman Inferensial",
+                subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks.",
+                bentukSoal: "Pilihan Ganda (PG)",
+                subMateriId: 'sub2',
+                contextTitle: "Teks untuk soal nomor 17 s.d. 20!",
+                contextText: `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\nSumber: https://www.rri.co.id/iptek/1281411/`,
+                question: "Kalimat yang tepat untuk mengakhiri uraian pada paragraf keempat adalah …",
+                options: [
+                    "Pada sisi lain, teknologi hijau memunculkan deforestasi dan polusi.",
+                    "Sehingga dampak negatif lingkungan berdampak pula pada kualitas hidup.",
+                    "Di samping itu, teknologi hijau dapat menciptakan dunia yang lebih baik untuk generasi yang akan datang.",
+                    "Di samping itu, bumi yang menggunakan teknologi hijau akan semakin menghadapi tantangan besar.",
+                    "Jadi, teknologi hijau berperan dalam menghilangnya keanekaragaman hayati."
+                ],
+                correctAnswer: 2,
+                explanation: "Kunci Jawaban: <b>C</b> (Di samping itu, teknologi hijau dapat menciptakan dunia yang lebih baik untuk generasi yang akan datang).",
+                imageName: null
+            },
+            // SOAL 20
+            {
+                id: 20,
+                noSoal: 20,
+                kompetensi: "Evaluasi dan Apresiasi",
+                subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
+                bentukSoal: "PGK MCMA",
+                subMateriId: 'sub3',
+                contextTitle: "Teks untuk soal nomor 17 s.d. 20!",
+                contextText: `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\nSumber: https://www.rri.co.id/iptek/1281411/`,
+                question: "Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim?<br><span class='text-xs text-brand-600 dark:text-brand-400 font-normal italic'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+                options: [
+                    "Teknologi hijau merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.",
+                    "Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global menurun, dan naiknya permukaan air laut.",
+                    "Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil.",
+                    "Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan teknologi yang sudah tidak bisa dihindari.",
+                    "Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup."
+                ],
+                correctAnswer: [0, 2, 4], // A, C, E
+                explanation: "Jawaban yang benar adalah <b>A</b>, <b>C</b>, dan <b>E</b>.",
                 imageName: null
             }
         ];
 
         function App() {
             // Navigation States
-            const [activeTab, setActiveTab] = useState('materi'); // 'materi', 'soal', 'beranda'
+            const [activeTab, setActiveTab] = useState('beranda'); // 'beranda', 'materi', 'soal'
             const [selectedMateriId, setSelectedMateriId] = useState('sub1');
-            const [selectedSoalFilter, setSelectedSoalFilter] = useState('all'); // 'all', 'sub1', 'sub2', 'sub3'
+            const [selectedSoalFilter, setSelectedSoalFilter] = useState('all');
             
             // CBT Exam States
             const [activeExamQuestions, setActiveExamQuestions] = useState(examData);
@@ -254,7 +613,7 @@
             const [showConfirmModal, setShowConfirmModal] = useState(false);
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-            // Start Exam Function with Category Filtering
+            // Start Exam Function
             const handleStartExam = (filterType) => {
                 setSelectedSoalFilter(filterType);
                 let filtered = examData;
@@ -272,9 +631,32 @@
 
             const currentQ = activeExamQuestions[currentIndex] || activeExamQuestions[0];
 
-            const handleSelectOption = (optIndex) => {
+            // Handle Selection for single choice PG
+            const handleSelectPG = (optIndex) => {
                 if (isSubmitted || !currentQ) return;
                 setUserAnswers({ ...userAnswers, [currentQ.id]: optIndex });
+            };
+
+            // Handle Selection for MCMA (Multiple Answer Checkboxes)
+            const handleSelectMCMA = (optIndex) => {
+                if (isSubmitted || !currentQ) return;
+                const currentAns = Array.isArray(userAnswers[currentQ.id]) ? userAnswers[currentQ.id] : [];
+                const updatedAns = currentAns.includes(optIndex)
+                    ? currentAns.filter(i => i !== optIndex)
+                    : [...currentAns, optIndex];
+                setUserAnswers({ ...userAnswers, [currentQ.id]: updatedAns });
+            };
+
+            // Handle Selection for Category Matrix (Benar/Salah, Setuju/Tidak Setuju, Tepat/Tidak Tepat)
+            const handleSelectCategory = (statementId, choice) => {
+                if (isSubmitted || !currentQ) return;
+                const currentObj = (typeof userAnswers[currentQ.id] === 'object' && !Array.isArray(userAnswers[currentQ.id]))
+                    ? userAnswers[currentQ.id]
+                    : {};
+                setUserAnswers({
+                    ...userAnswers,
+                    [currentQ.id]: { ...currentObj, [statementId]: choice }
+                });
             };
 
             const toggleDoubt = () => {
@@ -286,16 +668,41 @@
                 setIsSubmitted(true);
                 setShowConfirmModal(false);
                 if (window.confetti) {
-                    window.confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+                    window.confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
                 }
             };
 
-            // Calculate Exam Score
+            // Helper to check if a question is answered
+            const isQuestionAnswered = (q) => {
+                const ans = userAnswers[q.id];
+                if (ans === undefined || ans === null) return false;
+                if (q.bentukSoal === "PGK MCMA") return Array.isArray(ans) && ans.length > 0;
+                if (q.bentukSoal === "PGK Kategori") {
+                    return typeof ans === 'object' && Object.keys(ans).length === q.statements.length;
+                }
+                return true; // standard PG
+            };
+
+            // Calculate Exam Score accurately per question type
             const calculateScore = () => {
                 let correctCount = 0;
                 activeExamQuestions.forEach((q) => {
-                    if (userAnswers[q.id] === q.correctAnswer) {
-                        correctCount++;
+                    const ans = userAnswers[q.id];
+                    if (ans === undefined || ans === null) return;
+
+                    if (q.bentukSoal === "Pilihan Ganda (PG)") {
+                        if (ans === q.correctAnswer) correctCount++;
+                    } else if (q.bentukSoal === "PGK MCMA") {
+                        if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
+                            const isExactMatch = ans.length === q.correctAnswer.length &&
+                                q.correctAnswer.every(val => ans.includes(val));
+                            if (isExactMatch) correctCount++;
+                        }
+                    } else if (q.bentukSoal === "PGK Kategori") {
+                        if (typeof ans === 'object' && !Array.isArray(ans)) {
+                            const isAllMatch = q.statements.every(st => ans[st.id] === q.correctAnswer[st.id]);
+                            if (isAllMatch) correctCount++;
+                        }
                     }
                 });
                 const score = activeExamQuestions.length > 0 
@@ -331,7 +738,7 @@
                                             Materi TKA Bahasa Indonesia
                                         </h1>
                                         <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                            Standar KBBI & PUEBI • Tes Kemampuan Akademik
+                                            Standar Pusmendik & KBBI • Tes Kemampuan Akademik
                                         </p>
                                     </div>
                                 </div>
@@ -435,19 +842,19 @@
                             )}
                         </header>
 
-                        {/* MAIN CONTENT CONTAINER */}
+                        {/* TAB 1: BERANDA */}
                         {activeTab === 'beranda' && (
                             <main className="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-8 space-y-8">
                                 <div className="bg-gradient-to-r from-brand-600 to-brand-800 text-white rounded-3xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
                                     <div className="relative z-10 max-w-2xl">
                                         <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-                                            Portal Pembelajaran Resmi
+                                            Portal Pembelajaran Resmi Pusmendik
                                         </span>
                                         <h2 className="text-2xl sm:text-4xl font-extrabold mb-3 leading-tight">
-                                            Materi TKA Bahasa Indonesia & Bank Soal CBT
+                                            Materi TKA Bahasa Indonesia & Bank Soal CBT (20 Soal)
                                         </h2>
                                         <p className="text-brand-100 text-sm sm:text-base mb-6 leading-relaxed">
-                                            Platform persiapan Ujian Kemampuan Akademik Bahasa Indonesia dengan penyusunan stimulus, tata bahasa, dan istilah baku yang disesuaikan secara presisi dengan KBBI dan PUEBI.
+                                            Platform simulasi Tes Kemampuan Akademik (TKA) Bahasa Indonesia SMA berstandar presisi 100% Pusmendik Kemendikdasmen & KBBI, mencakup bentuk soal Pilihan Ganda (PG), PGK Multiple Answer (MCMA), dan PGK Kategori.
                                         </p>
                                         <div className="flex flex-wrap gap-3">
                                             <button 
@@ -460,15 +867,14 @@
                                                 onClick={() => handleStartExam('all')}
                                                 className="bg-brand-500 hover:bg-brand-400 text-white font-bold px-5 py-2.5 rounded-xl text-sm border border-brand-400 shadow transition"
                                             >
-                                                Mulai Semua Soal
+                                                Mulai Ujian 20 Soal
                                             </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* MENU UTAMA SELECTION GRID */}
+                                {/* SELECTION GRID */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* CARD MENU MATERI */}
                                     <div 
                                         onClick={() => setActiveTab('materi')}
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer group"
@@ -478,7 +884,7 @@
                                         </div>
                                         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Menu Materi Pembelajaran</h3>
                                         <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
-                                            Akses ringkasan sub materi lengkap mulai dari analisis paragraf, perumusan karya ilmiah, hingga aturan ejaan baku KBBI.
+                                            Akses ringkasan sub materi lengkap mulai dari analisis Pemahaman Tekstual, Inferensial, hingga Evaluasi dan Apresiasi Sastra.
                                         </p>
                                         <span className="text-brand-600 dark:text-brand-400 text-xs font-bold inline-flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
                                             <span>Buka Modul Materi</span>
@@ -486,7 +892,6 @@
                                         </span>
                                     </div>
 
-                                    {/* CARD MENU SOAL */}
                                     <div 
                                         onClick={() => setActiveTab('soal')}
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer group"
@@ -496,7 +901,7 @@
                                         </div>
                                         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Menu Latihan Soal CBT</h3>
                                         <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
-                                            Uji pemahaman Anda dengan simulasi latihan soal per Sub Materi atau Paket Lengkap tanpa batasan timer waktu.
+                                            Uji pemahaman Anda dengan simulasi latihan 20 soal berstandar Pusmendik lengkap dengan tabel spesifikasi setiap soal dan tanpa batasan waktu.
                                         </p>
                                         <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold inline-flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
                                             <span>Pilih Modul Soal</span>
@@ -507,7 +912,7 @@
                             </main>
                         )}
 
-                        {/* MENU MATERI VIEW */}
+                        {/* TAB 2: MATERI PEMBELAJARAN */}
                         {activeTab === 'materi' && (
                             <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
                                 
@@ -573,27 +978,27 @@
                             </main>
                         )}
 
-                        {/* MENU SOAL VIEW */}
+                        {/* TAB 3: MENU SELEKSI SOAL */}
                         {activeTab === 'soal' && !isExamStarted && (
                             <main className="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-6">
                                 <div className="text-center max-w-xl mx-auto mb-8">
-                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pilih Modul Latihan Soal</h2>
-                                    <p className="text-sm text-slate-500">Pilih sub materi yang ingin Anda latih, atau ambil modul ujian lengkap tanpa batasan timer waktu.</p>
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pilih Modul Latihan Soal TKA</h2>
+                                    <p className="text-sm text-slate-500">Pilih sub materi spesifik yang ingin Anda latih, atau ambil modul ujian lengkap 20 soal tanpa batasan waktu.</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {/* PAKET LENGKAP */}
+                                    {/* PAKET LENGKAP 20 SOAL */}
                                     <div 
                                         onClick={() => handleStartExam('all')}
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-brand-500/40 hover:border-brand-500 shadow-sm transition cursor-pointer flex flex-col justify-between"
                                     >
                                         <div>
-                                            <span className="bg-brand-100 text-brand-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Paket Ujian Utama</span>
-                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Semua Soal TKA Bahasa Indonesia</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Total 6 Soal mencakup seluruh materi dan stimulus gambar.</p>
+                                            <span className="bg-brand-100 text-brand-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Paket Utama Pusmendik</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Semua 20 Soal TKA Bahasa Indonesia</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Total 20 Soal mencakup seluruh materi, stimulus teks wacana, cerpen, tabel spesifikasi, dan bentuk PG / PGK.</p>
                                         </div>
                                         <button className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-2.5 rounded-xl transition">
-                                            Mulai Latihan Lengkap
+                                            Mulai Latihan 20 Soal Lengkap
                                         </button>
                                     </div>
 
@@ -605,7 +1010,7 @@
                                         <div>
                                             <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 1</span>
                                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Pemahaman Tekstual</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan kata serapan, ejaan KBBI, dan analisis struktur teks.</p>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan kata serapan, ejaan KBBI, penyusunan bagan wacana, dan analisis teks.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
                                             Mulai Latihan Sub Bab 1
@@ -620,7 +1025,7 @@
                                         <div>
                                             <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 2</span>
                                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Pemahaman Inferensial</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan pola pengembangan paragraf, ide pokok & simpulan implisit.</p>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan pola pengembangan paragraf, ide pokok, & simpulan implisit.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
                                             Mulai Latihan Sub Bab 2
@@ -635,7 +1040,7 @@
                                         <div>
                                             <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 3</span>
                                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Evaluasi dan Apresiasi</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan evaluasi keakuratan data, ejaan KBBI, dan respons sastra.</p>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan penempatan struktur karya ilmiah, ejaan KBBI, dan apresiasi sastra.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
                                             Mulai Latihan Sub Bab 3
@@ -645,15 +1050,16 @@
                             </main>
                         )}
 
-                        {/* CBT EXAM INTERFACE (WHEN EXAM STARTED) */}
+                        {}
+                        {/* CBT EXAM INTERFACE & RESULTS */}
                         {activeTab === 'soal' && isExamStarted && (
                             <>
                                 {isSubmitted ? (
                                     /* REVIEW & EXAM RESULTS */
                                     <main className="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-8">
                                         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 lg:p-8 mb-8 text-center">
-                                            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">Hasil & Analisis Latihan</h2>
-                                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Berikut adalah skor akhir dan pembahasan lengkap soal sesuai standar KBBI</p>
+                                            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">Hasil & Analisis Latihan CBT</h2>
+                                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Berikut adalah skor akhir dan pembahasan lengkap 20 soal sesuai standar KBBI & Pusmendik</p>
                                             
                                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
                                                 <div className="bg-brand-50 dark:bg-brand-950/40 p-4 rounded-xl border border-brand-200 dark:border-brand-800">
@@ -667,7 +1073,7 @@
                                                     <span className="text-xs text-slate-500 block mt-1">Dari {activeExamQuestions.length} Soal</span>
                                                 </div>
                                                 <div className="bg-rose-50 dark:bg-rose-950/40 p-4 rounded-xl border border-rose-200 dark:border-rose-800">
-                                                    <span className="block text-sm text-rose-600 dark:text-rose-400 font-medium">Jawaban Salah</span>
+                                                    <span className="block text-sm text-rose-600 dark:text-rose-400 font-medium">Jawaban Salah / Kurang</span>
                                                     <span className="text-4xl font-black text-rose-700 dark:text-rose-300">{wrongCount}</span>
                                                     <span className="text-xs text-slate-500 block mt-1">Perlu Evaluasi</span>
                                                 </div>
@@ -686,7 +1092,20 @@
                                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Pembahasan Soal Detail</h3>
                                             {activeExamQuestions.map((q, idx) => {
                                                 const userAns = userAnswers[q.id];
-                                                const isCorrect = userAns === q.correctAnswer;
+                                                
+                                                // Calculate correctness for review
+                                                let isCorrect = false;
+                                                if (q.bentukSoal === "Pilihan Ganda (PG)") {
+                                                    isCorrect = userAns === q.correctAnswer;
+                                                } else if (q.bentukSoal === "PGK MCMA") {
+                                                    isCorrect = Array.isArray(userAns) &&
+                                                        userAns.length === q.correctAnswer.length &&
+                                                        q.correctAnswer.every(v => userAns.includes(v));
+                                                } else if (q.bentukSoal === "PGK Kategori") {
+                                                    isCorrect = typeof userAns === 'object' && !Array.isArray(userAns) &&
+                                                        q.statements.every(st => userAns[st.id] === q.correctAnswer[st.id]);
+                                                }
+
                                                 return (
                                                     <div key={q.id} className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow border border-slate-200 dark:border-slate-700">
                                                         <div className="flex items-start justify-between mb-4">
@@ -696,36 +1115,36 @@
                                                                     ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' 
                                                                     : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
                                                             }`}>
-                                                                {isCorrect ? 'BENAR' : 'SALAH'}
+                                                                {isCorrect ? 'BENAR' : 'SALAH / KURANG TEPAT'}
                                                             </span>
+                                                        </div>
+
+                                                        {/* TABEL SPESIFIKASI PUSMENDIK */}
+                                                        <div className="mb-4 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+                                                            <table className="pusmendik-table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>No Soal</td>
+                                                                        <td>{q.noSoal}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Kompetensi</td>
+                                                                        <td>{q.kompetensi}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Sub Kompetensi</td>
+                                                                        <td>{q.subKompetensi}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Bentuk Soal</td>
+                                                                        <td>{q.bentukSoal}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
 
                                                         <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-2" dangerouslySetInnerHTML={{ __html: q.contextTitle }}></p>
                                                         <p className="text-slate-700 dark:text-slate-300 text-sm mb-4" dangerouslySetInnerHTML={{ __html: q.question }}></p>
-
-                                                        {/* OPTIONS REVIEW */}
-                                                        <div className="space-y-2 mb-4">
-                                                            {q.options.map((opt, oIdx) => {
-                                                                const isUserChoice = userAns === oIdx;
-                                                                const isCorrectChoice = q.correctAnswer === oIdx;
-                                                                let style = "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300";
-                                                                
-                                                                if (isCorrectChoice) {
-                                                                    style = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-medium";
-                                                                } else if (isUserChoice && !isCorrectChoice) {
-                                                                    style = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 line-through";
-                                                                }
-
-                                                                return (
-                                                                    <div key={oIdx} className={`p-3 rounded-lg border text-xs sm:text-sm flex items-start space-x-3 ${style}`}>
-                                                                        <span className="font-bold">{String.fromCharCode(65 + oIdx)}.</span>
-                                                                        <span className="flex-1" dangerouslySetInnerHTML={{ __html: opt }}></span>
-                                                                        {isCorrectChoice && <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Kunci Jawaban</span>}
-                                                                        {isUserChoice && !isCorrectChoice && <span className="text-xs font-bold text-rose-600 dark:text-rose-400">Pilihan Anda</span>}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
 
                                                         {/* EXPLANATION */}
                                                         <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs sm:text-sm text-amber-900 dark:text-amber-200">
@@ -738,7 +1157,7 @@
                                         </div>
                                     </main>
                                 ) : (
-                                    /* ACTIVE QUESTION SCREEN (SPLIT VIEW) */
+                                    /* ACTIVE EXAM RUNNER VIEW */
                                     <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
                                         
                                         {/* LEFT COLUMN: STIMULUS READINGS & INFOGRAPHICS */}
@@ -751,10 +1170,35 @@
                                             </div>
                                             
                                             <div className={`flex-1 p-5 overflow-y-auto custom-scrollbar ${fontSize}`}>
+                                                
+                                                {/* TABEL SPESIFIKASI PUSMENDIK */}
+                                                <div className="mb-4 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                                    <table className="pusmendik-table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>No Soal</td>
+                                                                <td>{currentQ.noSoal}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Kompetensi</td>
+                                                                <td>{currentQ.kompetensi}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Sub Kompetensi</td>
+                                                                <td>{currentQ.subKompetensi}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Bentuk Soal</td>
+                                                                <td>{currentQ.bentukSoal}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
                                                 <h4 className="font-bold text-slate-900 dark:text-white mb-3 text-base" dangerouslySetInnerHTML={{ __html: currentQ.contextTitle }}></h4>
                                                 
-                                                {/* Single Paragraf Reading Passage with Italic terms */}
-                                                <div className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-justify" dangerouslySetInnerHTML={{ __html: currentQ.contextText }}></div>
+                                                {/* Reading Passage */}
+                                                <div className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-justify whitespace-pre-line" dangerouslySetInnerHTML={{ __html: currentQ.contextText }}></div>
 
                                                 {/* Image Stimulus Viewer */}
                                                 {(currentQ.imageName || currentQ.defaultImage) && (
@@ -771,21 +1215,21 @@
                                                             </div>
                                                         </div>
                                                         <p className="text-[11px] text-center text-slate-500 mt-2">
-                                                            *Gambar dimuat dari repository GitHub (`{currentQ.imageName || 'soal-2.png'}`)
+                                                            *Gambar dimuat dari repository GitHub (`{currentQ.imageName || 'soal-11-a.png'}`)
                                                         </p>
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
 
-                                        {/* RIGHT COLUMN: QUESTION & OPTIONS */}
+                                        {/* RIGHT COLUMN: QUESTION & INTERACTIVE OPTIONS */}
                                         <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
                                             
                                             {/* QUESTION PANEL */}
                                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 lg:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
                                                 <div className="flex items-center justify-between mb-4">
                                                     <span className="text-[11px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
-                                                        Pertanyaan No. {currentIndex + 1}
+                                                        Pertanyaan No. {currentIndex + 1} • {currentQ.bentukSoal}
                                                     </span>
 
                                                     {/* Doubt Checkbox */}
@@ -802,34 +1246,130 @@
 
                                                 <h3 className={`font-semibold text-slate-800 dark:text-slate-100 mb-6 leading-normal ${fontSize}`} dangerouslySetInnerHTML={{ __html: currentQ.question }}></h3>
 
-                                                {/* MULTIPLE CHOICE OPTIONS */}
-                                                <div className="space-y-3 flex-1">
-                                                    {currentQ.options.map((opt, optIndex) => {
-                                                        const isSelected = userAnswers[currentQ.id] === optIndex;
-                                                        const optionLetter = String.fromCharCode(65 + optIndex);
+                                                {/* MULTIPLE CHOICE TYPES */}
+                                                
+                                                {/* TYPE 1: STANDARD SINGLE CHOICE PG */}
+                                                {currentQ.bentukSoal === "Pilihan Ganda (PG)" && (
+                                                    <div className="space-y-3 flex-1">
+                                                        {currentQ.options.map((opt, optIndex) => {
+                                                            const isSelected = userAnswers[currentQ.id] === optIndex;
+                                                            const optionLetter = String.fromCharCode(65 + optIndex);
 
-                                                        return (
-                                                            <button
-                                                                key={optIndex}
-                                                                onClick={() => handleSelectOption(optIndex)}
-                                                                className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 group ${
-                                                                    isSelected 
-                                                                        ? 'border-brand-600 bg-brand-50/80 dark:bg-brand-950/40 text-brand-900 dark:text-brand-100 ring-2 ring-brand-500/20' 
-                                                                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200'
-                                                                }`}
-                                                            >
-                                                                <span className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${
-                                                                    isSelected 
-                                                                        ? 'bg-brand-600 text-white' 
-                                                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-slate-200'
-                                                                }`}>
-                                                                    {optionLetter}
-                                                                </span>
-                                                                <span className={`flex-1 ${fontSize} leading-snug`} dangerouslySetInnerHTML={{ __html: opt }}></span>
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
+                                                            return (
+                                                                <button
+                                                                    key={optIndex}
+                                                                    onClick={() => handleSelectPG(optIndex)}
+                                                                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 group ${
+                                                                        isSelected 
+                                                                            ? 'border-brand-600 bg-brand-50/80 dark:bg-brand-950/40 text-brand-900 dark:text-brand-100 ring-2 ring-brand-500/20' 
+                                                                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200'
+                                                                    }`}
+                                                                >
+                                                                    <span className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${
+                                                                        isSelected 
+                                                                            ? 'bg-brand-600 text-white' 
+                                                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-slate-200'
+                                                                    }`}>
+                                                                        {optionLetter}
+                                                                    </span>
+                                                                    <div className="flex-1">
+                                                                        <span className={`${fontSize} leading-snug`} dangerouslySetInnerHTML={{ __html: opt }}></span>
+                                                                        {currentQ.optionImages && currentQ.optionImages[optIndex] && (
+                                                                            <img 
+                                                                                src={`${githubImageBase}${currentQ.optionImages[optIndex]}`} 
+                                                                                alt={`Bagan ${optionLetter}`} 
+                                                                                className="mt-2 max-h-40 object-contain rounded-lg border border-slate-200 dark:border-slate-700" 
+                                                                                onError={(e) => { e.target.style.display = 'none'; }}
+                                                                            />
+                                                                        )}
+                                                                    </div>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+
+                                                {/* TYPE 2: MULTIPLE CHOICE MULTIPLE ANSWER (PGK MCMA) */}
+                                                {currentQ.bentukSoal === "PGK MCMA" && (
+                                                    <div className="space-y-3 flex-1">
+                                                        {currentQ.options.map((opt, optIndex) => {
+                                                            const userAnsArr = Array.isArray(userAnswers[currentQ.id]) ? userAnswers[currentQ.id] : [];
+                                                            const isSelected = userAnsArr.includes(optIndex);
+                                                            const optionLetter = String.fromCharCode(65 + optIndex);
+
+                                                            return (
+                                                                <button
+                                                                    key={optIndex}
+                                                                    onClick={() => handleSelectMCMA(optIndex)}
+                                                                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 group ${
+                                                                        isSelected 
+                                                                            ? 'border-brand-600 bg-brand-50/80 dark:bg-brand-950/40 text-brand-900 dark:text-brand-100 ring-2 ring-brand-500/20' 
+                                                                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200'
+                                                                    }`}
+                                                                >
+                                                                    <div className={`w-6 h-6 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                                                                        isSelected ? 'bg-brand-600 border-brand-600 text-white' : 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700'
+                                                                    }`}>
+                                                                        {isSelected && (
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                                                        )}
+                                                                    </div>
+                                                                    <span className={`font-bold shrink-0 ${fontSize}`}>{optionLetter}.</span>
+                                                                    <span className={`flex-1 ${fontSize} leading-snug`} dangerouslySetInnerHTML={{ __html: opt }}></span>
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+
+                                                {/* TYPE 3: CATEGORY MATRIX (PGK Kategori) */}
+                                                {currentQ.bentukSoal === "PGK Kategori" && (
+                                                    <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                                                        <table className="w-full text-left text-xs sm:text-sm">
+                                                            <thead className="bg-slate-100 dark:bg-slate-750 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700">
+                                                                <tr>
+                                                                    <th className="p-3 w-10 text-center">#</th>
+                                                                    <th className="p-3">Pernyataan</th>
+                                                                    {currentQ.categories.map((cat, cIdx) => (
+                                                                        <th key={cIdx} className="p-3 text-center w-24 sm:w-28">{cat}</th>
+                                                                    ))}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                                                                {currentQ.statements.map((st) => {
+                                                                    const userChoice = (typeof userAnswers[currentQ.id] === 'object' && !Array.isArray(userAnswers[currentQ.id]))
+                                                                        ? userAnswers[currentQ.id][st.id]
+                                                                        : undefined;
+
+                                                                    return (
+                                                                        <tr key={st.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                                                            <td className="p-3 text-center font-bold">{st.id}.</td>
+                                                                            <td className="p-3 leading-relaxed" dangerouslySetInnerHTML={{ __html: st.text }}></td>
+                                                                            {currentQ.categories.map((cat, cIdx) => {
+                                                                                const isChecked = userChoice === cat;
+                                                                                return (
+                                                                                    <td key={cIdx} className="p-3 text-center">
+                                                                                        <button
+                                                                                            onClick={() => handleSelectCategory(st.id, cat)}
+                                                                                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border inline-flex items-center justify-center font-bold text-xs transition-all ${
+                                                                                                isChecked 
+                                                                                                    ? 'bg-brand-600 border-brand-600 text-white shadow ring-2 ring-brand-500/20' 
+                                                                                                    : 'border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 text-transparent'
+                                                                                            }`}
+                                                                                        >
+                                                                                            ✓
+                                                                                        </button>
+                                                                                    </td>
+                                                                                );
+                                                                            })}
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                )}
+
                                             </div>
 
                                             {/* NAVIGATION & CONTROLS PANEL */}
@@ -838,12 +1378,12 @@
                                                 {/* QUESTION MAP GRID */}
                                                 <div>
                                                     <div className="text-xs font-semibold text-slate-500 mb-2 flex justify-between items-center">
-                                                        <span>Peta Navigasi Soal</span>
+                                                        <span>Peta Navigasi Soal (20 Soal)</span>
                                                         <span className="text-[10px] text-slate-400">Hijau: Terjawab | Kuning: Ragu</span>
                                                     </div>
-                                                    <div className="grid grid-cols-6 gap-2">
+                                                    <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
                                                         {activeExamQuestions.map((q, idx) => {
-                                                            const isAns = userAnswers[q.id] !== undefined;
+                                                            const isAns = isQuestionAnswered(q);
                                                             const isDoubt = doubtStatus[q.id];
                                                             const isCurr = currentIndex === idx;
 
@@ -926,7 +1466,7 @@
                                     </div>
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Konfirmasi Selesai Latihan</h3>
                                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                                        Apakah Anda yakin ingin menyelesaikan modul soal ini?
+                                        Apakah Anda yakin ingin menyelesaikan modul 20 latihan soal ini?
                                     </p>
                                     <div className="flex space-x-3">
                                         <button 
@@ -948,7 +1488,7 @@
 
                         {/* FOOTER */}
                         <footer className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-3 text-center text-xs text-slate-500 dark:text-slate-400">
-                            Portal Materi & Soal TKA Bahasa Indonesia • Hak Cipta &copy; {new Date().getFullYear()}
+                            Portal Materi & Soal TKA Bahasa Indonesia • Standar Pusmendik & KBBI • Hak Cipta &copy; {new Date().getFullYear()}
                         </footer>
                     </div>
                 </div>
