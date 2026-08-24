@@ -58,55 +58,67 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Data Materi Pembelajaran TKA Bahasa Indonesia
+        // Data Materi Pembelajaran TKA Bahasa Indonesia (Sesuai Kisi-Kisi TKA & Standard KBBI - Global & Akademis)
         const materiData = [
             {
                 id: 'sub1',
-                title: 'Sub Materi 1: Analisis Paragraf & Rumusan Masalah Karya Ilmiah',
-                category: 'Gaya Bahasa & Struktur Teks',
-                description: 'Memahami ide pokok paragraf, penguraian masalah birokrasi/sistem merit, dan perumusan masalah yang presisi untuk karya ilmiah.',
+                title: 'Sub Bab 1: Pemahaman Tekstual',
+                category: 'Literasi & Tata Bahasa Baku',
+                description: 'Memahami makna tersurat, identifikasi kata serapan daerah/asing secara global, kosakata fiksi/nonfiksi, serta penyusunan kerangka wacana ilmiah.',
                 content: [
                     {
-                        subtitle: '1. Memahami Ide Pokok & Struktur Paragraf Utuh',
-                        text: 'Dalam penulisan baku sesuai PUEBI/EYD, paragraf harus memiliki kesatuan gagasan. Pada teks analisis kebijakan ASN, paragraf menguraikan pentingnya UU No. 5 Tahun 2014 dalam menerapkan sistem merit untuk mengatasi ketidaksesuaian (<i>mismatch</i>) antara kompetensi pegawai dan kualifikasi jabatan.'
+                        subtitle: '1. Mengidentifikasi Kata Serapan & Pemakaian Kata Baku (KBBI)',
+                        text: 'Penyerapan kosakata ke dalam bahasa Indonesia dilakukan melalui jalur adopsi, adaptasi, dan penerjemahan, serta penyesuaian bentuk kata baku berdasarkan KBBI:\n• <b>Adopsi:</b> Mengambil seluruh bentuk kata asing secara utuh tanpa penyesuaian ejaan jika pengucapan dan penulisannya telah sesuai dengan sistem tata bahasa Indonesia (contoh: <i>supermarket</i>, <i>bus</i>).\n• <b>Adaptasi:</b> Mengubah ejaan atau pengucapan kata asing agar sesuai dengan kaidah bahasa Indonesia. Contoh: <i>system</i> → <b>sistem</b>, <i>career</i> → <b>karier</b>, <i>technique</i> → <b>teknik</b>, <i>qualitative</i> → <b>kualitatif</b>, <i>atmosphere</i> → <b>atmosfer</b>.\n• <b>Penerjemahan:</b> Mengambil konsep kata asing lalu mencarikan padanannya dalam bahasa Indonesia atau daerah. Contoh: <i>online</i> → <b>daring</b>, <i>download</i> → <b>unduh</b>, <i>gadget</i> → <b>gawai</b>.\n• <b>Penyesuaian Kata Baku KBBI:</b> Mengoreksi ejaan tidak baku menjadi bentuk baku resmi. Contoh: <i>handal</i> → <b>andal</b>, <i>praktek</i> → <b>praktik</b>, <i>analisa</i> → <b>analisis</b>, <i>himbau</i> → <b>imbau</b>.\n• <b>Ketentuan Cetak Miring:</b> Kata asing atau istilah teknis internasional yang belum diserap secara resmi ke dalam KBBI wajib dicetak miring (<i>italic</i>), contoh: <i>artificial intelligence</i>, <i>ecosystem</i>, <i>global warming</i>, <i>trias politica</i>.'
                     },
                     {
-                        subtitle: '2. Ciri Rumusan Masalah Karya Ilmiah',
-                        text: 'Rumusan masalah karya ilmiah disusun dalam bentuk kalimat tanya yang berfokus pada hubungan antarvariabel (seperti implementasi sistem merit dan pemecahan masalah birokrasi). Penulisan kata serapan harus baku: kata "sistem" (bukan <i>system</i>), "andal" (bukan <i>handal</i>), dan "karier" (bukan <i>karir</i>).'
+                        subtitle: '2. Mengidentifikasi Latar, Karakter, & Fenomena Teks (Fiksi & Nonfiksi)',
+                        text: 'Pemahaman tekstual memerlukan kecermatan dalam mengidentifikasi fakta eksplisit (tersurat) dalam berbagai wacana:\n• <b>Teks Fiksi (Sastra):</b> Menentukan latar tempat, waktu, dan suasana, serta perwatakan tokoh melalui dialog, tindakan, dan eksplorasi kosakata emotif.\n• <b>Teks Nonfiksi (Sains, Teknologi, Sosial, Ekonomi):</b> Mengidentifikasi fenomena global seperti perubahan iklim, perkembangan teknologi digital, hingga isu kesehatan publik melalui istilah-istilah ilmiah yang presisi.'
+                    },
+                    {
+                        subtitle: '3. Menyusun Kerangka atau Bagan Teks',
+                        text: 'Penyusunan kerangka bertujuan memetakan hierarki gagasan dalam wacana secara sistematis:\n• Memisahkan antara <b>pernyataan umum/tesis</b> (gagasan dasar), <b>deretan penjelas</b> (data, bukti, argumen pendukung), hingga <b>kesimpulan logis</b>.\n• Menyusun bagan alur wacana baik berupa alur kronologis, sebab-akibat, maupun hierarki konsep dari umum ke khusus.'
                     }
                 ],
                 relatedQuestions: [1, 2, 6]
             },
             {
                 id: 'sub2',
-                title: 'Sub Materi 2: Pola Pengembangan Paragraf & Politisasi Birokrasi',
-                category: 'Pengembangan Wacana & Definisi Operasional',
-                description: 'Menganalisis jenis pola pengembangan paragraf (definisi, analogi, pertentangan) dan menyusun kalimat definisi operasional.',
+                title: 'Sub Bab 2: Pemahaman Inferensial',
+                category: 'Analisis Semantik & Penalaran Wacana',
+                description: 'Menyimpulkan ide pokok, merumuskan makna implisit antarkalimat/paragraf, serta memprediksi kelanjutan isi teks secara logis.',
                 content: [
                     {
-                        subtitle: '1. Pola Pengembangan Paragraf Definisi',
-                        text: 'Pola pengembangan definisi menjelaskan batasan atau pengertian suatu konsep secara mendalam. Teks yang menerangkan apa itu "politisasi birokrasi" (seperti intervensi pejabat politik dalam pengangkatan dan demosi ASN) dikategorikan sebagai paragraf berpola pengembangan definisi.'
+                        subtitle: '1. Menyimpulkan Ide Pokok, Konflik, & Nilai Teks',
+                        text: 'Pemahaman inferensial merupakan kemampuan membaca secara kritis untuk menemukan makna tersirat (<i>implisit</i>):\n• <b>Ide Pokok & Gagasan Utama:</b> Menentukan kalimat inti wacana (deduktif di awal paragraf, induktif di akhir, atau campuran) dan mengestraksi pesan sentral penulis.\n• <b>Konflik & Nilai-Nilai:</b> Menemukan pertentangan utama (batin, sosial, atau lingkungan) dalam karya fiksi maupun nonfiksi, serta mengevaluasi nilai moral, etika, sosial, dan budaya yang dikembangkan.'
                     },
                     {
-                        subtitle: '2. Kata Depan & Istilah Baku KBBI',
-                        text: 'Perhatikan penulisan edisi baku KBBI: Kata depan "di mana" ditulis terpisah (bukan <i>dimana</i> jika menyatakan tempat/konteks). Istilah asing seperti <i>spoil system</i>, <i>mismatch</i>, dan <i>demotion</i> dicetak miring.'
+                        subtitle: '2. Menjelaskan Hubungan Makna Antarkalimat & Antarparagraf',
+                        text: 'Menganalisis keterkaitan logis (kohesi struktur dan koherensi makna) antarbagian wacana:\n• <b>Hubungan Logis:</b> Menentukan hubungan kausalitas (sebab-akibat), pertentangan (konsesif), perbandingan, pertambahan, atau contoh-rincian.\n• <b>Pola Pengembangan Paragraf:</b> Mengidentifikasi pola pengembangan definisi, analogi, kronologi, klasifikasi, deduktif-induktif, hingga sebab-akibat.'
+                    },
+                    {
+                        subtitle: '3. Memprediksi Lanjutan atau Akhir Uraian Cerita',
+                        text: 'Merumuskan estimasi atau simpulan logis mengenai kelanjutan wacana berdasarkan petunjuk (<i>clues</i>) tekstual yang disediakan oleh penulis. Prediksi harus bersifat objektif, terukur, dan konsisten dengan alur argumentasi sebelumnya.'
                     }
                 ],
                 relatedQuestions: [3, 4, 5]
             },
             {
                 id: 'sub3',
-                title: 'Sub Materi 3: Penulisan Rujukan & Posisi Kajian Teori',
-                category: 'Metodologi & Tata Bahasa Baku KBBI',
-                description: 'Penataan sitasi/rujukan ahli dalam struktur karya ilmiah dan penerapan kaidah ejaan yang disempurnakan.',
+                title: 'Sub Bab 3: Evaluasi dan Apresiasi',
+                category: 'Kritik Teks & Sintesis Karya Literatur',
+                description: 'Menilai relevansi, keakuratan data, ketepatan bahasa KBBI, serta mengapresiasi unsur fiksi dan karya sastra secara komprehensif.',
                 content: [
                     {
-                        subtitle: '1. Penempatan Sitasi Pendapat Ahli',
-                        text: 'Kalimat yang berisi sitasi atau pendapat pakar/ahli (misal: "Sebagaimana dikatakan Ashari (2010:4)...") dalam sistematika penulisan karya tulis ilmiah bertindak sebagai landasan teoritis, sehingga diletakkan pada BAB II (Kajian Teori / Landasan Teori).'
+                        subtitle: '1. Menilai Relevansi & Keakuratan Informasi',
+                        text: 'Melakukan evaluasi kritis terhadap konten dan kualitas informasi wacana:\n• <b>Relevansi Informasi:</b> Mengaitkan isu yang dibahas dalam teks (seperti transformasi digital, krisis energi, atau dinamika sosial) dengan konteks kehidupan nyata saat ini.\n• <b>Keakuratan & Kesahihan Data:</b> Menilai keabsahan sumber rujukan, validitas metodologi argumen, serta keterukuran bukti empiris yang disajikan penulis.'
                     },
                     {
-                        subtitle: '2. Koreksi Kata Baku Sesuai KBBI',
-                        text: 'Berdasarkan KBBI V: "andal" (tidak menggunakan h), "sistem" (bukan <i>system</i>), "karier" (bukan <i>karir</i>), "pengawasan" (bukan <i>pegawasan</i>), dan "jabatan" (bukan <i>jabata</i>).'
+                        subtitle: '2. Menilai Ketepatan Bahasa & Penggambaran Unsur Fiksi',
+                        text: 'Menganalisis kualitas teknis penyusunan wacana:\n• <b>Kesesuaian Kaidah Kebahasaan:</b> Menilai kebakuan kata (rujukan KBBI), keefektifan kalimat, penggunaan konjungsi antarparagraf, serta kebenaran tanda baca (PUEBI/EYD).\n• <b>Estetika Penggambaran Fiksi:</b> Menilai kecermatan pemilihan diksi, majas (gaya bahasa), serta penciptaan ritme alur cerita dalam menggambarkan perwatakan tokoh dan latar.'
+                    },
+                    {
+                        subtitle: '3. Menyimpulkan Respons Emosional Terhadap Karya Sastra',
+                        text: 'Mengapresiasi karya sastra (puisi, prosa, dan drama) dengan menganalisis nada (<i>tone</i>), suasana batin, simpati/empati pembaca, serta pesan estetis-filosofis yang disampaikan pengarang melalui karya tersebut.'
                     }
                 ],
                 relatedQuestions: [1, 6]
@@ -591,12 +603,12 @@
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
                                     >
                                         <div>
-                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 1</span>
-                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Paragraf & Sistem Merit</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan khusus seputar rumusan karya ilmiah dan UU ASN.</p>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 1</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Pemahaman Tekstual</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan kata serapan, ejaan KBBI, dan analisis struktur teks.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
-                                            Mulai Latihan Sub Materi 1
+                                            Mulai Latihan Sub Bab 1
                                         </button>
                                     </div>
 
@@ -606,12 +618,12 @@
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
                                     >
                                         <div>
-                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 2</span>
-                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Politisasi Birokrasi</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan pola pengembangan paragraf definisi & kalimat operasional.</p>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 2</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Pemahaman Inferensial</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan pola pengembangan paragraf, ide pokok & simpulan implisit.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
-                                            Mulai Latihan Sub Materi 2
+                                            Mulai Latihan Sub Bab 2
                                         </button>
                                     </div>
 
@@ -621,12 +633,12 @@
                                         className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
                                     >
                                         <div>
-                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 3</span>
-                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Penulisan Rujukan Ahli</h3>
-                                            <p className="text-xs text-slate-500 mb-4">Latihan penempatan sitasi dan kaidah ejaan baku KBBI.</p>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Bab 3</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Evaluasi dan Apresiasi</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan evaluasi keakuratan data, ejaan KBBI, dan respons sastra.</p>
                                         </div>
                                         <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
-                                            Mulai Latihan Sub Materi 3
+                                            Mulai Latihan Sub Bab 3
                                         </button>
                                     </div>
                                 </div>
