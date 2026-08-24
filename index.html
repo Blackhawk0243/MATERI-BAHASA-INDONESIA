@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujian Online CBT - Bahasa Indonesia</title>
+    <title>Materi & Soal TKA Bahasa Indonesia - Standar KBBI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -11,12 +11,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <!-- Babel standalone for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Canvas Confetti for Exam Finish -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -58,14 +56,70 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
 
-        // Data Soal Sesuai KBBI & PUEBI
+        // Data Materi Pembelajaran TKA Bahasa Indonesia
+        const materiData = [
+            {
+                id: 'sub1',
+                title: 'Sub Materi 1: Analisis Paragraf & Rumusan Masalah Karya Ilmiah',
+                category: 'Gaya Bahasa & Struktur Teks',
+                description: 'Memahami ide pokok paragraf, penguraian masalah birokrasi/sistem merit, dan perumusan masalah yang presisi untuk karya ilmiah.',
+                content: [
+                    {
+                        subtitle: '1. Memahami Ide Pokok & Struktur Paragraf Utuh',
+                        text: 'Dalam penulisan baku sesuai PUEBI/EYD, paragraf harus memiliki kesatuan gagasan. Pada teks analisis kebijakan ASN, paragraf menguraikan pentingnya UU No. 5 Tahun 2014 dalam menerapkan sistem merit untuk mengatasi ketidaksesuaian (*mismatch*) antara kompetensi pegawai dan kualifikasi jabatan.'
+                    },
+                    {
+                        subtitle: '2. Ciri Rumusan Masalah Karya Ilmiah',
+                        text: 'Rumusan masalah karya ilmiah disusun dalam bentuk kalimat tanya yang berfokus pada hubungan antarvariabel (seperti implementasi sistem merit dan pemecahan masalah birokrasi). Penulisan kata serapan harus baku: kata "sistem" (bukan *system*), "andal" (bukan *handal*), dan "karier" (bukan *karir*).'
+                    }
+                ],
+                relatedQuestions: [1, 2, 6]
+            },
+            {
+                id: 'sub2',
+                title: 'Sub Materi 2: Pola Pengembangan Paragraf & Politisasi Birokrasi',
+                category: 'Pengembangan Wacana & Definisi Operasional',
+                description: 'Menganalisis jenis pola pengembangan paragraf (definisi, analogi, pertentangan) dan menyusun kalimat definisi operasional.',
+                content: [
+                    {
+                        subtitle: '1. Pola Pengembangan Paragraf Definisi',
+                        text: 'Pola pengembangan definisi menjelaskan batasan atau pengertian suatu konsep secara mendalam. Teks yang menerangkan apa itu "politisasi birokrasi" (seperti intervensi pejabat politik dalam pengangkatan dan demosi ASN) dikategorikan sebagai paragraf berpola pengembangan definisi.'
+                    },
+                    {
+                        subtitle: '2. Kata Depan & Istilah Baku KBBI',
+                        text: 'Perhatikan penulisan edisi baku KBBI: Kata depan "di mana" ditulis terpisah (bukan *dimana* jika menyatakan tempat/konteks). Istilah asing seperti *spoil system*, *mismatch*, dan *demotion* dicetak miring.'
+                    }
+                ],
+                relatedQuestions: [3, 4, 5]
+            },
+            {
+                id: 'sub3',
+                title: 'Sub Materi 3: Penulisan Rujukan & Posisi Kajian Teori',
+                category: 'Metodologi & Tata Bahasa Baku KBBI',
+                description: 'Penataan sitasi/rujukan ahli dalam struktur karya ilmiah dan penerapan kaidah ejaan yang disempurnakan.',
+                content: [
+                    {
+                        subtitle: '1. Penempatan Sitasi Pendapat Ahli',
+                        text: 'Kalimat yang berisi sitasi atau pendapat pakar/ahli (misal: "Sebagaimana dikatakan Ashari (2010:4)...") dalam sistematika penulisan karya tulis ilmiah bertindak sebagai landasan teoritis, sehingga diletakkan pada BAB II (Kajian Teori / Landasan Teori).'
+                    },
+                    {
+                        subtitle: '2. Koreksi Kata Baku Sesuai KBBI',
+                        text: 'Berdasarkan KBBI V: "andal" (tidak menggunakan h), "sistem" (bukan system), "karier" (bukan karir), "pengawasan" (bukan pegawasan), dan "jabatan" (bukan jabata).'
+                    }
+                ],
+                relatedQuestions: [1, 6]
+            }
+        ];
+
+        // Data Soal Sesuai KBBI & PUEBI (Bentuk Paragraf Utuh Tanpa Pemisah Line Shift)
         const examData = [
             {
                 id: 1,
+                subMateriId: 'sub1',
                 contextTitle: "Teks 1: Undang-Undang Nomor 5 Tahun 2014 & Sistem Merit",
-                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) Sistem merit manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. *Mismatch* antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN yang kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik *spoil system* dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
+                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) Merit sistem manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. Mismatch antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik spoil system dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
                 question: "Berdasarkan teks tersebut, salah satu masalah yang bisa diuraikan dalam sebuah karya ilmiah adalah....",
                 options: [
                     "Mengapa permasalahan dalam birokrasi sulit dipecahkan, walaupun berbagai sistem manajemen sudah diterapkan?",
@@ -75,11 +129,12 @@
                     "Bagaimanakah implementasi sistem merit dalam memecahkan masalah manajemen birokrasi?"
                 ],
                 correctAnswer: 4, // E
-                explanation: "Opsi E merupakan rumusan masalah yang paling relevan dengan konteks paragraf. Teks membahas perlunya penataan manajemen ASN melalui sistem merit untuk mengurai berbagai masalah birokrasi yang ada.",
-                image: null
+                explanation: "Opsi E merupakan rumusan masalah yang paling presisi dengan konteks teks. Teks membahas penerapan sistem merit sebagai solusi untuk mengurai masalah manajemen ASN dan birokrasi.",
+                imageName: null
             },
             {
                 id: 2,
+                subMateriId: 'sub1',
                 contextTitle: "Infografis: Bangunan dan Fondasi Sistem Merit ASN",
                 contextText: `Cermati gambar infografis di bawah ini untuk menjawab soal nomor 2. Gambar menunjukkan 6 komponen penting (6P) dalam sistem merit ASN serta nilai positifnya bagi pengembangan aparatur negara.`,
                 question: "Gambar tersebut menyatakan bahwa salah satu nilai positif dalam menerapkan sistem merit pada ASN adalah mengurangi kesenjangan kompetensi dan mendapatkan talenta terbaik. Hal itu berhubungan dengan pemecahan masalah agar tercipta....",
@@ -91,14 +146,15 @@
                     "Sistem dan pola karier pegawai yang cukup jelas dan transparan"
                 ],
                 correctAnswer: 4, // E
-                explanation: "Tujuan dari mengurangi kesenjangan kompetensi dan merekrut talenta terbaik melalui sistem merit adalah terciptanya sistem serta pola karier pegawai yang jelas, transparan, dan kompetitif.",
+                explanation: "Tujuan utama dari pengurangan kesenjangan kompetensi dan pemenuhan talenta terbaik adalah terwujudnya sistem dan pola karier pegawai yang jelas, transparan, serta kompetitif.",
                 imageName: "soal-2.png",
-                defaultImage: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXe9eB1O6x1t-F9Y0j9p4yZ2J-h3Z_L9-4i0hM" // Fallback jika belum diupload di github
+                defaultImage: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXe9eB1O6x1t-F9Y0j9p4yZ2J-h3Z_L9-4i0hM"
             },
             {
                 id: 3,
+                subMateriId: 'sub2',
                 contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit, melainkan lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun tidak lepas dari nuansa politisasi birokrasi.`,
+                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
                 question: "Jika pernyataan pada paragraf tersebut dijadikan pernyataan definisi, maka definisi yang tepat untuk politisasi birokrasi adalah...",
                 options: [
                     "Sebuah upaya untuk mengintervensi manajemen ASN melalui kekuatan politik dalam hal pengangkatan dan promosi serta pencopotan dan demosi ASN.",
@@ -108,13 +164,14 @@
                     "Upaya untuk memberikan gambaran kekuatan politik jika terjadi intervensi dalam semua proses manajemen ASN di pemerintahan."
                 ],
                 correctAnswer: 0, // A
-                explanation: "Definisi politisasi birokrasi berdasarkan kalimat (1) dan (3) merujuk pada upaya intervensi pejabat/kekuatan politik terhadap manajemen ASN dalam hal pengangkatan, promosi, pencopotan, dan demosi pegawai.",
-                image: null
+                explanation: "Definisi politisasi birokrasi secara eksplisit dijelaskan pada kalimat (1) dan (3), yaitu intervensi pejabat politik terhadap manajemen ASN dalam hal pengangkatan, promosi, pencopotan, dan demosi.",
+                imageName: null
             },
             {
                 id: 4,
+                subMateriId: 'sub2',
                 contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit, melainkan lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun tidak lepas dari nuansa politisasi birokrasi.`,
+                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
                 question: "Pernyataan pada paragraf tersebut termasuk dalam pola pengembangan....",
                 options: [
                     "analogi",
@@ -124,13 +181,14 @@
                     "klimaks"
                 ],
                 correctAnswer: 1, // B
-                explanation: "Paragraf tersebut menjelaskan batasan atau pengertian mengenai apa yang dimaksud dengan politisasi birokrasi pada ranah administrasi ASN (Pola pengembangan definisi).",
-                image: null
+                explanation: "Paragraf tersebut berfokus mendefinisikan dan memberikan batas makna istilah politisasi birokrasi dalam ranah administrasi ASN (pola pengembangan definisi).",
+                imageName: null
             },
             {
                 id: 5,
+                subMateriId: 'sub2',
                 contextTitle: "Teks 2: Politisasi Birokrasi dalam Ranah Administrasi",
-                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit, melainkan lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun tidak lepas dari nuansa politisasi birokrasi.`,
+                contextText: `(1) Buruknya penyelenggaraan manajemen ASN selama ini juga diperparah dengan adanya politisasi birokrasi dalam ranah administrasi, yaitu intervensi pejabat politik dalam pengangkatan jabatan karier ASN. (2) Sebagaimana dikatakan Damayanti (2009:12) bahwa dalam sejarah penyelenggaraan pemerintahan Indonesia sarat dengan politisasi birokrasi, di mana kedudukan birokrasi tidak dapat bersifat netral terhadap kekuatan-kekuatan politik yang bermain dalam pemerintahan. (3) Pengangkatan jabatan ASN dipilih dan dipromosikan bukan berdasarkan sistem merit tetapi lebih disebabkan oleh politisasi birokrasi, bahkan pencopotan atau demosi pun juga tidak lepas dari nuansa politisasi birokrasi.`,
                 question: "Pernyataan-pernyataan pada paragraf tersebut dapat diklasifikasikan sebagai permasalahan yang berhubungan dengan....",
                 options: [
                     "politisasi SDM birokrasi",
@@ -140,13 +198,14 @@
                     "masalah karier jabatan ASN"
                 ],
                 correctAnswer: 3, // D
-                explanation: "Fokus utama dari teks tersebut adalah dampak politisasi birokrasi pada ranah pengangkatan dan promosi jabatan ASN.",
-                image: null
+                explanation: "Garis besar paragraf adalah fenomena campur tangan pejabat politik dalam proses pengangkatan serta pemindahan jabatan karier pegawai ASN (politisasi pengangkatan ASN).",
+                imageName: null
             },
             {
                 id: 6,
+                subMateriId: 'sub3',
                 contextTitle: "Teks 1: Undang-Undang Nomor 5 Tahun 2014 & Sistem Merit",
-                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) Sistem merit manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. *Mismatch* antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN yang kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik *spoil system* dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
+                contextText: `(1) Lahirnya Undang-Undang Nomor 5 Tahun 2014 tentang Aparatur Sipil Negara (ASN) merupakan harapan baru bagi pelaksanaan manajemen ASN untuk mencetak ASN yang kompeten, andal, dan kompetitif melalui sistem manajemen berbasis merit. (2) Merit sistem manajemen ASN merupakan pendekatan yang menekankan pada pengelolaan ASN dengan mendasarkan kesesuaian antara keahlian pegawai dan kualifikasi jabatannya. Mismatch antara kompetensi pegawai dan kualifikasi jabatan menjadi masalah utama bagi keberadaan ASN yang menjadi sorotan publik. (3) Salah satu penyebabnya adalah implementasi manajemen ASN kurang profesional, yang berdampak pada minimnya kompetensi ASN. (4) Sebagaimana dikatakan Ashari (2010:4) bahwa perlunya pemberdayaan untuk mengurai masalah-masalah pegawai pemerintah yang lazim terjadi. (5) Masalah-masalah itu adalah (a) Praktik spoil system dan inkompetensi dalam sistem rekrutmen dan seleksi pegawai; (b) Struktur kepegawaian terutama yang menyangkut kualitas dan kuantitas serta distribusi yang tidak ideal; (c) Tingkat efisiensi dan efektivitas serta kinerja pegawai yang belum optimal; (d) Sistem dan pola karier pegawai yang tidak jelas, transparan, dan kompetitif; (e) Tingkat disiplin, etos kerja, dan budaya kerja pegawai masih rendah.`,
                 question: "Pada karya ilmiah, kalimat ke-4 pada paragraf tersebut sebaiknya diletakkan pada bagian....",
                 options: [
                     "latar belakang",
@@ -156,57 +215,58 @@
                     "simpulan"
                 ],
                 correctAnswer: 3, // D
-                explanation: "Kalimat ke-4 berisi rujukan atau sitasi pendapat ahli ('Sebagaimana dikatakan Ashari (2010:4)...') yang berlandaskan teori/literatur pendukung, sehingga tepat diletakkan pada bagian kajian teori.",
-                image: null
+                explanation: "Kalimat (4) memuat sitasi pendapat ahli ('Ashari, 2010:4') sebagai rujukan teoretis, sehingga ditempatkan pada Bab II (Kajian Teori) dalam sistematika karya ilmiah.",
+                imageName: null
             }
         ];
 
         function App() {
-            // State
+            // Navigation States
+            const [activeTab, setActiveTab] = useState('materi'); // 'materi', 'soal', 'beranda'
+            const [selectedMateriId, setSelectedMateriId] = useState('sub1');
+            const [selectedSoalFilter, setSelectedSoalFilter] = useState('all'); // 'all', 'sub1', 'sub2', 'sub3'
+            
+            // CBT Exam States
+            const [activeExamQuestions, setActiveExamQuestions] = useState(examData);
             const [currentIndex, setCurrentIndex] = useState(0);
-            const [userAnswers, setUserAnswers] = useState({}); // { questionId: optionIndex }
-            const [doubtStatus, setDoubtStatus] = useState({}); // { questionId: boolean }
+            const [userAnswers, setUserAnswers] = useState({});
+            const [doubtStatus, setDoubtStatus] = useState({});
             const [isSubmitted, setIsSubmitted] = useState(false);
-            const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 Menit
+            const [isExamStarted, setIsExamStarted] = useState(false);
+
+            // Display & Theme States
             const [isDarkMode, setIsDarkMode] = useState(false);
-            const [fontSize, setFontSize] = useState('text-base'); // text-sm, text-base, text-lg
+            const [fontSize, setFontSize] = useState('text-base');
             const [githubImageBase, setGithubImageBase] = useState('./images/');
             const [showImageModal, setShowImageModal] = useState(null);
-            const [studentName, setStudentName] = useState('Peserta Ujian');
             const [showConfirmModal, setShowConfirmModal] = useState(false);
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-            // Timer Effect
-            useEffect(() => {
-                if (isSubmitted) return;
-                const timer = setInterval(() => {
-                    setTimeLeft((prev) => {
-                        if (prev <= 1) {
-                            clearInterval(timer);
-                            handleSubmit();
-                            return 0;
-                        }
-                        return prev - 1;
-                    });
-                }, 1000);
-                return () => clearInterval(timer);
-            }, [isSubmitted]);
-
-            // Format Waktu MM:SS
-            const formatTime = (seconds) => {
-                const m = Math.floor(seconds / 60);
-                const s = seconds % 60;
-                return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            // Start Exam Function with Category Filtering
+            const handleStartExam = (filterType) => {
+                setSelectedSoalFilter(filterType);
+                let filtered = examData;
+                if (filterType !== 'all') {
+                    filtered = examData.filter(q => q.subMateriId === filterType);
+                }
+                setActiveExamQuestions(filtered);
+                setCurrentIndex(0);
+                setUserAnswers({});
+                setDoubtStatus({});
+                setIsSubmitted(false);
+                setIsExamStarted(true);
+                setActiveTab('soal');
             };
 
-            const currentQ = examData[currentIndex];
+            const currentQ = activeExamQuestions[currentIndex] || activeExamQuestions[0];
 
             const handleSelectOption = (optIndex) => {
-                if (isSubmitted) return;
+                if (isSubmitted || !currentQ) return;
                 setUserAnswers({ ...userAnswers, [currentQ.id]: optIndex });
             };
 
             const toggleDoubt = () => {
-                if (isSubmitted) return;
+                if (isSubmitted || !currentQ) return;
                 setDoubtStatus({ ...doubtStatus, [currentQ.id]: !doubtStatus[currentQ.id] });
             };
 
@@ -218,22 +278,25 @@
                 }
             };
 
-            // Hitung Hasil Ujian
+            // Calculate Exam Score
             const calculateScore = () => {
                 let correctCount = 0;
-                examData.forEach((q) => {
+                activeExamQuestions.forEach((q) => {
                     if (userAnswers[q.id] === q.correctAnswer) {
                         correctCount++;
                     }
                 });
-                const score = Math.round((correctCount / examData.length) * 100);
-                return { correctCount, wrongCount: examData.length - correctCount, score };
+                const score = activeExamQuestions.length > 0 
+                    ? Math.round((correctCount / activeExamQuestions.length) * 100) 
+                    : 0;
+                return { correctCount, wrongCount: activeExamQuestions.length - correctCount, score };
             };
 
             const { correctCount, wrongCount, score } = calculateScore();
 
-            // Mendapatkan URL Gambar (Dari Github Base Path atau Fallback)
+            // Image URL Builder
             const getImageUrl = (q) => {
+                if (!q) return '';
                 if (!q.imageName) return q.defaultImage;
                 return `${githubImageBase}${q.imageName}`;
             };
@@ -242,341 +305,600 @@
                 <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
                     <div className="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col">
                         
-                        {/* NAVBAR HEADER */}
-                        <header className="sticky top-0 z-30 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm px-4 lg:px-8 py-3 flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                                <div className="p-2 bg-brand-600 text-white rounded-lg font-bold text-lg flex items-center justify-center w-10 h-10 shadow-md">
-                                    CBT
-                                </div>
-                                <div>
-                                    <h1 className="font-bold text-slate-900 dark:text-white text-base lg:text-lg leading-tight">
-                                        Ujian Bahasa Indonesia
-                                    </h1>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                                        Manajemen ASN & Sistem Merit • Standar KBBI
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center space-x-3 lg:space-x-6">
-                                {/* Timer */}
-                                {!isSubmitted && (
-                                    <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg border font-mono font-semibold text-sm ${
-                                        timeLeft < 300 
-                                            ? 'bg-red-50 text-red-600 border-red-200 animate-pulse dark:bg-red-950/40 dark:text-red-400 dark:border-red-800' 
-                                            : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600'
-                                    }`}>
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        <span>{formatTime(timeLeft)}</span>
+                        {/* NAVBAR / HEADER */}
+                        <header className="sticky top-0 z-30 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm px-4 lg:px-8 py-3">
+                            <div className="max-w-7xl mx-auto flex items-center justify-between">
+                                
+                                {/* Logo & Main Title */}
+                                <div className="flex items-center space-x-3 cursor-pointer" onClick={() => { setActiveTab('beranda'); setIsExamStarted(false); }}>
+                                    <div className="p-2.5 bg-brand-600 text-white rounded-xl font-black text-xl flex items-center justify-center w-11 h-11 shadow-md tracking-wider">
+                                        TKA
                                     </div>
-                                )}
-
-                                {/* Pengatur Ukuran Font */}
-                                <div className="hidden sm:flex items-center space-x-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-lg border border-slate-200 dark:border-slate-600">
-                                    <button 
-                                        onClick={() => setFontSize('text-sm')} 
-                                        className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-sm' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
-                                        title="Ukuran Teks Kecil">A-</button>
-                                    <button 
-                                        onClick={() => setFontSize('text-base')} 
-                                        className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-base' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
-                                        title="Ukuran Teks Sedang">A</button>
-                                    <button 
-                                        onClick={() => setFontSize('text-lg')} 
-                                        className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-lg' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
-                                        title="Ukuran Teks Besar">A+</button>
+                                    <div>
+                                        <h1 className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg leading-tight">
+                                            Materi TKA Bahasa Indonesia
+                                        </h1>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                            Standar KBBI & PUEBI • Tes Kemampuan Akademik
+                                        </p>
+                                    </div>
                                 </div>
 
-                                {/* Dark Mode Toggle */}
-                                <button
-                                    onClick={() => setIsDarkMode(!isDarkMode)}
-                                    className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600"
-                                    title="Ganti Tema"
-                                >
-                                    {isDarkMode ? (
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                    ) : (
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                                    )}
-                                </button>
-                            </div>
-                        </header>
-
-                        {/* HASIL UJIAN (JIKA SUDAH SUBMIT) */}
-                        {isSubmitted ? (
-                            <main className="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-8">
-                                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 lg:p-8 mb-8 text-center">
-                                    <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">Hasil & Analisis Ujian</h2>
-                                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Berikut adalah skor dan pembahasan lengkap soal sesuai standar KBBI</p>
-                                    
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
-                                        <div className="bg-brand-50 dark:bg-brand-950/40 p-4 rounded-xl border border-brand-200 dark:border-brand-800">
-                                            <span className="block text-sm text-brand-600 dark:text-brand-400 font-medium">Nilai Akhir</span>
-                                            <span className="text-4xl font-black text-brand-700 dark:text-brand-300">{score}</span>
-                                            <span className="text-xs text-slate-500 block mt-1">Skala 0 - 100</span>
-                                        </div>
-                                        <div className="bg-emerald-50 dark:bg-emerald-950/40 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800">
-                                            <span className="block text-sm text-emerald-600 dark:text-emerald-400 font-medium">Jawaban Benar</span>
-                                            <span className="text-4xl font-black text-emerald-700 dark:text-emerald-300">{correctCount}</span>
-                                            <span className="text-xs text-slate-500 block mt-1">Dari {examData.length} Soal</span>
-                                        </div>
-                                        <div className="bg-rose-50 dark:bg-rose-950/40 p-4 rounded-xl border border-rose-200 dark:border-rose-800">
-                                            <span className="block text-sm text-rose-600 dark:text-rose-400 font-medium">Jawaban Salah</span>
-                                            <span className="text-4xl font-black text-rose-700 dark:text-rose-300">{wrongCount}</span>
-                                            <span className="text-xs text-slate-500 block mt-1">Perlu Evaluasi</span>
-                                        </div>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => { setIsSubmitted(false); setUserAnswers({}); setDoubtStatus({}); setTimeLeft(30*60); }} 
-                                        className="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md"
+                                {/* Desktop Menu Nav */}
+                                <nav className="hidden md:flex items-center space-x-1 bg-slate-100 dark:bg-slate-700/60 p-1 rounded-xl border border-slate-200 dark:border-slate-600">
+                                    <button
+                                        onClick={() => { setActiveTab('beranda'); setIsExamStarted(false); }}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition ${
+                                            activeTab === 'beranda' 
+                                                ? 'bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow' 
+                                                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                                        }`}
                                     >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                        <span>Ulangi Ujian</span>
+                                        Beranda
+                                    </button>
+                                    <button
+                                        onClick={() => { setActiveTab('materi'); setIsExamStarted(false); }}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition ${
+                                            activeTab === 'materi' 
+                                                ? 'bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow' 
+                                                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                                        }`}
+                                    >
+                                        📚 Menu Materi
+                                    </button>
+                                    <button
+                                        onClick={() => { setActiveTab('soal'); }}
+                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition ${
+                                            activeTab === 'soal' 
+                                                ? 'bg-white dark:bg-slate-600 text-brand-600 dark:text-brand-300 shadow' 
+                                                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                                        }`}
+                                    >
+                                        ✍️ Menu Soal
+                                    </button>
+                                </nav>
+
+                                {/* Controls: Font Resizer & Dark Mode */}
+                                <div className="flex items-center space-x-2">
+                                    <div className="hidden sm:flex items-center space-x-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-lg border border-slate-200 dark:border-slate-600">
+                                        <button 
+                                            onClick={() => setFontSize('text-sm')} 
+                                            className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-sm' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
+                                            title="Ukuran Teks Kecil">A-</button>
+                                        <button 
+                                            onClick={() => setFontSize('text-base')} 
+                                            className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-base' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
+                                            title="Ukuran Teks Sedang">A</button>
+                                        <button 
+                                            onClick={() => setFontSize('text-lg')} 
+                                            className={`px-2 py-0.5 text-xs font-bold rounded ${fontSize === 'text-lg' ? 'bg-white dark:bg-slate-600 shadow' : 'text-slate-500'}`}
+                                            title="Ukuran Teks Besar">A+</button>
+                                    </div>
+
+                                    {/* Dark Mode Toggle */}
+                                    <button
+                                        onClick={() => setIsDarkMode(!isDarkMode)}
+                                        className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 transition"
+                                        title="Ganti Mode Terang/Gelap"
+                                    >
+                                        {isDarkMode ? (
+                                            <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                        ) : (
+                                            <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                                        )}
+                                    </button>
+
+                                    {/* Mobile Menu Button */}
+                                    <button
+                                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                        className="md:hidden p-2 text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 rounded-xl"
+                                    >
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                                     </button>
                                 </div>
+                            </div>
 
-                                {/* PEMBAHASAN DETAIL SOAL */}
-                                <div className="space-y-6">
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Pembahasan Soal</h3>
-                                    {examData.map((q, idx) => {
-                                        const userAns = userAnswers[q.id];
-                                        const isCorrect = userAns === q.correctAnswer;
-                                        return (
-                                            <div key={q.id} className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow border border-slate-200 dark:border-slate-700">
-                                                <div className="flex items-start justify-between mb-4">
-                                                    <span className="font-bold text-slate-900 dark:text-white text-lg">Soal Nomor {idx + 1}</span>
-                                                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                                                        isCorrect 
-                                                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' 
-                                                            : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-                                                    }`}>
-                                                        {isCorrect ? 'BENAR' : 'SALAH'}
-                                                    </span>
-                                                </div>
-
-                                                <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 mb-2">{q.contextTitle}</p>
-                                                <p className="text-slate-700 dark:text-slate-300 text-sm mb-4 whitespace-pre-line">{q.question}</p>
-
-                                                {/* GAMBAR PADA HASIL JIKA ADA */}
-                                                {(q.imageName || q.defaultImage) && (
-                                                    <div className="mb-4">
-                                                        <img 
-                                                            src={getImageUrl(q)} 
-                                                            onError={(e) => { e.target.src = q.defaultImage; }}
-                                                            alt={`Gambar Soal ${q.id}`} 
-                                                            className="max-h-60 rounded-lg border dark:border-slate-700 object-contain"
-                                                        />
-                                                    </div>
-                                                )}
-
-                                                {/* OPTIONS REVIEW */}
-                                                <div className="space-y-2 mb-4">
-                                                    {q.options.map((opt, oIdx) => {
-                                                        const isUserChoice = userAns === oIdx;
-                                                        const isCorrectChoice = q.correctAnswer === oIdx;
-                                                        let style = "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300";
-                                                        
-                                                        if (isCorrectChoice) {
-                                                            style = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-medium";
-                                                        } else if (isUserChoice && !isCorrectChoice) {
-                                                            style = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 line-through";
-                                                        }
-
-                                                        return (
-                                                            <div key={oIdx} className={`p-3 rounded-lg border text-sm flex items-start space-x-3 ${style}`}>
-                                                                <span className="font-bold">{String.fromCharCode(65 + oIdx)}.</span>
-                                                                <span className="flex-1">{opt}</span>
-                                                                {isCorrectChoice && <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Kunci Jawaban</span>}
-                                                                {isUserChoice && !isCorrectChoice && <span className="text-xs font-bold text-rose-600 dark:text-rose-400">Pilihan Anda</span>}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-
-                                                {/* PEMBAHASAN */}
-                                                <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs sm:text-sm text-amber-900 dark:text-amber-200">
-                                                    <strong className="font-bold block mb-1">Kunci & Pembahasan:</strong>
-                                                    {q.explanation}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
+                            {/* Mobile Drawer Menu */}
+                            {isMobileMenuOpen && (
+                                <div className="md:hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                                    <button
+                                        onClick={() => { setActiveTab('beranda'); setIsExamStarted(false); setIsMobileMenuOpen(false); }}
+                                        className="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700"
+                                    >
+                                        🏠 Beranda Utama
+                                    </button>
+                                    <button
+                                        onClick={() => { setActiveTab('materi'); setIsExamStarted(false); setIsMobileMenuOpen(false); }}
+                                        className="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700"
+                                    >
+                                        📚 Menu Materi Pembelajaran
+                                    </button>
+                                    <button
+                                        onClick={() => { setActiveTab('soal'); setIsMobileMenuOpen(false); }}
+                                        className="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700"
+                                    >
+                                        ✍️ Menu Latihan Soal
+                                    </button>
                                 </div>
-                            </main>
-                        ) : (
-                            /* INTERFACE UJIAN CBT MAIN */
-                            <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                                
-                                {/* KOLOM KIRI: TEKS / BACAAN / INFOGRAFIS */}
-                                <div className="lg:col-span-6 flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden h-[500px] lg:h-[calc(100vh-140px)]">
-                                    <div className="bg-slate-100 dark:bg-slate-750 border-b border-slate-200 dark:border-slate-700 px-4 py-3 flex items-center justify-between">
-                                        <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm flex items-center space-x-2">
-                                            <svg className="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                            <span>Bahan Bacaan & Stimulus</span>
-                                        </h3>
-                                        <span className="text-xs text-slate-500 font-mono">Soal {currentIndex + 1} dari {examData.length}</span>
-                                    </div>
-                                    
-                                    <div className={`flex-1 p-5 overflow-y-auto custom-scrollbar ${fontSize}`}>
-                                        <h4 className="font-bold text-slate-900 dark:text-white mb-3 text-base">
-                                            {currentQ.contextTitle}
-                                        </h4>
-                                        
-                                        {/* Teks Bacaan */}
-                                        <div className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line mb-4">
-                                            {currentQ.contextText}
-                                        </div>
+                            )}
+                        </header>
 
-                                        {/* GAMBAR STIMULUS JIKA ADA */}
-                                        {(currentQ.imageName || currentQ.defaultImage) && (
-                                            <div className="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2 bg-slate-50 dark:bg-slate-900">
-                                                <div className="relative group cursor-pointer" onClick={() => setShowImageModal(getImageUrl(currentQ))}>
-                                                    <img 
-                                                        src={getImageUrl(currentQ)} 
-                                                        onError={(e) => { e.target.src = currentQ.defaultImage; }}
-                                                        alt={`Gambar Stimulus Soal ${currentQ.id}`} 
-                                                        className="w-full h-auto max-h-80 object-contain rounded-lg shadow-sm"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg text-white font-medium text-xs">
-                                                        Klik untuk Memperbesar Gambar
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-center text-slate-500 mt-2">
-                                                    *Gambar otomatis dimuat dari repository GitHub (`{currentQ.imageName || 'soal-2.png'}`)
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* KOLOM KANAN: SOAL, PILIHAN & NAVIGASI */}
-                                <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
-                                    
-                                    {/* PANEL PERTANYAAN */}
-                                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 lg:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <span className="text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
-                                                Pertanyaan No. {currentIndex + 1}
-                                            </span>
-
-                                            {/* Ragu-Ragu Checkbox */}
-                                            <label className="flex items-center space-x-2 cursor-pointer select-none">
-                                                <input 
-                                                    type="checkbox" 
-                                                    checked={!!doubtStatus[currentQ.id]} 
-                                                    onChange={toggleDoubt}
-                                                    className="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-400"
-                                                />
-                                                <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">Ragu-Ragu</span>
-                                            </label>
-                                        </div>
-
-                                        <h3 className={`font-semibold text-slate-800 dark:text-slate-100 mb-6 leading-normal ${fontSize}`}>
-                                            {currentQ.question}
-                                        </h3>
-
-                                        {/* PILIHAN JAWABAN (A, B, C, D, E) */}
-                                        <div className="space-y-3 flex-1">
-                                            {currentQ.options.map((opt, optIndex) => {
-                                                const isSelected = userAnswers[currentQ.id] === optIndex;
-                                                const optionLetter = String.fromCharCode(65 + optIndex);
-
-                                                return (
-                                                    <button
-                                                        key={optIndex}
-                                                        onClick={() => handleSelectOption(optIndex)}
-                                                        className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 group ${
-                                                            isSelected 
-                                                                ? 'border-brand-600 bg-brand-50/80 dark:bg-brand-950/40 text-brand-900 dark:text-brand-100 ring-2 ring-brand-500/20' 
-                                                                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200'
-                                                        }`}
-                                                    >
-                                                        <span className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${
-                                                            isSelected 
-                                                                ? 'bg-brand-600 text-white' 
-                                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-slate-200'
-                                                        }`}>
-                                                            {optionLetter}
-                                                        </span>
-                                                        <span className={`flex-1 ${fontSize} leading-snug`}>
-                                                            {opt}
-                                                        </span>
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* PANEL NAVIGASI SOAL & KONTROL */}
-                                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm flex flex-col space-y-4">
-                                        
-                                        {/* GRID NOMOR SOAL */}
-                                        <div>
-                                            <div className="text-xs font-semibold text-slate-500 mb-2 flex justify-between items-center">
-                                                <span>Peta Navigasi Soal</span>
-                                                <span className="text-[10px] text-slate-400">Hijau: Terjawab | Kuning: Ragu</span>
-                                            </div>
-                                            <div className="grid grid-cols-6 gap-2">
-                                                {examData.map((q, idx) => {
-                                                    const isAns = userAnswers[q.id] !== undefined;
-                                                    const isDoubt = doubtStatus[q.id];
-                                                    const isCurr = currentIndex === idx;
-
-                                                    let badgeStyle = "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600";
-                                                    if (isDoubt) {
-                                                        badgeStyle = "bg-amber-500 text-white border-amber-600";
-                                                    } else if (isAns) {
-                                                        badgeStyle = "bg-emerald-600 text-white border-emerald-700";
-                                                    }
-
-                                                    return (
-                                                        <button
-                                                            key={q.id}
-                                                            onClick={() => setCurrentIndex(idx)}
-                                                            className={`h-9 rounded-lg font-bold text-xs border transition-all flex items-center justify-center relative ${badgeStyle} ${
-                                                                isCurr ? 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 scale-105' : ''
-                                                            }`}
-                                                        >
-                                                            {idx + 1}
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-
-                                        {/* TOMBOL NAVIGASI BOTTOM */}
-                                        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
-                                            <button
-                                                disabled={currentIndex === 0}
-                                                onClick={() => setCurrentIndex(currentIndex - 1)}
-                                                className="px-4 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                        {/* MAIN CONTENT CONTAINER */}
+                        {activeTab === 'beranda' && (
+                            <main className="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-8 space-y-8">
+                                <div className="bg-gradient-to-r from-brand-600 to-brand-800 text-white rounded-3xl p-6 sm:p-10 shadow-xl relative overflow-hidden">
+                                    <div className="relative z-10 max-w-2xl">
+                                        <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                                            Portal Pembelajaran Resmi
+                                        </span>
+                                        <h2 className="text-2xl sm:text-4xl font-extrabold mb-3 leading-tight">
+                                            Materi TKA Bahasa Indonesia & Bank Soal CBT
+                                        </h2>
+                                        <p className="text-brand-100 text-sm sm:text-base mb-6 leading-relaxed">
+                                            Platform persiapan Ujian Kemampuan Akademik Bahasa Indonesia dengan penyusunan stimulus, tata bahasa, dan istilah baku yang disesuaikan secara presisi dengan KBBI dan PUEBI.
+                                        </p>
+                                        <div className="flex flex-wrap gap-3">
+                                            <button 
+                                                onClick={() => setActiveTab('materi')}
+                                                className="bg-white text-brand-700 hover:bg-brand-50 font-bold px-5 py-2.5 rounded-xl text-sm shadow transition"
                                             >
-                                                &larr; Sebelumnya
+                                                Pelajari Materi
                                             </button>
-
-                                            {currentIndex === examData.length - 1 ? (
-                                                <button
-                                                    onClick={() => setShowConfirmModal(true)}
-                                                    className="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition"
-                                                >
-                                                    Selesai Ujian
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setCurrentIndex(currentIndex + 1)}
-                                                    className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-md transition"
-                                                >
-                                                    Selanjutnya &rarr;
-                                                </button>
-                                            )}
+                                            <button 
+                                                onClick={() => handleStartExam('all')}
+                                                className="bg-brand-500 hover:bg-brand-400 text-white font-bold px-5 py-2.5 rounded-xl text-sm border border-brand-400 shadow transition"
+                                            >
+                                                Mulai Semua Soal
+                                            </button>
                                         </div>
+                                    </div>
+                                </div>
+
+                                {/* MENU UTAMA SELECTION GRID */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* CARD MENU MATERI */}
+                                    <div 
+                                        onClick={() => setActiveTab('materi')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer group"
+                                    >
+                                        <div className="w-12 h-12 bg-brand-100 text-brand-600 dark:bg-brand-950 dark:text-brand-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Menu Materi Pembelajaran</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
+                                            Akses ringkasan sub materi lengkap mulai dari analisis paragraf, perumusan karya ilmiah, hingga aturan ejaan baku KBBI.
+                                        </p>
+                                        <span className="text-brand-600 dark:text-brand-400 text-xs font-bold inline-flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+                                            <span>Buka Modul Materi</span>
+                                            <span>&rarr;</span>
+                                        </span>
+                                    </div>
+
+                                    {/* CARD MENU SOAL */}
+                                    <div 
+                                        onClick={() => setActiveTab('soal')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer group"
+                                    >
+                                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Menu Latihan Soal CBT</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
+                                            Uji pemahaman Anda dengan simulasi latihan soal per Sub Materi atau Paket Lengkap tanpa batasan timer waktu.
+                                        </p>
+                                        <span className="text-emerald-600 dark:text-emerald-400 text-xs font-bold inline-flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+                                            <span>Pilih Modul Soal</span>
+                                            <span>&rarr;</span>
+                                        </span>
                                     </div>
                                 </div>
                             </main>
                         )}
 
-                        {/* MODAL PERBESAR GAMBAR */}
+                        {/* MENU MATERI VIEW */}
+                        {activeTab === 'materi' && (
+                            <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                                
+                                {/* SIDEBAR NAV SUB MATERI */}
+                                <div className="lg:col-span-4 space-y-3">
+                                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 px-1">Daftar Sub Materi TKA</h3>
+                                    {materiData.map((m) => (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => setSelectedMateriId(m.id)}
+                                            className={`w-full text-left p-4 rounded-2xl border transition-all ${
+                                                selectedMateriId === m.id 
+                                                    ? 'bg-brand-50 border-brand-500 dark:bg-brand-950/60 dark:border-brand-600 text-slate-900 dark:text-white shadow-sm ring-1 ring-brand-500/30' 
+                                                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300'
+                                            }`}
+                                        >
+                                            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-300 rounded-md mb-2 inline-block">
+                                                {m.category}
+                                            </span>
+                                            <h4 className="font-bold text-sm leading-snug mb-1">{m.title}</h4>
+                                            <p className="text-xs text-slate-500 line-clamp-2">{m.description}</p>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* DETAIL MATERI DISPLAY */}
+                                <div className="lg:col-span-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm flex flex-col justify-between">
+                                    {(() => {
+                                        const activeM = materiData.find(m => m.id === selectedMateriId) || materiData[0];
+                                        return (
+                                            <div className="space-y-6">
+                                                <div className="border-b border-slate-100 dark:border-slate-700 pb-4">
+                                                    <span className="text-xs font-bold text-brand-600 dark:text-brand-400">{activeM.category}</span>
+                                                    <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">{activeM.title}</h2>
+                                                </div>
+
+                                                <p className="text-sm text-slate-600 dark:text-slate-300 italic bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                    "{activeM.description}"
+                                                </p>
+
+                                                <div className="space-y-4">
+                                                    {activeM.content.map((sec, sIdx) => (
+                                                        <div key={sIdx} className="space-y-2">
+                                                            <h3 className="font-bold text-slate-800 dark:text-slate-200 text-base">{sec.subtitle}</h3>
+                                                            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-line">{sec.text}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <div className="pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4">
+                                                    <span className="text-xs text-slate-500">Sub materi ini mencakup {activeM.relatedQuestions.length} latihan soal khusus.</span>
+                                                    <button
+                                                        onClick={() => handleStartExam(activeM.id)}
+                                                        className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow transition"
+                                                    >
+                                                        Kerjakan Soal {activeM.title.split(':')[0]} &rarr;
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            </main>
+                        )}
+
+                        {/* MENU SOAL VIEW */}
+                        {activeTab === 'soal' && !isExamStarted && (
+                            <main className="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-6">
+                                <div className="text-center max-w-xl mx-auto mb-8">
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pilih Modul Latihan Soal</h2>
+                                    <p className="text-sm text-slate-500">Pilih sub materi yang ingin Anda latih, atau ambil modul ujian lengkap tanpa batasan timer waktu.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* PAKET LENGKAP */}
+                                    <div 
+                                        onClick={() => handleStartExam('all')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-brand-500/40 hover:border-brand-500 shadow-sm transition cursor-pointer flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <span className="bg-brand-100 text-brand-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Paket Ujian Utama</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Semua Soal TKA Bahasa Indonesia</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Total 6 Soal mencakup seluruh materi dan stimulus gambar.</p>
+                                        </div>
+                                        <button className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-2.5 rounded-xl transition">
+                                            Mulai Latihan Lengkap
+                                        </button>
+                                    </div>
+
+                                    {/* SUB MATERI 1 SOAL */}
+                                    <div 
+                                        onClick={() => handleStartExam('sub1')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 1</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Paragraf & Sistem Merit</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan khusus seputar rumusan karya ilmiah dan UU ASN.</p>
+                                        </div>
+                                        <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
+                                            Mulai Latihan Sub Materi 1
+                                        </button>
+                                    </div>
+
+                                    {/* SUB MATERI 2 SOAL */}
+                                    <div 
+                                        onClick={() => handleStartExam('sub2')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 2</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Politisasi Birokrasi</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan pola pengembangan paragraf definisi & kalimat operasional.</p>
+                                        </div>
+                                        <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
+                                            Mulai Latihan Sub Materi 2
+                                        </button>
+                                    </div>
+
+                                    {/* SUB MATERI 3 SOAL */}
+                                    <div 
+                                        onClick={() => handleStartExam('sub3')}
+                                        className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-slate-300 transition cursor-pointer flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <span className="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Sub Materi 3</span>
+                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-2 mb-1">Soal Penulisan Rujukan Ahli</h3>
+                                            <p className="text-xs text-slate-500 mb-4">Latihan penempatan sitasi dan kaidah ejaan baku KBBI.</p>
+                                        </div>
+                                        <button className="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs py-2.5 rounded-xl transition">
+                                            Mulai Latihan Sub Materi 3
+                                        </button>
+                                    </div>
+                                </div>
+                            </main>
+                        )}
+
+                        {/* CBT EXAM INTERFACE (WHEN EXAM STARTED) */}
+                        {activeTab === 'soal' && isExamStarted && (
+                            <>
+                                {isSubmitted ? (
+                                    /* REVIEW & EXAM RESULTS */
+                                    <main className="flex-1 max-w-6xl w-full mx-auto p-4 lg:p-8">
+                                        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 lg:p-8 mb-8 text-center">
+                                            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">Hasil & Analisis Latihan</h2>
+                                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Berikut adalah skor akhir dan pembahasan lengkap soal sesuai standar KBBI</p>
+                                            
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+                                                <div className="bg-brand-50 dark:bg-brand-950/40 p-4 rounded-xl border border-brand-200 dark:border-brand-800">
+                                                    <span className="block text-sm text-brand-600 dark:text-brand-400 font-medium">Nilai Akhir</span>
+                                                    <span className="text-4xl font-black text-brand-700 dark:text-brand-300">{score}</span>
+                                                    <span className="text-xs text-slate-500 block mt-1">Skala 0 - 100</span>
+                                                </div>
+                                                <div className="bg-emerald-50 dark:bg-emerald-950/40 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                                                    <span className="block text-sm text-emerald-600 dark:text-emerald-400 font-medium">Jawaban Benar</span>
+                                                    <span className="text-4xl font-black text-emerald-700 dark:text-emerald-300">{correctCount}</span>
+                                                    <span className="text-xs text-slate-500 block mt-1">Dari {activeExamQuestions.length} Soal</span>
+                                                </div>
+                                                <div className="bg-rose-50 dark:bg-rose-950/40 p-4 rounded-xl border border-rose-200 dark:border-rose-800">
+                                                    <span className="block text-sm text-rose-600 dark:text-rose-400 font-medium">Jawaban Salah</span>
+                                                    <span className="text-4xl font-black text-rose-700 dark:text-rose-300">{wrongCount}</span>
+                                                    <span className="text-xs text-slate-500 block mt-1">Perlu Evaluasi</span>
+                                                </div>
+                                            </div>
+
+                                            <button 
+                                                onClick={() => { setIsExamStarted(false); setIsSubmitted(false); }} 
+                                                className="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md text-xs sm:text-sm"
+                                            >
+                                                <span>Kembali ke Menu Soal</span>
+                                            </button>
+                                        </div>
+
+                                        {/* PEMBAHASAN DETAIL SOAL */}
+                                        <div className="space-y-6">
+                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Pembahasan Soal Detail</h3>
+                                            {activeExamQuestions.map((q, idx) => {
+                                                const userAns = userAnswers[q.id];
+                                                const isCorrect = userAns === q.correctAnswer;
+                                                return (
+                                                    <div key={q.id} className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow border border-slate-200 dark:border-slate-700">
+                                                        <div className="flex items-start justify-between mb-4">
+                                                            <span className="font-bold text-slate-900 dark:text-white text-base sm:text-lg">Soal Nomor {idx + 1}</span>
+                                                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                                                isCorrect 
+                                                                    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' 
+                                                                    : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                                                            }`}>
+                                                                {isCorrect ? 'BENAR' : 'SALAH'}
+                                                            </span>
+                                                        </div>
+
+                                                        <p className="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-2">{q.contextTitle}</p>
+                                                        <p className="text-slate-700 dark:text-slate-300 text-sm mb-4">{q.question}</p>
+
+                                                        {/* OPTIONS REVIEW */}
+                                                        <div className="space-y-2 mb-4">
+                                                            {q.options.map((opt, oIdx) => {
+                                                                const isUserChoice = userAns === oIdx;
+                                                                const isCorrectChoice = q.correctAnswer === oIdx;
+                                                                let style = "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300";
+                                                                
+                                                                if (isCorrectChoice) {
+                                                                    style = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-medium";
+                                                                } else if (isUserChoice && !isCorrectChoice) {
+                                                                    style = "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 line-through";
+                                                                }
+
+                                                                return (
+                                                                    <div key={oIdx} className={`p-3 rounded-lg border text-xs sm:text-sm flex items-start space-x-3 ${style}`}>
+                                                                        <span className="font-bold">{String.fromCharCode(65 + oIdx)}.</span>
+                                                                        <span className="flex-1">{opt}</span>
+                                                                        {isCorrectChoice && <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Kunci Jawaban</span>}
+                                                                        {isUserChoice && !isCorrectChoice && <span className="text-xs font-bold text-rose-600 dark:text-rose-400">Pilihan Anda</span>}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+
+                                                        {/* EXPLANATION */}
+                                                        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs sm:text-sm text-amber-900 dark:text-amber-200">
+                                                            <strong className="font-bold block mb-1">Kunci & Pembahasan:</strong>
+                                                            {q.explanation}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </main>
+                                ) : (
+                                    /* ACTIVE QUESTION SCREEN (SPLIT VIEW) */
+                                    <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                                        
+                                        {/* LEFT COLUMN: STIMULUS READINGS & INFOGRAPHICS */}
+                                        <div className="lg:col-span-6 flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden min-h-[300px] lg:h-[calc(100vh-140px)]">
+                                            <div className="bg-slate-100 dark:bg-slate-750 border-b border-slate-200 dark:border-slate-700 px-4 py-3 flex items-center justify-between">
+                                                <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-xs sm:text-sm flex items-center space-x-2">
+                                                    <span>Bahan Bacaan & Stimulus Teks</span>
+                                                </h3>
+                                                <span className="text-xs text-slate-500 font-mono">Soal {currentIndex + 1} dari {activeExamQuestions.length}</span>
+                                            </div>
+                                            
+                                            <div className={`flex-1 p-5 overflow-y-auto custom-scrollbar ${fontSize}`}>
+                                                <h4 className="font-bold text-slate-900 dark:text-white mb-3 text-base">
+                                                    {currentQ.contextTitle}
+                                                </h4>
+                                                
+                                                {/* Single Paragraf Reading Passage */}
+                                                <div className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-justify">
+                                                    {currentQ.contextText}
+                                                </div>
+
+                                                {/* Image Stimulus Viewer */}
+                                                {(currentQ.imageName || currentQ.defaultImage) && (
+                                                    <div className="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl p-2 bg-slate-50 dark:bg-slate-900">
+                                                        <div className="relative group cursor-pointer" onClick={() => setShowImageModal(getImageUrl(currentQ))}>
+                                                            <img 
+                                                                src={getImageUrl(currentQ)} 
+                                                                onError={(e) => { e.target.src = currentQ.defaultImage; }}
+                                                                alt={`Gambar Stimulus Soal ${currentQ.id}`} 
+                                                                className="w-full h-auto max-h-80 object-contain rounded-lg shadow-sm"
+                                                            />
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg text-white font-medium text-xs">
+                                                                Klik untuk Memperbesar Gambar
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-[11px] text-center text-slate-500 mt-2">
+                                                            *Gambar dimuat dari repository GitHub (`{currentQ.imageName || 'soal-2.png'}`)
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* RIGHT COLUMN: QUESTION & OPTIONS */}
+                                        <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
+                                            
+                                            {/* QUESTION PANEL */}
+                                            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 lg:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className="text-[11px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
+                                                        Pertanyaan No. {currentIndex + 1}
+                                                    </span>
+
+                                                    {/* Doubt Checkbox */}
+                                                    <label className="flex items-center space-x-2 cursor-pointer select-none">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            checked={!!doubtStatus[currentQ.id]} 
+                                                            onChange={toggleDoubt}
+                                                            className="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-400"
+                                                        />
+                                                        <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">Ragu-Ragu</span>
+                                                    </label>
+                                                </div>
+
+                                                <h3 className={`font-semibold text-slate-800 dark:text-slate-100 mb-6 leading-normal ${fontSize}`}>
+                                                    {currentQ.question}
+                                                </h3>
+
+                                                {/* MULTIPLE CHOICE OPTIONS */}
+                                                <div className="space-y-3 flex-1">
+                                                    {currentQ.options.map((opt, optIndex) => {
+                                                        const isSelected = userAnswers[currentQ.id] === optIndex;
+                                                        const optionLetter = String.fromCharCode(65 + optIndex);
+
+                                                        return (
+                                                            <button
+                                                                key={optIndex}
+                                                                onClick={() => handleSelectOption(optIndex)}
+                                                                className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 group ${
+                                                                    isSelected 
+                                                                        ? 'border-brand-600 bg-brand-50/80 dark:bg-brand-950/40 text-brand-900 dark:text-brand-100 ring-2 ring-brand-500/20' 
+                                                                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200'
+                                                                }`}
+                                                            >
+                                                                <span className={`w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center shrink-0 transition-colors ${
+                                                                    isSelected 
+                                                                        ? 'bg-brand-600 text-white' 
+                                                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-slate-200'
+                                                                }`}>
+                                                                    {optionLetter}
+                                                                </span>
+                                                                <span className={`flex-1 ${fontSize} leading-snug`}>
+                                                                    {opt}
+                                                                </span>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+
+                                            {/* NAVIGATION & CONTROLS PANEL */}
+                                            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm flex flex-col space-y-4">
+                                                
+                                                {/* QUESTION MAP GRID */}
+                                                <div>
+                                                    <div className="text-xs font-semibold text-slate-500 mb-2 flex justify-between items-center">
+                                                        <span>Peta Navigasi Soal</span>
+                                                        <span className="text-[10px] text-slate-400">Hijau: Terjawab | Kuning: Ragu</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-6 gap-2">
+                                                        {activeExamQuestions.map((q, idx) => {
+                                                            const isAns = userAnswers[q.id] !== undefined;
+                                                            const isDoubt = doubtStatus[q.id];
+                                                            const isCurr = currentIndex === idx;
+
+                                                            let badgeStyle = "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600";
+                                                            if (isDoubt) {
+                                                                badgeStyle = "bg-amber-500 text-white border-amber-600";
+                                                            } else if (isAns) {
+                                                                badgeStyle = "bg-emerald-600 text-white border-emerald-700";
+                                                            }
+
+                                                            return (
+                                                                <button
+                                                                    key={q.id}
+                                                                    onClick={() => setCurrentIndex(idx)}
+                                                                    className={`h-9 rounded-lg font-bold text-xs border transition-all flex items-center justify-center relative ${badgeStyle} ${
+                                                                        isCurr ? 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-800 scale-105' : ''
+                                                                    }`}
+                                                                >
+                                                                    {idx + 1}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                {/* BOTTOM NAVIGATION BUTTONS */}
+                                                <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
+                                                    <button
+                                                        disabled={currentIndex === 0}
+                                                        onClick={() => setCurrentIndex(currentIndex - 1)}
+                                                        className="px-4 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                                                    >
+                                                        &larr; Sebelumnya
+                                                    </button>
+
+                                                    {currentIndex === activeExamQuestions.length - 1 ? (
+                                                        <button
+                                                            onClick={() => setShowConfirmModal(true)}
+                                                            className="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition"
+                                                        >
+                                                            Selesai Latihan
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => setCurrentIndex(currentIndex + 1)}
+                                                            className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-md transition"
+                                                        >
+                                                            Selanjutnya &rarr;
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </main>
+                                )}
+                            </>
+                        )}
+
+                        {/* IMAGE ZOOM MODAL */}
                         {showImageModal && (
                             <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={() => setShowImageModal(null)}>
                                 <div className="relative max-w-4xl w-full bg-white dark:bg-slate-800 rounded-2xl overflow-hidden p-2" onClick={(e) => e.stopPropagation()}>
@@ -591,16 +913,16 @@
                             </div>
                         )}
 
-                        {/* MODAL KONFIRMASI SUBMIT */}
+                        {/* CONFIRM SUBMIT MODAL */}
                         {showConfirmModal && (
                             <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
                                 <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
                                     <div className="w-12 h-12 bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Konfirmasi Selesai Ujian</h3>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Konfirmasi Selesai Latihan</h3>
                                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                                        Apakah Anda yakin ingin mengakhiri ujian ini? Pastikan seluruh soal telah Anda periksa kembali.
+                                        Apakah Anda yakin ingin menyelesaikan modul soal ini?
                                     </p>
                                     <div className="flex space-x-3">
                                         <button 
@@ -613,7 +935,7 @@
                                             onClick={handleSubmit}
                                             className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
                                         >
-                                            Ya, Akhiri Ujian
+                                            Ya, Selesai
                                         </button>
                                     </div>
                                 </div>
@@ -622,7 +944,7 @@
 
                         {/* FOOTER */}
                         <footer className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-3 text-center text-xs text-slate-500 dark:text-slate-400">
-                            System CBT Ujian Bahasa Indonesia • Hak Cipta &copy; {new Date().getFullYear()}
+                            Portal Materi & Soal TKA Bahasa Indonesia • Hak Cipta &copy; {new Date().getFullYear()}
                         </footer>
                     </div>
                 </div>
