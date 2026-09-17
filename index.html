@@ -7,10 +7,10 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter & Merriweather -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- React & ReactDOM CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -18,38 +18,73 @@
   <!-- Babel Standalone for in-browser JSX parsing -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s ease-out forwards',
+            'slide-up': 'slideUp 0.5s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(15px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      -webkit-font-smoothing: antialiased;
     }
     .reading-font {
       font-family: 'Merriweather', serif;
     }
     /* Custom Scrollbars */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1f5f9;
+      background: transparent;
     }
     ::-webkit-scrollbar-thumb {
       background: #cbd5e1;
-      border-radius: 4px;
+      border-radius: 9999px;
+      border: 2px solid #f8fafc;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
+    
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="text-slate-800 min-h-screen selection:bg-blue-200 selection:text-blue-900">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
     // ==========================================
-    // 1. DATA MATERI PEMBELAJARAN (GLOBAL & KBBI)
+    // 1. DATA MATERI PEMBELAJARAN
     // ==========================================
     const materiData = [
       {
@@ -57,31 +92,35 @@
         title: "Pemahaman Tekstual",
         subtitle: "Analisis Makna Leksikal, Unsur Intrinsik/Ekstrinsik, dan Restrukturisasi Bagan",
         content: `
-          <div class="space-y-6 text-slate-700 leading-relaxed">
+          <div class="space-y-6 text-slate-700 leading-relaxed text-[15px]">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">A. Identifikasi Kata Serapan Asing dan Daerah</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-blue-600 rounded-full"></span> Identifikasi Kata Serapan Asing dan Daerah</h3>
               <p class="mb-3">Bahasa Indonesia memperkaya kosakatanya melalui proses penyerapan unsur bahasa daerah maupun bahasa asing. Berdasarkan Pedoman Umum Ejaan Bahasa Indonesia (PUEBI) dan KBBI, penyerapan dibagi menjadi tiga jalur utama:</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-blue-500">
                 <li><strong>Adopsi:</strong> Pengambilan bentuk kata dan maknanya secara utuh tanpa modifikasi fonologis (misalnya: <em>supermarket</em>, <em>de facto</em>, <em>status quo</em>).</li>
                 <li><strong>Adaptasi:</strong> Penyesuaian ejaan dan lafal asing dengan kaidah fonologi bahasa Indonesia (misalnya: <em>coordination</em> → <strong>koordinasi</strong>, <em>system</em> → <strong>sistem</strong>, <em>efforts</em> → <strong>upaya</strong>).</li>
                 <li><strong>Penerjemahan/Kalk:</strong> Mengambil konsep maknanya lalu dicarikan padanan katanya dalam bahasa Indonesia (misalnya: <em>feed</em> → <strong>umpan</strong>, <em>download</em> → <strong>unduh</strong>, <em>network</em> → <strong>jaringan</strong>).</li>
               </ul>
-              <div class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-600 rounded text-sm">
-                <strong>Ketentuan Kata Baku KBBI:</strong> Kata seperti <em>praktek</em>, <em>analisa</em>, dan <em>handal</em> adalah bentuk tidak baku. Bentuk baku yang benar menurut KBBI adalah <strong>praktik</strong>, <strong>analisis</strong>, dan <strong>andal</strong>.
+              <div class="mt-4 p-4 bg-blue-50/50 border border-blue-100 rounded-xl text-sm flex items-start gap-3">
+                <span class="text-xl">💡</span>
+                <div>
+                  <strong class="text-blue-800 block mb-1">Ketentuan Kata Baku KBBI:</strong> 
+                  <span class="text-slate-600">Kata seperti <em>praktek</em>, <em>analisa</em>, dan <em>handal</em> adalah bentuk tidak baku. Bentuk baku yang benar menurut KBBI adalah <strong class="text-emerald-600">praktik</strong>, <strong class="text-emerald-600">analisis</strong>, dan <strong class="text-emerald-600">andal</strong>.</span>
+                </div>
               </div>
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">B. Analisis Unsur Tekstual (Fiksi dan Nonfiksi)</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-blue-600 rounded-full"></span> Analisis Unsur Tekstual (Fiksi dan Nonfiksi)</h3>
               <p class="mb-3">Pemahaman tekstual memerlukan ketelitian dalam menyaring informasi yang tersurat (eksplisit) pada teks:</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-blue-500">
                 <li><strong>Teks Fiksi:</strong> Meliputi penentuan latar tempat, suasana, waktu, karakterisasi tokoh, dan alur peristiwa yang dapat diidentifikasi secara nyata dari pilihan kata (diksi).</li>
                 <li><strong>Teks Nonfiksi (Ilmiah/Berita/Opini):</strong> Mengidentifikasi fakta numerik, kutipan narasumber, data statistik, kronologi fenomena alam atau fenomena sosial secara objektif.</li>
               </ul>
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">C. Restrukturisasi Informasi ke Dalam Bagan/Kerangka Konseptual</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-blue-600 rounded-full"></span> Restrukturisasi Informasi ke Dalam Bagan</h3>
               <p>Meringkas teks panjang menjadi bagan pikiran (<em>mind map</em>) atau diagram alir membutuhkan pemahaman hierarki konsep: ide pokok berada di pusat atau pucuk hierarki, diikuti oleh gagasan penjelas utama, rincian teknis, dan bukti pendukung.</p>
             </div>
           </div>
@@ -92,11 +131,11 @@
         title: "Pemahaman Inferensial",
         subtitle: "Menyimpulkan Makna Tersirat, Hubungan Logis Antarparagraf, dan Prediksi Kelanjutan Teks",
         content: `
-          <div class="space-y-6 text-slate-700 leading-relaxed">
+          <div class="space-y-6 text-slate-700 leading-relaxed text-[15px]">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">A. Menyimpulkan Ide Pokok dan Nilai Tersirat</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded-full"></span> Menyimpulkan Ide Pokok dan Nilai Tersirat</h3>
               <p class="mb-3">Ide pokok tersirat (implisit) tidak tertera langsung dalam satu kalimat utama, melainkan tersebar di seluruh rangkaian kalimat. Pembaca perlu melakukan abstraksi dan generalisasi atas topik yang dibahas.</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-indigo-500">
                 <li><strong>Nilai Moral/Etika:</strong> Pesan tentang kebajikan budi pekerti dan integritas nurani.</li>
                 <li><strong>Nilai Sosial:</strong> Perilaku tolong-menolong, solidaritas, kepedulian terhadap lingkungan, dan tenggang rasa antarwarga.</li>
                 <li><strong>Nilai Budaya:</strong> Adat istiadat, ritual spiritual, dan kearifan lokal yang diwariskan turun-temurun.</li>
@@ -104,9 +143,9 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">B. Hubungan Makna Antarkalimat dan Antarparagraf</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded-full"></span> Hubungan Makna Antarkalimat & Antarparagraf</h3>
               <p class="mb-3">Kepaduan wacana (kohesi dan koherensi) dibangun melalui relasi logis antarbagian kalimat:</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-indigo-500">
                 <li><strong>Sebab-Akibat (Kausalitas):</strong> Paragraf pembuka memaparkan faktor pemicu, lalu diikuti dampak nyata yang timbul.</li>
                 <li><strong>Proses/Kronologis:</strong> Penjelasan bertahap mengenai mekanisme atau langkah-langkah kerja suatu sistem.</li>
                 <li><strong>Pertentangan/Konsesif:</strong> Membandingkan dua realitas yang bertolak belakang (misalnya keindahan alam vs kenyataan sampah yang ditinggalkan).</li>
@@ -115,7 +154,7 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">C. Prediksi Kelanjutan Teks</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded-full"></span> Prediksi Kelanjutan Teks</h3>
               <p>Memproyeksikan kejadian berikutnya dari teks cerita atau teks eksposisi harus bertumpu kuat pada petunjuk kontekstual (<em>contextual clues</em>) yang telah dibangun oleh narator pada bagian akhir paragraf.</p>
             </div>
           </div>
@@ -126,11 +165,11 @@
         title: "Evaluasi dan Apresiasi",
         subtitle: "Menilai Validitas Argumen, Keefektifan Bahasa, serta Apresiasi Estetika dan Sikap Kritis",
         content: `
-          <div class="space-y-6 text-slate-700 leading-relaxed">
+          <div class="space-y-6 text-slate-700 leading-relaxed text-[15px]">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">A. Evaluasi Keakuratan dan Kesahihan Data</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-amber-500 rounded-full"></span> Evaluasi Keakuratan dan Kesahihan Data</h3>
               <p class="mb-3">Pembaca kritis harus mampu membedakan opini subjektif penulis dengan fakta terverifikasi. Kriteria evaluasi teks argumentasi meliputi:</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-amber-500">
                 <li><strong>Kecukupan Bukti:</strong> Apakah klaim penulis didukung oleh data statistik riset resmi (misalnya LIPI, KLHK, Bank Dunia)?</li>
                 <li><strong>Relevansi Data:</strong> Apakah data yang disajikan berkaitan langsung dengan premis yang dibangun?</li>
                 <li><strong>Objektivitas:</strong> Apakah analisis bebas dari bias asumsi pribadi atau generalisasi yang keliru?</li>
@@ -138,16 +177,16 @@
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">B. Penilaian Ketepatan dan Efektivitas Gaya Bahasa</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-amber-500 rounded-full"></span> Penilaian Ketepatan dan Efektivitas Gaya Bahasa</h3>
               <p class="mb-3">Menilai pemilihan diksi penulis dalam membangun pesan atau sindiran sosial:</p>
-              <ul class="list-disc pl-6 space-y-1.5">
+              <ul class="list-disc pl-6 space-y-2 marker:text-amber-500">
                 <li><strong>Penggunaan Idiom & Ungkapan:</strong> Memilih frasa seperti <em>bahu-membahu</em> untuk memperkuat makna kerja sama kolektif.</li>
                 <li><strong>Ironi dan Sarkasme:</strong> Penggunaan istilah satire seperti <em>"sampah estetik"</em> untuk menyindir fenomena pencitraan media sosial yang bertolak belakang dengan kesadaran lingkungan riil.</li>
               </ul>
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-slate-900 mb-2">C. Refleksi Relevansi Nilai dengan Kehidupan Nyata</h3>
+              <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-amber-500 rounded-full"></span> Refleksi Relevansi Nilai dengan Kehidupan Nyata</h3>
               <p>Menghubungkan konflik atau tema dalam karya sastra dengan realitas kontemporer, seperti dilema antara tradisi lokal dengan beban ekonomi modern, eksploitasi alam versus kelestarian hutan adat, serta dedikasi persahabatan sejati.</p>
             </div>
           </div>
@@ -156,7 +195,7 @@
     ];
 
     // ==========================================
-    // 2. DATA 20 SOAL LATIHAN PUSMENDIK (MANDIRI)
+    // 2. DATA BACAAN & SOAL LATIHAN PUSMENDIK
     // ==========================================
     const TEKS_LAUTAN = `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\n\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\n\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\n\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`;
 
@@ -213,7 +252,7 @@
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_LAUTAN,
-        question: "Mengapa lautan menghadapi ancaman pada 2050?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Mengapa lautan menghadapi ancaman pada 2050?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Sampah plastik di laut akan lebih banyak daripada jumlah ikan.",
@@ -233,7 +272,7 @@
         subKompetensi: "Menilai ketepatan dan kesesuaian penggunaan bahasa dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_LAUTAN,
-        question: "“Solusi tersebut tidak mudah.”<br>Mengapa penulis menggunakan kalimat tersebut pada teks?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+        question: "“Solusi tersebut tidak mudah.”<br>Mengapa penulis menggunakan kalimat tersebut pada teks?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -252,7 +291,7 @@
         subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_DANGAU,
-        question: "Apa permasalahan yang dihadapi tokoh aku dalam kutipan tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+        question: "Apa permasalahan yang dihadapi tokoh aku dalam kutipan tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -271,7 +310,7 @@
         subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_DANGAU,
-        question: "Apa yang akan terjadi jika tokoh aku tidak datang ke rumah <i>iyye</i>?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Apa yang akan terjadi jika tokoh aku tidak datang ke rumah <i>iyye</i>?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "<i>Iyye</i> akan datang menasehati Ayah karena melarang tokoh aku untuk belajar.",
@@ -351,7 +390,7 @@
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_RHODAMIN,
-        question: "Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Mendorong masyarakat untuk menghindari Rhodamin B dalam berbagai keperluan.",
@@ -398,7 +437,7 @@
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_UKM,
-        question: "Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</span>",
+        question: "Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -416,8 +455,8 @@
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK Kategori",
-        stimulus: TEKS_UKM + `\n\n---\nTranskrip Percakapan:\nDini : Teks tersebut sangat menarik dan bisa menambah wawasan kita, terutama jika kita berencana untuk mengembangkan suatu bisnis kecil.\nRio : Iya, pilihan katanya juga sangat mudah dimengerti sehingga orang yang awam terhadap istilah di bidang ekonomi juga mudah untuk memahami isi informasi yang disajikan.\nSena : Aku sependapat dengan kalian berdua, tetapi rasanya teks tersebut akan lebih baik jika disertai data pertumbuhan UKM dalam kurun waktu lima tahun terakhir atau pendapat ahli di bidang ekonomi.`,
-        question: "Berdasarkan percakapan tersebut, mengapa pendapat Sena sangat baik dalam menilai keakuratan dari informasi yang disajikan tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan berikut!</span>",
+        stimulus: TEKS_UKM + `\n\n---\nTranskrip Percakapan:\n\nDini : Teks tersebut sangat menarik dan bisa menambah wawasan kita, terutama jika kita berencana untuk mengembangkan suatu bisnis kecil.\n\nRio : Iya, pilihan katanya juga sangat mudah dimengerti sehingga orang yang awam terhadap istilah di bidang ekonomi juga mudah untuk memahami isi informasi yang disajikan.\n\nSena : Aku sependapat dengan kalian berdua, tetapi rasanya teks tersebut akan lebih baik jika disertai data pertumbuhan UKM dalam kurun waktu lima tahun terakhir atau pendapat ahli di bidang ekonomi.`,
+        question: "Berdasarkan percakapan tersebut, mengapa pendapat Sena sangat baik dalam menilai keakuratan dari informasi yang disajikan tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Setuju", "Tidak Setuju"],
         statements: [
@@ -456,7 +495,7 @@
         subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_SERAGAM,
-        question: "Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh saya tidak ikut mencari jangkrik malam itu?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</span>",
+        question: "Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh saya tidak ikut mencari jangkrik malam itu?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Tepat", "Tidak Tepat"],
         statements: [
@@ -475,7 +514,7 @@
         subKompetensi: "Menilai ketepatan bagian teks untuk menggambarkan karakter, peristiwa, atau latar dalam teks fiksi",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_SERAGAM,
-        question: "Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh saya merupakan seorang yang setia kawan?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh saya merupakan seorang yang setia kawan?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Saya langsung menyatakan ingin ikut, tapi dia keberatan.",
@@ -495,7 +534,7 @@
         subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_TEKNOLOGI,
-        question: "Manakah kalimat yang memiliki penggunaan kata serapan yang tepat?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut!</span>",
+        question: "Manakah kalimat yang memiliki penggunaan kata serapan yang tepat?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Tepat", "Tidak Tepat"],
         statements: [
@@ -504,7 +543,7 @@
           "Kata “polusi” pada kalimat (1) paragraf keempat."
         ],
         correctAnswer: ["Tepat", "Tidak Tepat", "Tepat"],
-        explanation: "Kata 'deforestasi' dan 'polusi' digunakan secara tepat sesuai konteks lingkungan hidup, sedangkan 'menginvestigasi' kurang tepat konteksnya untuk penanganan banjir."
+        explanation: "Kata 'deforestasi' dan 'polusi' digunakan secara tepat sesuai konteks lingkungan hidup, sedangkan 'menginvestigasi' kurang tepat konteksnya untuk penanganan banjir (seharusnya adaptasi/mitigasi)."
       },
       {
         id: 18,
@@ -554,7 +593,7 @@
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_TEKNOLOGI,
-        question: "Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Teknologi hijau merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.",
@@ -572,19 +611,12 @@
     // 3. DATA 28 SOAL ASLI PENILAIAN TKA 2025
     // ==========================================
     const TEKS_BUWUHAN = `Tradisi Buwuhan: Antara Gotong Royong dan Utang Piutang\n\nTradisi buwuhan merupakan bagian dari budaya masyarakat Jawa, khususnya di kota-kota besar seperti Surabaya. Tradisi ini dilakukan ketika ada acara penting seperti pernikahan atau khitanan yang diadakan di daerah tersebut. Buwuhan merujuk pada kegiatan memberi bantuan, baik berupa barang, uang, maupun tenaga kepada seseorang yang sedang mengadakan hajatan, atau bisa juga disebut sebagai kegiatan menyumbang. Tradisi ini mencerminkan nilai gotong royong dan solidaritas sosial karena keluarga dan tetangga saling bahu-membahu dalam membantu sesama.\n\nNamun, praktik buwuhan tidak lepas dari unsur pertukaran atau dipandang sebagai utang. Masyarakat meyakini bahwa segala bentuk bantuan yang diberikan akan kembali dalam bentuk yang setara ketika si pemberi mengadakan hajatan serupa. Hal ini menyebabkan buwuhan tidak lagi dipandang murni sebagai hibah atau sedekah, tetapi sebagai bentuk "utang tidak tertulis" yang menimbulkan kewajiban moral untuk membalas.\n\nDalam praktiknya, buwuhan memang meringankan beban tuan rumah, tetapi dapat menimbulkan tekanan psikologis bagi penerima bantuan. Rasa malu dan kekhawatiran kehilangan harga diri mendorong sebagian orang untuk berutang demi mengembalikan buwuhan. Hal ini menyebabkan terbaginya cara pandang terhadap buwuhan. Ada yang melihatnya sebagai bentuk tolong-menolong, tetapi ada juga yang justru menganggapnya menjadi sistem utang piutang berbasis sosial. Sebagian pihak berpendapat bahwa buwuhan adalah hibah karena tujuannya adalah untuk membantu. Namun, apabila ada keharusan pengembalian, maka secara hukum dan etika, buwuhan telah bergeser dari semangat gotong royong menjadi sebuah kewajiban ekonomi yang membebani. Oleh karena itu, pemahaman masyarakat terhadap tradisi buwuhan perlu diluruskan agar nilai luhur tolong-menolong tetap terjaga tanpa menimbulkan beban yang tidak perlu.\n\nSumber: Rachmawati, S. A., & Anwar, M. K. (2021). Budaya dan Tradisi Buwuh sebagai Utang Piutang dalam Adat Pernikahan di Kota Surabaya. Jurnal Ekonomika dan Bisnis Islam, 4(3), hl 69-83.`;
-
     const TEKS_LAYUR = `Layur, Teruslah Berlayar\n\n"Bapak, pulanglah," lirih Layur berharap. Ini hari keenam. Tiga hari adalah waktu terlama nelayan berada di laut. Dengan susah payah, Layur berpindah duduk ke dalam sebuah perahu tua. Penyangga kedua kaki Layur yang tak utuh ia letakkan di sampingnya.\n"Jangan-jangan..."\n"Tidak ... Aku tidak boleh berpikiran buruk. Bapak pasti pulang dengan selamat. Aku akan tetap menunggunya di sini sambil berdoa."\nLayur masih ingat masa-masa dulu, ketika Bapak berlayar pada malam hari dan keesokan harinya sudah merapat kembali di pantai dengan membawa ikan berlimpah.\n"Ayo! Siapa mau udang?" panggil Bapak. Layur berlari kencang bersama teman-temannya. Namun, itu adalah kenangan sepuluh tahun silam. Kini, udang dan ikan kecil adalah anugerah besar. Itu pun harus dijaring di tengah laut.\nLayur ingat betul, Bapak adalah pembuat bondet paling disegani, juga berpengaruh di dusun. Setiap hari, nelayan silih berganti datang ke rumah memesan bondet. Hasil panen ikan berlimpah. Tinggal melemparkan bondet ke dalam laut dan bum! Berkuintal-kuintal ikan terapung tinggal diserok menggunakan jaring.\nSampai suatu ketika\nDUAAAR!\nSeparuh rumah Layur luluh lantak karena simpanan bondet di gudang meledak. Ledakan bondet di gudang tak hanya merusak rumah tetapi juga mencelakai anak semata wayang. Ia berteriak minta tolong, menepuk-nepuk dadanya, dan menangis. Itulah titik balik yang amat disesali Bapak. Sejak itu, Bapak meninggalkan usaha pembuatan bondet. Demikian pula dengan warga Dusun Prau tempat mereka berdiam berangsur-angsur meninggalkan cara menangkap ikan dengan bondet.\nLamat-lamat terlihat kibaran layar bercorak biru. Layur beringsut menuruni perahu tempatnya duduk. Lambaian tangan bapaknya semakin jelas dan semakin dekat.\n"Bapak dari mana? Bapak sudah tiga hari telat pulang!" Seru Layur kesal. Matanya berkaca-kaca, menahan rindu, dan cemas.\n\nKarya Anang YB\nDaftar Istilah: Bondet: istilah lokal yang merujuk pada bahan peledak rakitan, sering disebut juga bom ikan.\nSumber: https://buku.kemdikbud.go.id/katalog/layur-tetaplah-berlayar (dengan pengubahan)`;
-
     const TEKS_PANTAI = `Pantai Bersih Tanpa Sampah\n\nDi sebuah daerah wisata yang terkenal dengan pantainya yang indah, pemerintah setempat gencar mengampanyekan "Pantai Bersih Tanpa Sampah." Spanduk dan papan peringatan terpampang di berbagai sudut. Namun, kenyataannya seringkali berbeda.\nSuatu sore, Pak Wayan, seorang nelayan tua yang sudah puluhan tahun melaut, sedang membersihkan jaringnya di tepi pantai. Di sampingnya, sekelompok turis muda asyik berpose untuk berfoto. Mereka mengenakan topi pantai yang modis, kacamata hitam, dan membawa botol minum berwarna-warni.\n"Wah, pantainya bersih banget ya, guys!" seru salah satu turis sambil memegang ponselnya. "Pas banget buat konten liburan ramah lingkungan!"\nTemannya menimpali, "Iya! Nanti caption-nya 'Menikmati keindahan alam tanpa jejak, menjaga bumi kita tercinta!"\nSetelah puas berfoto dari berbagai sudut dengan beragam filter, mereka beranjak pergi. Namun mereka meninggalkan botol minum plastik kosong, bungkus keripik, dan beberapa puntung rokok yang disembunyikan di balik semak-semak. Mereka bahkan tidak berusaha mencari tempat sampah yang hanya berjarak beberapa meter.\nPak Wayan hanya bisa menggelengkan kepala. Ia berjalan mendekat dan memungut sampah-sampah itu satu per satu. Ia sudah terbiasa dengan pemandangan ini. Para turis datang untuk menikmati keindahan, berfoto, membuat konten, lalu pergi meninggalkan "kenangan" dalam bentuk sampah.\nTak lama kemudian, seorang petugas kebersihan berseragam oranye datang dengan sapu dan karung. "Pak Wayan, sudah banyak lagi ya sampahnya?" tanyanya sambil menghela napas.\n"Sudah biasa, Nak," jawab Pak Wayan. "Ini namanya 'sampah estetik'. Cuma bagus di foto, tapi busuk di mata dan bau di hidung."\nPetugas itu tersenyum masam. "Iya, Pak. Kata mereka peduli lingkungan, tapi pedulinya cuma di caption media sosial."\nMalam harinya, di akun media sosial Pak Wayan - yang diajari cucunya - ia melihat foto-foto pantai yang diunggah para turis tadi. Pantai tampak bersih sempurna, dihiasi filter matahari terbenam yang memukau. Ia membaca caption-nya: "Surgaku, jangan kau kotori!"\nPak Wayan hanya bisa tersenyum getir. Sepertinya, slogan "Pantai Bersih Tanpa Sampah" itu hanya berlaku untuk kamera dan media sosial. Sementara di balik layar, jejak yang ditinggalkan justru lebih nyata dan memprihatinkan daripada gambar yang dipamerkan.`;
-
     const TEKS_PULIHKAN = `Pulihkan Ekosistem, Menjaga Planet Kita dari Generasi ke Generasi\n\nBerdasarkan hasil riset LIPI (Lembaga Ilmu Pengetahuan Indonesia) terjadi peningkatan sampah plastik selama pandemik. Hal ini disebabkan oleh penggunaan layanan delivery makanan lewat jasa transportasi online, 96% paket dibungkus dengan plastik yang tebal dan ditambah dengan bubble wrap. Selain itu selotip, bungkus plastik, dan bubble wrap merupakan pembungkus berbahan plastik yang paling sering ditemukan. Sampah medis juga melonjak. Kementerian Lingkungan Hidup dan Kehutanan (KLHK) menyatakan bahwa selama pandemi, terjadi peningkatan timbunan sampah medis sebesar 30% hingga 50%. Dari data tersebut, Indonesia merupakan negara ke-2 penyumbang polusi sampah di lautan (3,22 metrik ton per tahun).\n\nSalah satu faktor penyebab dari permasalahan tersebut adalah dengan pertambahan jumlah penduduk akan terjadi peningkatan aktivitas manusia dan daya konsumsi yang melonjak. Hal itu menyebabkan meningkatnya jumlah dan jenis limbah sehingga menyebabkan lingkungan menjadi tercemar. Selain sampah, penebangan pohon secara liar sampai pada kebakaran hutan menjadi penyumbang terbesar dalam kerusakan ekosistem. Banyak aktivitas manusia yang mengancam pelestarian lingkungan sehingga menyebabkan ketidakseimbangan ekosistem. Manusia punya peran besar dalam menjaga keseimbangan ekosistem, bukan cuma untuk sekarang, tapi juga untuk generasi mendatang. Tanggung jawab dalam menjaga lingkungan, tentunya bukan hanya dibebankan oleh pemerintah saja, tetapi seluruh elemen masyarakat harus bahu-membahu dalam menjaga dan melestarikan lingkungan.\n\nBertepatan dengan peringatan Hari Lingkungan Hidup Sedunia, yang tidak hanya sebagai seremonial belaka, tentunya menjadi sebuah harapan dalam meningkatkan kesadaran menjaga dan melestarikan lingkungan. Selain itu, memberikan semangat baru bagi kita semua untuk komitmen menjaga lingkungan. Dengan memulai dari diri sendiri dan hal paling kecil, yaitu tidak membuang sampah sembarangan, terutama sampah plastik karena merusak ekosistem laut, tidak menebang pohon dengan liar hingga membuat gundul hutan. Mari bersama merobohkan jurang ekologi, memulihkan ekosistem bumi dengan pendekatan pengelolaan sumber daya alam yang adil dan berkelanjutan.\n\nSumber: https://uiad.ac.id/2021/06/06/opini-pulihkan-ekosistem-menjaga-planet-kita-dari-generasi-ke-generasi/ (dengan pengubahan)`;
-
     const TEKS_EKONOMI_GLOBAL = `Prospek Ekonomi Global di Tengah Ketidakpastian\nJakarta, Senin, 16 Juni 2025\n\nPerekonomian global terus menghadapi tantangan signifikan di tengah ketidakpastian geopolitik dan tekanan inflasi yang persisten. Analisis terbaru yang dirilis pada (Senin, 2/6/2025), oleh Dana Moneter Internasional (IMF) menunjukkan adanya divergensi dalam laju pemulihan ekonomi antarwilayah, di mana beberapa negara seperti Amerika Serikat dan India menunjukkan ketahanan yang lebih baik, sementara negara-negara di Eropa dan Tiongkok masih berjuang mengatasi dampak guncangan eksternal.\n\nKenaikan harga energi dan pangan tetap menjadi pendorong utama inflasi di banyak negara, dipicu oleh gangguan rantai pasok global dan konflik di Ukraina, memaksa bank sentral untuk mempertahankan kebijakan moneter yang ketat. Upaya ini, meskipun esensial untuk mengendalikan kenaikan harga, berpotensi mengerem pertumbuhan ekonomi. Para pengambil kebijakan dihadapkan pada dilema sulit: menyeimbangkan kebutuhan untuk meredam inflasi tanpa memicu resesi yang dalam.\n\n"Kami melihat adanya perlambatan pertumbuhan global yang signifikan di tahun ini, dan risiko resesi menjadi lebih nyata jika bank sentral terlalu agresif dalam menaikkan suku bunga," ujar seorang ekonom senior dari Bank Dunia, dalam sebuah webinar yang diadakan, (Rabu, 11/6).\n\nDi sisi lain, sektor manufaktur global menunjukkan tanda-tanda perlambatan, tercermin dari menurunnya indeks manajer pembelian (PMI) di beberapa ekonomi besar seperti Jerman dan Jepang. Penurunan permintaan ekspor dan gangguan rantai pasok masih menjadi perhatian utama bagi produsen. Namun, sektor jasa justru menunjukkan resiliensi yang lebih kuat, didukung oleh kembali normalnya aktivitas setelah pandemi, sebuah tren yang mulai terlihat sejak awal Desember 2024.\n\nPasar tenaga kerja di beberapa negara maju masih relatif ketat, dengan tingkat pengangguran yang rendah. Kondisi ini memberikan dukungan terhadap daya beli konsumen, meskipun tekanan biaya hidup yang tinggi dapat mengikis dampaknya. Sementara itu, investasi langsung asing (FDI) cenderung melambat, mencerminkan kehati-hatian investor di tengah prospek ekonomi yang tidak menentu.\n\nKe depan, koordinasi kebijakan ekonomi antarnegara akan menjadi kunci untuk menstabilkan kondisi global. Reformasi struktural yang bertujuan meningkatkan produktivitas dan daya saing juga dianggap krusial untuk memastikan pertumbuhan yang berkelanjutan dalam jangka panjang. Para ekonom memprediksi bahwa prospek ekonomi akan sangat bergantung pada evolusi inflasi, respons kebijakan moneter, dan perkembangan situasi geopolitik di seluruh dunia. Bagi Indonesia, kondisi ini menuntut kewaspadaan dan diversifikasi ekonomi agar tidak terlalu rentan terhadap gejolak global dalam kurun waktu tiga hingga enam bulan ke depan, terhitung sejak (16/6/2025).\n\nSumber: Disadur dan diadaptasi dari rilis pers dan laporan Global Economic Prospects, Juni 2025 oleh World Bank (Bank Dunia).`;
-
     const TEKS_HUDOQ = `Tari Hudoq: Warisan Budaya yang Harus Dilestarikan\n\nTari Hudoq dari suku Dayak Modang di Kalimantan Timur bukan sekadar tontonan seni biasa. Lebih dari itu, tarian ini adalah warisan budaya yang sarat akan makna spiritual dan simbolis. Oleh karena itu, melestarikan Tari Hudoq menjadi sebuah keharusan, tidak hanya untuk menjaga keragaman budaya Indonesia, tetapi juga untuk mengingatkan kita akan pentingnya hubungan harmonis antara manusia dan alam.\n\nPertama, Tari Hudoq adalah cerminan dari kearifan lokal yang mengajarkan nilai-nilai fundamental. Tarian ini merupakan bagian integral dari ritual keagamaan untuk menjalin hubungan harmonis dengan roh penjaga pertanian, Halaeng Heboung, dan roh pelindung umat manusia, Selo Sen. Dalam era modern yang sering kali mengabaikan hubungan manusia dengan alam, tarian ini berfungsi sebagai pengingat kuat akan ketergantungan kita pada alam dan pentingnya menghormati kekuatan yang lebih besar dari diri kita.\n\nKedua, setiap elemen dalam Tari Hudoq mengandung simbolisme yang mendalam dan relevan. Penggunaan topeng kayu yang besar dan dedaunan yang menutupi tubuh penari bukan sekadar properti, melainkan representasi kekuatan dan perlindungan dari roh-roh tersebut. Gerakan tari yang menggambarkan keteguhan petani serta nyanyian tradisional yang mengiringinya adalah permohonan tulus kepada alam semesta untuk memberikan keseimbangan dan kesuksesan panen. Menghilangkan tarian ini berarti menghilangkan simbolisme penting yang telah diwariskan turun-temurun, yang merupakan esensi dari budaya Dayak Modang itu sendiri.\n\nKetiga, Tari Hudoq memiliki nilai edukatif yang tinggi bagi masyarakat luas, termasuk wisatawan. Pertunjukan ini tidak hanya memukau secara visual, tetapi juga memberikan pemahaman tentang pentingnya keseimbangan alam dan hubungan spiritual yang mendalam. Dengan melestarikan dan memperkenalkan tarian ini kepada publik yang lebih luas, kita tidak hanya menjaga keberadaan tarian itu sendiri, tetapi juga menyebarkan pesan tentang pentingnya menjaga lingkungan dan menghargai nilai-nilai tradisional.\n\nDengan demikian, jelaslah bahwa Tari Hudoq bukan sekadar pertunjukan, melainkan sebuah jembatan spiritual yang menghubungkan manusia dengan alam dan leluhur. Mengabaikan pelestariannya sama saja dengan mengabaikan kekayaan spiritual dan kearifan lokal yang menjadi fondasi budaya kita. Pelestarian Tari Hudoq adalah investasi untuk masa depan, memastikan bahwa nilai-nilai berharga ini tetap hidup dan relevan bagi generasi mendatang.\n\nSumber: Kebudayaan Kemdikbud, Pustaka Borneo, Times Nusantara (dengan penyesuaian)`;
-
     const TEKS_MERATUS = `Roh Meratus\n\nKami kembali berjalan pulang. Kondisiku sudah sepenuhnya normal. Tetua melangkah di depanku. Tak kusangka, dalam keadaan kritis ternyata kami telah sangat jauh memasuki belantara. Aku memperhatikan pohon-pohon besar yang kami lewati. Sinar matahari bahkan hampir tak bisa menembus ke bawah.\nAku merasa asing di tempat ini. Pohon-pohon yang berlumut itu, sulur-sulur yang bergantungan, semak-semak yang rimbun itu. Oh... ternyata belantara ini adalah tempat menakjubkan. Bayangkan, di lumut batang pohon itu udang-udang kecil berloncatan lincah. Belum pernah aku melihat udang hidup di batang pohon!\n"Kau tahu anak muda, tempat ini merasa terancam dengan keberadaan..." tetua menghentikan langkahnya dan mengambil sesuatu dalam butah. "Roh Meratus meniupkan wisa ke tubuh kalian, sayang kawan-kawanmu yang lain terlambat," sambungnya kemudian melemparkan gulungan kertas yang diambil dari butah. Sigap kutangkap gulungan itu.\n"Itu peta yang kuambil dari ranselmu. Ternyata kalian memasang patok-patok dan memberi tanda pohon-pohon besar untuk ditebang. Dan perlu kau ketahui anak muda, tempat ini juga termasuk wilayah yang akan kalian pasangi patok-patok itu," katanya dingin.\nPerlahan kubuka gulungan peta di tanganku. Dari peta terlihat jelas, pekerjaan kami tinggal sedikit lagi. Jika saja semuanya lancar, maka kami akan sampai di tempat ini dan selesailah kontrak kerja kami. Dalam waktu singkat, mungkin alat-alat berat akan didatangkan! Pohon-pohon ini, sulur-sulur ini, lumut-lumut ini, udang-udang ini... akan bagaimana?\n"Tetua, izinkan aku tinggal di sini dan bersama kaummu menjaga tempat ini..." Akhirnya setelah lama hanya diam, aku menatap mata tetua mantap.\n\n(Cerpen karya Zaidinoor)\nGlosarium:\nButah: wadah atau tempat yang digunakan untuk membawa sesuatu, biasanya terbuat dari anyaman rotan atau bambu\nWisa: bisa atau racun`;
-
     const TEKS_BELIS = `Tradisi Belis: Simbol Budaya yang Menyimpan Beban Finansial di Era Modern\n\nBelis adalah tradisi di wilayah Indonesia bagian timur seperti Nusa Tenggara Timur, yang secara umum di Indonesia dikenal dengan mas kawin atau mahar. Tradisi ini melambangkan penghormatan kepada wanita dan penyatuan keluarga. Namun, di balik nilainya, belis sering menjadi beban finansial berat bagi pihak laki-laki, yang kadang memicu tekanan psikologis dan mengganggu hubungan kekeluargaan. Beberapa pihak, terutama para sesepuh desa atau orang-orang tua, kadang terlalu kukuh untuk mempertahankan tradisi dan membuat tekanan dengan nilai yang semakin naik.\n\nBelis memiliki makna yang mendalam dan dianggap sebagai bentuk pengakuan atas peran penting seorang perempuan di dalam keluarga. Belis merupakan representasi keseriusan dan komitmen seorang pria untuk membangun keluarga. Proses penyerahan belis tidak hanya dimaknai sebagai pertukaran materi, tetapi juga sebagai simbol penyatuan dua komunitas besar, yakni keluarga kedua belah pihak. Pada masyarakat Lamaholot misalnya, belis diwujudkan dalam bentuk gading gajah atau bala, yang besarnya disesuaikan dengan status sosial seorang perempuan. Selain itu, disertakan juga pelengkap belis seperti sarung tenun sutra dan ternak. Uniknya, meskipun belis dari pihak laki-laki, pihak keluarga perempuan memberikan balasan simbolis kepada pihak laki-laki dalam bentuk barang berharga lainnya. Tradisi ini mengajarkan keseimbangan dan saling menghargai di antara kedua belah pihak.\n\nMeskipun belis mengandung nilai-nilai yang positif, tantangannya saat ini adalah menjaga agar tradisi tersebut tidak menjadi beban finansial yang berat. Tuntutan belis yang tinggi sering kali menjadi sumber tekanan, terutama bagi keluarga laki-laki. Dalam beberapa kasus, perkara belis dapat berimbas pada kesehatan mental hingga memicu tindakan tragis, seperti yang pernah terjadi di Kupang. Selain menjadi tantangan finansial, besarnya tuntutan materi untuk belis juga sering kali menimbulkan ketegangan dan konflik di antara pasangan dan keluarganya. Ketika keluarga perempuan menetapkan nominal belis yang tinggi, tidak jarang hal ini membangkitkan sentimen negatif dari pihak laki-laki yang merasa tertekan dan kehilangan martabat jika tidak mampu memenuhinya. Alhasil, penundaan pernikahan diambil guna memenuhi permintaan belis. Konflik semacam ini bisa merusak hubungan dua keluarga yang harusnya harmonis.\n\nSumber: Berita Kini, Krajan.id (dengan penyesuaian)`;
 
     const penilaianSoalData = [
@@ -806,7 +838,7 @@
         subKompetensi: "Menilai keakuratan data visual dan bukti pendukung opini",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_PULIHKAN,
-        question: "Aktivitas manusia memberikan dampak besar terhadap pencemaran lingkungan di Indonesia. Data apa saja yang mendukung opini penulis tersebut?<br><span class='text-xs font-semibold text-blue-600'>Klik pilihan Benar atau Salah untuk setiap pernyataan sesuai isi teks!</span>",
+        question: "Aktivitas manusia memberikan dampak besar terhadap pencemaran lingkungan di Indonesia. Data apa saja yang mendukung opini penulis tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Klik pilihan Benar atau Salah untuk setiap pernyataan sesuai isi teks!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -1033,7 +1065,7 @@
         subKompetensi: "Menilai kesesuaian tindakan tokoh dengan karakter",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_MERATUS,
-        question: `Perubahan sikap tokoh utama ditunjukkan melalui tindakannya di akhir kutipan.<br>Manakah pernyataan yang paling tepat untuk menilai kesesuaian antara karakter tokoh dan tindakannya?<br><span class='text-xs font-semibold text-blue-600'>Klik Benar atau Salah pada setiap pernyataan berikut!</span>`,
+        question: `Perubahan sikap tokoh utama ditunjukkan melalui tindakannya di akhir kutipan.<br>Manakah pernyataan yang paling tepat untuk menilai kesesuaian antara karakter tokoh dan tindakannya?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Klik Benar atau Salah pada setiap pernyataan berikut!</span>`,
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -1140,6 +1172,9 @@
       const [zoomImage, setZoomImage] = useState(null);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+      // Scroll to top helper
+      const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
       // Mulai Ujian / Latihan
       const startExam = (questions, title, mode = "latihan") => {
         setActiveQuestions(questions);
@@ -1149,7 +1184,7 @@
         setUserAnswers({});
         setFlagged({});
         setCurrentTab("exam");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
       };
 
       // Handler Jawaban
@@ -1212,95 +1247,109 @@
 
       const currentQ = activeQuestions[currentIndex];
 
+      // Formatter Key Jawaban
+      const getAnswerKeyText = (q) => {
+        if (q.type === "single") {
+          return String.fromCharCode(65 + q.correctAnswer);
+        } else if (q.type === "mcma") {
+          return q.correctAnswer.map(idx => String.fromCharCode(65 + idx)).join(", ");
+        } else if (q.type === "matrix") {
+          return q.statements.map((_, i) => `${String.fromCharCode(65 + i)}: ${q.correctAnswer[i]}`).join(" | ");
+        }
+        return "";
+      };
+
       return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col font-sans">
           {/* HEADER NAVIGASI */}
-          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+          <header className="sticky top-0 z-40 glass-nav border-b border-slate-200/60 shadow-sm transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               <div 
-                className="flex items-center gap-3 cursor-pointer select-none"
-                onClick={() => setCurrentTab("home")}
+                className="flex items-center gap-3 cursor-pointer select-none group"
+                onClick={() => { setCurrentTab("home"); scrollToTop(); }}
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-blue-500/20">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
                   ID
                 </div>
                 <div>
-                  <h1 className="font-bold text-slate-900 leading-tight text-sm sm:text-base">Materi TKA Bahasa Indonesia</h1>
-                  <p className="text-xs text-slate-500 font-medium hidden sm:block">Pusat Asesmen & Standar Literasi Akademis SMA/SMK</p>
+                  <h1 className="font-extrabold text-slate-800 leading-tight text-sm sm:text-base tracking-tight">Materi TKA Bahasa Indonesia</h1>
+                  <p className="text-xs text-slate-500 font-medium hidden sm:block">Pusat Asesmen & Standar Literasi Akademis</p>
                 </div>
               </div>
 
               {/* Desktop Menu */}
-              <nav className="hidden md:flex items-center gap-1">
+              <nav className="hidden md:flex items-center gap-1.5">
                 <button
-                  onClick={() => setCurrentTab("home")}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
-                    currentTab === "home" ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("home"); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    currentTab === "home" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   Beranda
                 </button>
                 <button
-                  onClick={() => setCurrentTab("materi")}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
-                    currentTab === "materi" ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("materi"); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    currentTab === "materi" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   Modul Materi
                 </button>
                 <button
-                  onClick={() => setCurrentTab("latihan")}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
-                    currentTab === "latihan" ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    currentTab === "latihan" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   Latihan Soal (20)
                 </button>
                 <button
-                  onClick={() => setCurrentTab("penilaian")}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition ${
-                    currentTab === "penilaian" ? "bg-amber-50 text-amber-700 font-bold border border-amber-200" : "text-amber-700 bg-amber-50/70 hover:bg-amber-100/80"
+                  onClick={() => { setCurrentTab("penilaian"); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    currentTab === "penilaian" 
+                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-orange-500/20" 
+                      : "text-amber-700 bg-amber-50 hover:bg-amber-100/80"
                   }`}
                 >
-                  🎯 Penilaian (28 Soal)
+                  🎯 Penilaian (28)
                 </button>
               </nav>
 
               {/* Mobile Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+                className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:ring-2 focus:ring-blue-100 transition"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
                 </svg>
               </button>
             </div>
 
             {/* Mobile Drawer */}
             {mobileMenuOpen && (
-              <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
+              <div className="md:hidden border-t border-slate-200/60 bg-white/95 backdrop-blur-md px-4 py-3 space-y-1 shadow-lg absolute w-full animate-slide-up">
                 <button
-                  onClick={() => { setCurrentTab("home"); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("home"); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
                 >
                   Beranda
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("materi"); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("materi"); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
                 >
                   Modul Materi
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("latihan"); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("latihan"); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
                 >
                   Latihan Soal (20 Soal)
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("penilaian"); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100"
+                  onClick={() => { setCurrentTab("penilaian"); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-amber-800 bg-gradient-to-r from-amber-50 to-orange-50 transition"
                 >
                   🎯 Penilaian Resmi (28 Soal)
                 </button>
@@ -1312,36 +1361,34 @@
           <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
             {/* TAB 1: BERANDA */}
             {currentTab === "home" && (
-              <div className="space-y-8 animate-fadeIn">
-                <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl text-white p-6 sm:p-10 shadow-xl relative overflow-hidden">
-                  <div className="relative z-10 max-w-2xl space-y-4">
-                    <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-bold tracking-wide uppercase">
+              <div className="space-y-10 animate-fade-in">
+                <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 rounded-[2rem] text-white p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
+                  <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-64 h-64 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+                  
+                  <div className="relative z-10 max-w-3xl space-y-5">
+                    <span className="inline-block px-3.5 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-widest uppercase text-blue-200 border border-white/10">
                       Portal Akademis TKA
                     </span>
-                    <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                    <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
                       Kuasai Literasi Membaca & Tes Kemampuan Akademik
                     </h2>
-                    <p className="text-blue-100 text-sm sm:text-base leading-relaxed">
+                    <p className="text-blue-100 text-base sm:text-lg leading-relaxed max-w-2xl font-light">
                       Sistem belajar interaktif berstandar Kemendikdasmen. Dilengkapi dengan modul teoretis komprehensif, latihan bertahap, dan simulasi penilaian asli.
                     </p>
-                    <div className="flex flex-wrap gap-3 pt-2">
+                    <div className="flex flex-wrap gap-4 pt-4">
                       <button
-                        onClick={() => setCurrentTab("materi")}
-                        className="px-5 py-2.5 bg-white text-blue-700 font-bold text-sm rounded-xl shadow hover:bg-blue-50 transition"
+                        onClick={() => { setCurrentTab("materi"); scrollToTop(); }}
+                        className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
                       >
                         Pelajari Materi
                       </button>
                       <button
-                        onClick={() => setCurrentTab("latihan")}
-                        className="px-5 py-2.5 bg-blue-600/80 hover:bg-blue-600 text-white font-bold text-sm rounded-xl border border-white/20 transition"
+                        onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
+                        className="px-6 py-3 bg-blue-600/80 backdrop-blur-sm hover:bg-blue-600 text-white font-bold text-sm rounded-xl border border-white/20 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
                       >
                         Mulai Latihan Soal
-                      </button>
-                      <button
-                        onClick={() => setCurrentTab("penilaian")}
-                        className="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm rounded-xl shadow-lg transition"
-                      >
-                        Ikuti Penilaian (28 Soal)
                       </button>
                     </div>
                   </div>
@@ -1349,40 +1396,40 @@
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div 
-                    onClick={() => { setActiveMateri(materiData[0]); setCurrentTab("materi"); }}
-                    className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group"
+                    onClick={() => { setActiveMateri(materiData[0]); setCurrentTab("materi"); scrollToTop(); }}
+                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-inner">
                       1
                     </div>
-                    <h3 className="font-bold text-slate-900 text-lg mb-2">Pemahaman Tekstual</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-blue-700 transition-colors">Pemahaman Tekstual</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Kaidah pembakuan kata serapan, identifikasi fakta eksplisit fiksi/nonfiksi, dan perancangan bagan alur wacana.
                     </p>
                   </div>
 
                   <div 
-                    onClick={() => { setActiveMateri(materiData[1]); setCurrentTab("materi"); }}
-                    className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group"
+                    onClick={() => { setActiveMateri(materiData[1]); setCurrentTab("materi"); scrollToTop(); }}
+                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 shadow-inner">
                       2
                     </div>
-                    <h3 className="font-bold text-slate-900 text-lg mb-2">Pemahaman Inferensial</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-indigo-700 transition-colors">Pemahaman Inferensial</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Teknik abstraksi gagasan tersirat, hubungan kohesi kausalitas antarkalimat, serta proyeksi kelanjutan cerita.
                     </p>
                   </div>
 
                   <div 
-                    onClick={() => { setActiveMateri(materiData[2]); setCurrentTab("materi"); }}
-                    className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group"
+                    onClick={() => { setActiveMateri(materiData[2]); setCurrentTab("materi"); scrollToTop(); }}
+                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg mb-4 group-hover:bg-amber-600 group-hover:text-white transition">
+                    <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner">
                       3
                     </div>
-                    <h3 className="font-bold text-slate-900 text-lg mb-2">Evaluasi dan Apresiasi</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-amber-700 transition-colors">Evaluasi dan Apresiasi</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Menilai kesahihan data empiris, efektivitas gaya bahasa/sarkasme, serta refleksi kritis nilai sastra dalam masyarakat.
                     </p>
                   </div>
@@ -1392,52 +1439,53 @@
 
             {/* TAB 2: MODUL MATERI */}
             {currentTab === "materi" && (
-              <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200">
                   <div>
-                    <h2 className="text-2xl font-black text-slate-900">Modul Teoretis Kebahasaan</h2>
-                    <p className="text-sm text-slate-500">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & PUEBI</p>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Modul Teoretis Kebahasaan</h2>
+                    <p className="text-base text-slate-500 mt-2 font-medium">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & PUEBI</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
                     {materiData.map(m => (
                       <button
                         key={m.id}
                         onClick={() => setActiveMateri(m)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                        className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
                           activeMateri.id === m.id
-                            ? "bg-blue-600 text-white shadow-sm"
-                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                            ? "bg-white text-blue-700 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
                         }`}
                       >
-                        Sub Bab {m.id}
+                        Subbab {m.id}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-                  <div className="border-b border-slate-100 pb-4">
-                    <span className="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-md">
-                      Sub Bab {activeMateri.id}
+                <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-sm shadow-slate-200/50 space-y-8">
+                  <div className="border-b border-slate-100 pb-6">
+                    <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black tracking-wider uppercase rounded-lg border border-blue-100">
+                      Subbab {activeMateri.id}
                     </span>
-                    <h3 className="text-2xl font-extrabold text-slate-900 mt-2">{activeMateri.title}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{activeMateri.subtitle}</p>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-4 tracking-tight">{activeMateri.title}</h3>
+                    <p className="text-base text-slate-500 mt-2 font-medium">{activeMateri.subtitle}</p>
                   </div>
 
                   <div 
-                    className="prose max-w-none text-slate-700 text-sm sm:text-base"
+                    className="prose max-w-none text-slate-700 text-base"
                     dangerouslySetInnerHTML={{ __html: activeMateri.content }}
                   />
 
-                  <div className="pt-6 border-t border-slate-100 flex justify-between items-center">
+                  <div className="pt-8 border-t border-slate-100 flex justify-end">
                     <button
                       onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === activeMateri.id);
-                        startExam(filtered, `Latihan Mandiri Sub Bab ${activeMateri.id}`, "latihan");
+                        startExam(filtered, `Latihan Mandiri Subbab ${activeMateri.id}`, "latihan");
                       }}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition"
+                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                     >
-                      Uji Pemahaman: Latihan Sub Bab {activeMateri.id} →
+                      Uji Pemahaman: Latihan Subbab {activeMateri.id} 
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                   </div>
                 </div>
@@ -1446,76 +1494,80 @@
 
             {/* TAB 3: MENU LATIHAN SOAL */}
             {currentTab === "latihan" && (
-              <div className="space-y-6">
+              <div className="space-y-8 animate-fade-in">
                 <div>
-                  <h2 className="text-2xl font-black text-slate-900">Paket Latihan Mandiri (20 Soal)</h2>
-                  <p className="text-sm text-slate-500">Uji kemampuan membaca Anda tanpa batasan waktu dengan teks bacaan utuh dan mandiri.</p>
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">Paket Latihan Mandiri (20 Soal)</h2>
+                  <p className="text-base text-slate-500 mt-2 font-medium">Uji kemampuan membaca Anda tanpa batasan waktu dengan teks bacaan utuh dan mandiri.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                  <div className="bg-white p-5 rounded-2xl border-2 border-blue-500 shadow-sm flex flex-col justify-between">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Card Paket Lengkap */}
+                  <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-3xl shadow-lg shadow-blue-500/20 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-transform duration-300"
+                       onClick={() => startExam(latihanSoalData, "Paket Lengkap 20 Soal Latihan", "latihan")}>
                     <div>
-                      <span className="px-2.5 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded">Paket Lengkap</span>
-                      <h3 className="font-extrabold text-slate-900 text-lg mt-2">Semua Soal Latihan</h3>
-                      <p className="text-xs text-slate-500 mt-1">20 soal variatif mencakup Sub Bab 1, 2, dan 3 secara terpadu.</p>
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider rounded-lg border border-white/20">
+                        Paket Lengkap
+                      </span>
+                      <h3 className="font-extrabold text-white text-xl mt-4 leading-snug">Semua Soal Latihan</h3>
+                      <p className="text-sm text-blue-100 mt-2 font-medium opacity-90">20 soal variatif mencakup Subbab 1, 2, dan 3 secara terpadu.</p>
                     </div>
-                    <button
-                      onClick={() => startExam(latihanSoalData, "Paket Lengkap 20 Soal Latihan", "latihan")}
-                      className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition"
-                    >
-                      Mulai Latihan Lengkap
-                    </button>
+                    <div className="mt-6 flex items-center gap-2 text-white font-bold text-sm">
+                      Mulai Latihan <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                      <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-bold rounded">Sub Bab 1</span>
-                      <h3 className="font-extrabold text-slate-900 text-lg mt-2">Pemahaman Tekstual</h3>
-                      <p className="text-xs text-slate-500 mt-1">Kata serapan baku, pemahaman bagan, dan analisis struktur informasi.</p>
-                    </div>
-                    <button
-                      onClick={() => {
+                  {/* Card Subbab 1 */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                       onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 1);
-                        startExam(filtered, "Latihan Sub Bab 1: Pemahaman Tekstual", "latihan");
-                      }}
-                      className="mt-4 w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl transition"
-                    >
-                      Mulai Sub Bab 1 ({latihanSoalData.filter(q => q.subBab === 1).length} Soal)
-                    </button>
+                        startExam(filtered, "Latihan Subbab 1: Pemahaman Tekstual", "latihan");
+                      }}>
+                    <div>
+                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
+                        Subbab 1
+                      </span>
+                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-blue-600 transition-colors">Pemahaman Tekstual</h3>
+                      <p className="text-sm text-slate-500 mt-2 font-medium">Kata serapan baku, pemahaman bagan, dan analisis struktur informasi.</p>
+                    </div>
+                    <div className="mt-6 font-bold text-sm text-blue-600 flex items-center gap-2">
+                      Mulai ({latihanSoalData.filter(q => q.subBab === 1).length} Soal) <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                      <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-bold rounded">Sub Bab 2</span>
-                      <h3 className="font-extrabold text-slate-900 text-lg mt-2">Pemahaman Inferensial</h3>
-                      <p className="text-xs text-slate-500 mt-1">Ide pokok tersirat, hubungan kausalitas paragraf, dan prediksi cerita.</p>
-                    </div>
-                    <button
-                      onClick={() => {
+                  {/* Card Subbab 2 */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                       onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 2);
-                        startExam(filtered, "Latihan Sub Bab 2: Pemahaman Inferensial", "latihan");
-                      }}
-                      className="mt-4 w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl transition"
-                    >
-                      Mulai Sub Bab 2 ({latihanSoalData.filter(q => q.subBab === 2).length} Soal)
-                    </button>
+                        startExam(filtered, "Latihan Subbab 2: Pemahaman Inferensial", "latihan");
+                      }}>
+                    <div>
+                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
+                        Subbab 2
+                      </span>
+                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-indigo-600 transition-colors">Pemahaman Inferensial</h3>
+                      <p className="text-sm text-slate-500 mt-2 font-medium">Ide pokok tersirat, hubungan kausalitas paragraf, dan prediksi cerita.</p>
+                    </div>
+                    <div className="mt-6 font-bold text-sm text-indigo-600 flex items-center gap-2">
+                      Mulai ({latihanSoalData.filter(q => q.subBab === 2).length} Soal) <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                      <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-bold rounded">Sub Bab 3</span>
-                      <h3 className="font-extrabold text-slate-900 text-lg mt-2">Evaluasi & Apresiasi</h3>
-                      <p className="text-xs text-slate-500 mt-1">Evaluasi validitas data statistik, gaya bahasa, serta nilai sosial sastra.</p>
-                    </div>
-                    <button
-                      onClick={() => {
+                  {/* Card Subbab 3 */}
+                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                       onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 3);
-                        startExam(filtered, "Latihan Sub Bab 3: Evaluasi & Apresiasi", "latihan");
-                      }}
-                      className="mt-4 w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl transition"
-                    >
-                      Mulai Sub Bab 3 ({latihanSoalData.filter(q => q.subBab === 3).length} Soal)
-                    </button>
+                        startExam(filtered, "Latihan Subbab 3: Evaluasi & Apresiasi", "latihan");
+                      }}>
+                    <div>
+                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
+                        Subbab 3
+                      </span>
+                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-amber-600 transition-colors">Evaluasi & Apresiasi</h3>
+                      <p className="text-sm text-slate-500 mt-2 font-medium">Evaluasi validitas data statistik, gaya bahasa, serta nilai sosial sastra.</p>
+                    </div>
+                    <div className="mt-6 font-bold text-sm text-amber-600 flex items-center gap-2">
+                      Mulai ({latihanSoalData.filter(q => q.subBab === 3).length} Soal) <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1523,28 +1575,35 @@
 
             {/* TAB 4: MENU PENILAIAN */}
             {currentTab === "penilaian" && (
-              <div className="space-y-6">
-                <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-6 sm:p-8 rounded-3xl text-white shadow-lg">
-                  <span className="px-3 py-1 bg-black/20 rounded-full text-xs font-extrabold uppercase tracking-wider">
-                    Ujian Penilaian Kemampuan Mandiri
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-black mt-3">Simulasi Asesmen Asli TKA 2025 SMA/SMK</h2>
-                  <p className="text-amber-100 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-                    Ujian resmi berisi 28 butir soal lengkap yang menguji seluruh spektrum literasi membaca teks sastra dan nonfiksi kontemporer.
-                  </p>
-                  <div className="mt-5">
-                    <button
-                      onClick={() => startExam(penilaianSoalData, "Penilaian Resmi TKA 2025 (28 Soal)", "penilaian")}
-                      className="px-6 py-3 bg-white text-amber-900 font-extrabold text-sm rounded-xl shadow hover:bg-amber-50 transition"
-                    >
-                      Mulai Penilaian Sekarang (28 Soal) →
-                    </button>
+              <div className="space-y-8 animate-fade-in">
+                <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 p-8 sm:p-12 rounded-[2rem] text-white shadow-xl shadow-orange-500/20 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
+                  
+                  <div className="relative z-10">
+                    <span className="px-3.5 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest border border-white/20 shadow-sm">
+                      Ujian Penilaian Kemampuan Mandiri
+                    </span>
+                    <h2 className="text-3xl sm:text-5xl font-black mt-5 tracking-tight leading-tight">Simulasi Asesmen Asli TKA 2025 SMA/SMK</h2>
+                    <p className="text-amber-50 text-base sm:text-lg mt-4 max-w-2xl leading-relaxed font-medium">
+                      Ujian resmi berisi 28 butir soal lengkap yang menguji seluruh spektrum literasi membaca teks sastra dan nonfiksi kontemporer.
+                    </p>
+                    <div className="mt-8">
+                      <button
+                        onClick={() => startExam(penilaianSoalData, "Penilaian Resmi TKA 2025 (28 Soal)", "penilaian")}
+                        className="px-8 py-3.5 bg-white text-orange-600 font-black text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 flex items-center gap-2 w-max"
+                      >
+                        Mulai Penilaian Sekarang 
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                  <h3 className="font-bold text-slate-900 text-base">Ketentuan Teknis Pengerjaan:</h3>
-                  <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 space-y-4">
+                  <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span> Ketentuan Teknis Pengerjaan:
+                  </h3>
+                  <ul className="list-disc pl-6 text-base text-slate-600 space-y-2 marker:text-orange-400 font-medium">
                     <li>Terdiri atas <strong>28 nomor soal</strong> dengan teks wacana mandiri pada setiap butir soal.</li>
                     <li>Mencakup beragam tipe soal asesmen nasional: <em>Pilihan Ganda Tunggal (PG)</em> dan <em>PGK Kategori Matriks (Benar/Salah)</em>.</li>
                     <li>Dilengkapi tabel spesifikasi resmi (*No Soal*, *Kompetensi*, *Sub Kompetensi*, *Bentuk Soal*) pada setiap butir soal.</li>
@@ -1556,33 +1615,33 @@
 
             {/* INTERFACE PENGERJAAN CBT */}
             {currentTab === "exam" && currentQ && (
-              <div className="space-y-4">
+              <div className="space-y-5 animate-fade-in">
                 {/* Exam Sub-Header */}
-                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                    <span className={`text-xs font-black uppercase tracking-widest ${examMode === "penilaian" ? "text-orange-600" : "text-blue-600"}`}>
                       {examMode === "penilaian" ? "🎯 Penilaian Resmi" : "✍️ Sesi Latihan"}
                     </span>
-                    <h2 className="font-extrabold text-slate-900 text-base sm:text-lg">{examTitle}</h2>
+                    <h2 className="font-extrabold text-slate-900 text-lg sm:text-xl mt-1 tracking-tight">{examTitle}</h2>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center bg-slate-100 rounded-lg p-1 text-xs font-bold">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center bg-slate-100 rounded-xl p-1 text-sm font-bold border border-slate-200/60 shadow-inner">
                       <button 
                         onClick={() => setFontSizeClass("text-sm")}
-                        className={`px-2 py-1 rounded ${fontSizeClass === "text-sm" ? "bg-white shadow-sm" : "text-slate-600"}`}
+                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-sm" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
                       >
                         A-
                       </button>
                       <button 
                         onClick={() => setFontSizeClass("text-base")}
-                        className={`px-2 py-1 rounded ${fontSizeClass === "text-base" ? "bg-white shadow-sm" : "text-slate-600"}`}
+                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-base" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
                       >
                         A
                       </button>
                       <button 
                         onClick={() => setFontSizeClass("text-lg")}
-                        className={`px-2 py-1 rounded ${fontSizeClass === "text-lg" ? "bg-white shadow-sm" : "text-slate-600"}`}
+                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-lg" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
                       >
                         A+
                       </button>
@@ -1590,10 +1649,10 @@
 
                     <button
                       onClick={() => toggleFlag(currentQ.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                      className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-300 flex items-center gap-1.5 ${
                         flagged[currentQ.id]
-                          ? "bg-amber-400 border-amber-500 text-slate-900 font-black"
-                          : "border-slate-300 text-slate-600 hover:bg-slate-50"
+                          ? "bg-amber-400 border-amber-400 text-slate-900 shadow-md shadow-amber-400/20"
+                          : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
                       }`}
                     >
                       {flagged[currentQ.id] ? "★ Ragu-ragu" : "☆ Tandai Ragu"}
@@ -1602,68 +1661,70 @@
                 </div>
 
                 {/* Split Screen Container */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   {/* PANEL KIRI: BAHAN BACAAN / STIMULUS */}
-                  <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col max-h-[75vh] overflow-y-auto">
-                    <div className="border-b border-slate-100 pb-3 mb-4 flex items-center justify-between">
-                      <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                        Bahan Bacaan & Stimulus Soal
+                  <div className="lg:col-span-6 xl:col-span-7 bg-amber-50/30 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-h-[78vh] overflow-y-auto">
+                    <div className="border-b border-slate-200/60 pb-4 mb-5 flex items-center justify-between sticky top-0 bg-amber-50/90 backdrop-blur-sm z-10 -mt-2 pt-2">
+                      <h3 className="font-extrabold text-slate-800 text-base flex items-center gap-2 tracking-tight">
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
+                        Bahan Bacaan & Stimulus
                       </h3>
-                      <span className="text-xs text-slate-400">Nomor {currentIndex + 1} dari {activeQuestions.length}</span>
+                      <span className="text-xs font-bold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                        {currentIndex + 1} / {activeQuestions.length}
+                      </span>
                     </div>
 
                     {/* Gambar Stimulus (Jika Ada) */}
                     {currentQ.stimulusImage && (
-                      <div className="mb-4 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 p-2">
+                      <div className="mb-6 rounded-2xl overflow-hidden border border-slate-200 bg-white p-3 shadow-sm hover:shadow-md transition-shadow">
                         <img 
                           src={currentQ.stimulusImage}
                           alt="Stimulus Soal"
-                          className="w-full h-auto object-contain rounded cursor-pointer hover:opacity-95 transition"
+                          className="w-full h-auto object-contain rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
                           onClick={() => setZoomImage(currentQ.stimulusImage)}
                           onError={(e) => {
                             e.target.style.display = "none";
                           }}
                         />
-                        <p className="text-center text-xs text-slate-400 mt-1 italic">Klik gambar untuk memperbesar</p>
+                        <p className="text-center text-xs font-medium text-slate-400 mt-2 bg-slate-50 py-1.5 rounded-lg">🔍 Klik gambar untuk memperbesar</p>
                       </div>
                     )}
 
-                    <div className={`reading-font whitespace-pre-line text-slate-800 leading-relaxed ${fontSizeClass}`}>
+                    <div className={`reading-font whitespace-pre-line text-slate-800 leading-loose ${fontSizeClass}`}>
                       {currentQ.stimulus}
                     </div>
                   </div>
 
                   {/* PANEL KANAN: TABEL SPESIFIKASI & LEMBAR SOAL */}
-                  <div className="lg:col-span-5 space-y-4">
+                  <div className="lg:col-span-6 xl:col-span-5 space-y-5">
                     {/* TABEL SPESIFIKASI PUSMENDIK */}
-                    <div className="bg-slate-100 rounded-xl p-3.5 border border-slate-200 text-xs text-slate-700 shadow-inner">
-                      <table className="w-full text-left">
-                        <tbody>
-                          <tr className="border-b border-slate-200/70">
-                            <td className="py-1 font-semibold text-slate-500 w-32">No Soal</td>
-                            <td className="py-1 font-bold text-slate-900">{currentQ.noSoal}</td>
-                          </tr>
-                          <tr className="border-b border-slate-200/70">
-                            <td className="py-1 font-semibold text-slate-500">Kompetensi</td>
-                            <td className="py-1 font-bold text-slate-900">{currentQ.kompetensi}</td>
-                          </tr>
-                          <tr className="border-b border-slate-200/70">
-                            <td className="py-1 font-semibold text-slate-500">Sub Kompetensi</td>
-                            <td className="py-1 text-slate-800 leading-tight">{currentQ.subKompetensi}</td>
+                    <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm shadow-slate-200/50">
+                      <table className="w-full text-left text-xs sm:text-sm">
+                        <tbody className="divide-y divide-slate-100">
+                          <tr>
+                            <td className="py-2 font-semibold text-slate-500 w-32">No Soal</td>
+                            <td className="py-2 font-black text-slate-900">{currentQ.noSoal}</td>
                           </tr>
                           <tr>
-                            <td className="py-1 font-semibold text-slate-500">Bentuk Soal</td>
-                            <td className="py-1 font-bold text-blue-700">{currentQ.bentukSoal}</td>
+                            <td className="py-2 font-semibold text-slate-500">Kompetensi</td>
+                            <td className="py-2 font-bold text-slate-900">{currentQ.kompetensi}</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 font-semibold text-slate-500 align-top">Sub Kompetensi</td>
+                            <td className="py-2 text-slate-700 font-medium leading-relaxed">{currentQ.subKompetensi}</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 font-semibold text-slate-500">Bentuk Soal</td>
+                            <td className="py-2 font-black text-blue-600">{currentQ.bentukSoal}</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
 
                     {/* SOAL & PILIHAN INTERAKTIF */}
-                    <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-5">
+                    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-lg shadow-slate-200/50 space-y-6">
                       <div 
-                        className={`font-semibold text-slate-900 leading-relaxed ${fontSizeClass}`}
+                        className={`font-bold text-slate-900 leading-relaxed ${fontSizeClass}`}
                         dangerouslySetInnerHTML={{ __html: currentQ.question }}
                       />
 
@@ -1677,30 +1738,30 @@
                               <div
                                 key={idx}
                                 onClick={() => handleSingleSelect(currentQ.id, idx)}
-                                className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                                className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
                                   isSelected
-                                    ? "border-blue-600 bg-blue-50/60 shadow-sm"
-                                    : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                                    ? "border-blue-500 bg-blue-50/50 shadow-sm"
+                                    : "border-slate-100 hover:border-blue-200 hover:bg-slate-50"
                                 }`}
                               >
-                                <span className={`w-7 h-7 flex-shrink-0 flex items-center justify-center font-bold text-xs rounded-lg ${
-                                  isSelected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-700"
+                                <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold text-sm rounded-xl transition-colors ${
+                                  isSelected ? "bg-blue-600 text-white shadow-md shadow-blue-500/30" : "bg-slate-100 text-slate-600"
                                 }`}>
                                   {String.fromCharCode(65 + idx)}
                                 </span>
-                                <div className="flex-1 space-y-2">
+                                <div className="flex-1 space-y-3">
                                   {optImg && (
-                                    <div className="rounded-lg overflow-hidden border border-slate-200 bg-white p-2 max-w-sm">
+                                    <div className="rounded-xl overflow-hidden border border-slate-200 bg-white p-2 w-full max-w-sm">
                                       <img 
                                         src={optImg} 
                                         alt={`Pilihan ${String.fromCharCode(65 + idx)}`} 
-                                        className="w-full h-auto object-contain cursor-pointer hover:scale-105 transition"
+                                        className="w-full h-auto object-contain cursor-zoom-in hover:scale-105 transition-transform duration-300 rounded-lg"
                                         onClick={(e) => { e.stopPropagation(); setZoomImage(optImg); }}
                                         onError={(e) => { e.target.style.display = "none"; }}
                                       />
                                     </div>
                                   )}
-                                  <div className={`text-slate-800 leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
+                                  <div className={`text-slate-700 font-medium leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
                                 </div>
                               </div>
                             );
@@ -1717,22 +1778,22 @@
                               <div
                                 key={idx}
                                 onClick={() => handleMcmaToggle(currentQ.id, idx)}
-                                className={`flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                                className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
                                   isChecked
-                                    ? "border-indigo-600 bg-indigo-50/60 shadow-sm"
-                                    : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                                    ? "border-indigo-500 bg-indigo-50/50 shadow-sm"
+                                    : "border-slate-100 hover:border-indigo-200 hover:bg-slate-50"
                                 }`}
                               >
-                                <div className={`w-5 h-5 mt-0.5 rounded flex items-center justify-center border ${
-                                  isChecked ? "bg-indigo-600 border-indigo-600 text-white" : "border-slate-300 bg-white"
+                                <div className={`w-6 h-6 mt-0.5 rounded-lg flex items-center justify-center border-2 transition-colors ${
+                                  isChecked ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/30" : "border-slate-300 bg-white"
                                 }`}>
                                   {isChecked && (
-                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                   )}
                                 </div>
-                                <div className={`text-slate-800 leading-relaxed flex-1 ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
+                                <div className={`text-slate-700 font-medium flex-1 leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
                               </div>
                             );
                           })}
@@ -1741,33 +1802,34 @@
 
                       {/* Tipe 3: PGK Kategori Matriks (Benar/Salah) */}
                       {currentQ.type === "matrix" && (
-                        <div className="overflow-x-auto border border-slate-200 rounded-xl">
-                          <table className="w-full text-left text-xs sm:text-sm">
-                            <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                        <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
+                          <table className="w-full text-left text-sm">
+                            <thead className="bg-slate-50 text-slate-800 font-extrabold border-b border-slate-200">
                               <tr>
-                                <th className="p-3">#</th>
-                                <th className="p-3">Pernyataan</th>
+                                <th className="p-4 w-10 text-center">#</th>
+                                <th className="p-4">Pernyataan</th>
                                 {currentQ.matrixColumns.map((col, cIdx) => (
-                                  <th key={cIdx} className="p-3 text-center w-24">{col}</th>
+                                  <th key={cIdx} className="p-4 text-center min-w-[90px]">{col}</th>
                                 ))}
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-slate-100 bg-white">
                               {currentQ.statements.map((stmt, sIdx) => (
-                                <tr key={sIdx} className="hover:bg-slate-50/50">
-                                  <td className="p-3 font-bold text-slate-500 align-top">{String.fromCharCode(65 + sIdx)}.</td>
-                                  <td className="p-3 text-slate-800 align-top" dangerouslySetInnerHTML={{ __html: stmt }} />
+                                <tr key={sIdx} className="hover:bg-slate-50/50 transition-colors">
+                                  <td className="p-4 font-bold text-slate-500 align-top text-center">{String.fromCharCode(65 + sIdx)}.</td>
+                                  <td className="p-4 text-slate-700 font-medium align-top leading-relaxed" dangerouslySetInnerHTML={{ __html: stmt }} />
                                   {currentQ.matrixColumns.map((col, cIdx) => {
                                     const isChosen = Array.isArray(userAnswers[currentQ.id]) && userAnswers[currentQ.id][sIdx] === col;
                                     return (
-                                      <td key={cIdx} className="p-3 text-center align-middle">
-                                        <input
-                                          type="radio"
-                                          name={`matrix-${currentQ.id}-${sIdx}`}
-                                          checked={isChosen}
-                                          onChange={() => handleMatrixSelect(currentQ.id, sIdx, col)}
-                                          className="w-4 h-4 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                                        />
+                                      <td key={cIdx} className="p-4 text-center align-middle">
+                                        <div 
+                                          onClick={() => handleMatrixSelect(currentQ.id, sIdx, col)}
+                                          className={`w-6 h-6 mx-auto rounded-full border-2 flex items-center justify-center cursor-pointer transition-all ${
+                                            isChosen ? "border-blue-600 bg-blue-600" : "border-slate-300 hover:border-blue-400 bg-white"
+                                          }`}
+                                        >
+                                          {isChosen && <div className="w-2.5 h-2.5 rounded-full bg-white"></div>}
+                                        </div>
                                       </td>
                                     );
                                   })}
@@ -1780,38 +1842,39 @@
                     </div>
 
                     {/* Navigasi Soal Bawah */}
-                    <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 flex flex-wrap gap-4 items-center justify-between">
                       <button
                         disabled={currentIndex === 0}
                         onClick={() => setCurrentIndex(prev => prev - 1)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
+                        className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
                           currentIndex === 0
-                            ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                            : "bg-slate-100 hover:bg-slate-200 text-slate-800"
+                            ? "bg-slate-50 text-slate-400 cursor-not-allowed"
+                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
                         }`}
                       >
-                        ← Sebelumnya
+                        ← <span className="hidden sm:inline">Sebelumnya</span>
                       </button>
 
-                      <div className="text-xs font-bold text-slate-500">
-                        Soal {currentIndex + 1} / {activeQuestions.length}
+                      <div className="text-sm font-black text-slate-400 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                        {currentIndex + 1} / {activeQuestions.length}
                       </div>
 
                       {currentIndex < activeQuestions.length - 1 ? (
                         <button
                           onClick={() => setCurrentIndex(prev => prev + 1)}
-                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow transition"
+                          className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                         >
-                          Selanjutnya →
+                          <span className="hidden sm:inline">Selanjutnya</span> →
                         </button>
                       ) : (
                         <button
                           onClick={() => {
                             if (window.confirm("Apakah Anda yakin ingin menyelesaikan tes dan melihat hasil pembahasan?")) {
                               setCurrentTab("result");
+                              scrollToTop();
                             }
                           }}
-                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition"
+                          className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-black shadow-lg shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
                           Selesaikan Tes ✓
                         </button>
@@ -1819,24 +1882,27 @@
                     </div>
 
                     {/* Palet Nomor Soal */}
-                    <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                      <h4 className="font-bold text-xs text-slate-500 uppercase tracking-wider">Daftar Nomor Soal</h4>
-                      <div className="grid grid-cols-7 gap-2">
+                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 space-y-4">
+                      <h4 className="font-extrabold text-sm text-slate-800 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        Peta Navigasi Soal
+                      </h4>
+                      <div className="grid grid-cols-7 sm:grid-cols-10 gap-2.5">
                         {activeQuestions.map((q, idx) => {
                           const isAnswered = userAnswers[q.id] !== undefined;
                           const isCurrent = currentIndex === idx;
                           const isFlag = flagged[q.id];
 
-                          let badgeColor = "bg-slate-100 text-slate-700 border-slate-200";
-                          if (isFlag) badgeColor = "bg-amber-400 text-slate-900 border-amber-500 font-black";
-                          else if (isAnswered) badgeColor = "bg-blue-600 text-white border-blue-600 font-bold";
+                          let badgeColor = "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300";
+                          if (isFlag) badgeColor = "bg-amber-400 text-amber-950 border-amber-500 font-black shadow-inner";
+                          else if (isAnswered) badgeColor = "bg-blue-600 text-white border-blue-600 font-bold shadow-md shadow-blue-500/20";
 
                           return (
                             <button
                               key={idx}
                               onClick={() => setCurrentIndex(idx)}
-                              className={`h-9 rounded-lg text-xs border flex items-center justify-center transition-all ${badgeColor} ${
-                                isCurrent ? "ring-2 ring-blue-500 ring-offset-2 scale-105" : ""
+                              className={`h-10 rounded-xl text-sm border-2 flex items-center justify-center transition-all duration-200 ${badgeColor} ${
+                                isCurrent ? "ring-2 ring-slate-900 ring-offset-2 scale-110 z-10" : ""
                               }`}
                             >
                               {idx + 1}
@@ -1852,28 +1918,36 @@
 
             {/* TAB 5: LEMBAR HASIL & PEMBAHASAN */}
             {currentTab === "result" && (
-              <div className="space-y-6 animate-fadeIn">
-                <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm text-center space-y-4">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-black text-3xl shadow-inner">
-                    {scoreCalculation.totalScore}
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900">Hasil Evaluasi Tes Anda</h2>
-                  <p className="text-sm text-slate-600 max-w-md mx-auto">
-                    Anda berhasil menjawab benar <strong>{scoreCalculation.correctCount}</strong> dari total <strong>{scoreCalculation.total}</strong> butir soal.
-                  </p>
-                  <div className="pt-2 flex justify-center gap-3">
-                    <button
-                      onClick={() => setCurrentTab(examMode === "penilaian" ? "penilaian" : "latihan")}
-                      className="px-5 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl shadow hover:bg-blue-700 transition"
-                    >
-                      Kembali ke Menu Utama
-                    </button>
+              <div className="space-y-8 animate-fade-in">
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-8 sm:p-14 shadow-2xl text-center space-y-6 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="w-28 h-28 mx-auto rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-1 shadow-lg shadow-blue-500/30">
+                      <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center font-black text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
+                        {scoreCalculation.totalScore}
+                      </div>
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl font-black text-white mt-6 tracking-tight">Hasil Evaluasi Tes Anda</h2>
+                    <p className="text-base text-slate-300 max-w-md mx-auto mt-3 font-medium">
+                      Anda berhasil menjawab benar <strong className="text-white">{scoreCalculation.correctCount}</strong> dari total <strong className="text-white">{scoreCalculation.total}</strong> butir soal.
+                    </p>
+                    <div className="pt-6 flex justify-center">
+                      <button
+                        onClick={() => { setCurrentTab(examMode === "penilaian" ? "penilaian" : "latihan"); scrollToTop(); }}
+                        className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                      >
+                        Kembali ke Menu Utama
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Tinjauan Pembahasan Tiap Nomor */}
-                <div className="space-y-4">
-                  <h3 className="font-extrabold text-slate-900 text-lg">Tinjauan dan Pembahasan Lengkap</h3>
+                <div className="space-y-6">
+                  <h3 className="font-black text-slate-900 text-2xl tracking-tight flex items-center gap-3">
+                    <span className="w-2 h-8 bg-blue-600 rounded-full"></span> Tinjauan dan Pembahasan Lengkap
+                  </h3>
                   
                   {activeQuestions.map((q, idx) => {
                     const ans = userAnswers[q.id];
@@ -1891,29 +1965,39 @@
                       }
                     }
 
+                    const keyText = getAnswerKeyText(q);
+
                     return (
-                      <div key={idx} className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-                        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                          <span className="text-xs font-bold px-2.5 py-1 rounded bg-slate-100 text-slate-700">
+                      <div key={idx} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm shadow-slate-200/50 space-y-5">
+                        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                          <span className="text-sm font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200">
                             Soal Nomor {q.noSoal}
                           </span>
-                          <span className={`text-xs font-extrabold px-2.5 py-1 rounded ${
-                            isCorrect ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
+                          <span className={`text-sm font-black px-4 py-1.5 rounded-lg shadow-sm ${
+                            isCorrect ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-rose-100 text-rose-800 border border-rose-200"
                           }`}>
                             {isCorrect ? "Jawaban Anda Benar ✓" : "Jawaban Anda Salah ✕"}
                           </span>
                         </div>
 
-                        <div className="text-xs text-slate-500">
-                          <strong>Kompetensi:</strong> {q.kompetensi} | <strong>Bentuk:</strong> {q.bentukSoal}
+                        <div className="text-sm text-slate-500 font-medium flex flex-wrap gap-4">
+                          <span><strong>Kompetensi:</strong> <span className="text-slate-700">{q.kompetensi}</span></span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 hidden sm:block"></span>
+                          <span><strong>Bentuk:</strong> <span className="text-slate-700">{q.bentukSoal}</span></span>
                         </div>
 
-                        <div className="font-semibold text-slate-900 text-sm" dangerouslySetInnerHTML={{ __html: q.question }} />
+                        <div className="font-bold text-slate-900 text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: q.question }} />
 
                         {/* Penjelasan Kunci Jawaban */}
-                        <div className="p-4 bg-blue-50/70 border-l-4 border-blue-600 rounded-lg space-y-1">
-                          <h5 className="font-bold text-xs text-blue-900">Pembahasan Resmi:</h5>
-                          <p className="text-xs sm:text-sm text-blue-800 leading-relaxed">{q.explanation}</p>
+                        <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-3">
+                          <h5 className="font-extrabold text-sm text-blue-900 flex items-center gap-2">
+                            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Kunci & Pembahasan Resmi
+                          </h5>
+                          <div className="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
+                            <span className="block mb-2"><strong className="text-slate-900">Kunci: {keyText}</strong></span>
+                            {q.explanation}
+                          </div>
                         </div>
                       </div>
                     );
@@ -1926,13 +2010,13 @@
           {/* MODAL ZOOM GAMBAR */}
           {zoomImage && (
             <div 
-              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
+              className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out animate-fade-in"
               onClick={() => setZoomImage(null)}
             >
-              <div className="max-w-4xl max-h-[90vh] bg-white p-3 rounded-2xl shadow-2xl overflow-hidden relative">
+              <div className="max-w-5xl max-h-[90vh] bg-white p-2 rounded-2xl shadow-2xl overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
                 <button
                   onClick={() => setZoomImage(null)}
-                  className="absolute top-4 right-4 bg-slate-900/80 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm"
+                  className="absolute top-4 right-4 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg transition-colors z-10"
                 >
                   ✕
                 </button>
@@ -1942,8 +2026,10 @@
           )}
 
           {/* FOOTER */}
-          <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 mt-12">
-            <p>© 2026 Materi & Soal TKA Bahasa Indonesia SMA/SMK. Sesuai Standar Pusmendik Kemendikdasmen & KBBI.</p>
+          <footer className="border-t border-slate-200/60 bg-white py-8 text-center mt-auto">
+            <p className="text-sm font-medium text-slate-500">
+              © 2026 Materi & Soal TKA Bahasa Indonesia SMA/SMK.<br className="sm:hidden" /> Sesuai Standar Pusmendik & KBBI.
+            </p>
           </footer>
         </div>
       );
