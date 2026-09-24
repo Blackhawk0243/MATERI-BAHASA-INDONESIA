@@ -18,36 +18,9 @@
   <!-- Babel Standalone for in-browser JSX parsing -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            serif: ['Merriweather', 'serif'],
-          },
-          animation: {
-            'fade-in': 'fadeIn 0.4s ease-out forwards',
-            'slide-up': 'slideUp 0.5s ease-out forwards',
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' },
-            },
-            slideUp: {
-              '0%': { opacity: '0', transform: 'translateY(15px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            }
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
     body {
-      background-color: #f8fafc;
+      font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     .reading-font {
@@ -74,21 +47,53 @@
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     }
     
-    .rsvp-focus-point {
-      color: #ef4444; /* Red color for focus letter */
+    .rsvp-box {
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.4);
     }
   </style>
 </head>
-<body class="text-slate-800 min-h-screen selection:bg-blue-200 selection:text-blue-900">
+<body class="bg-slate-50 text-slate-900 min-h-screen selection:bg-blue-200 selection:text-blue-900">
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo, useRef } = React;
 
     // ==========================================
-    // 1. DATA MATERI PEMBELAJARAN
+    // 1. DATA BACAAN (STIMULUS SOAL) UTUH MANDIRI
+    // ==========================================
+    const TEKS_LAUTAN = `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\n\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\n\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\n\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`;
+
+    const TEKS_DANGAU = `“E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim maddongi (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah.”\n\nAku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. “Bagaimana kalau aku ke rumah iyye-ku (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah.”\n\nEsok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah iyye-ku.\n“Kenapa kamu lesu?” Iyye menanyakan keadaanku. Aku pun menceritakan semuanya kepada iyye.\n“Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang,” ujar iyye-ku.\n\n(Piala di Atas Dangau, Muhammad Isrul, dengan penyesuaian)`;
+
+    const TEKS_RHODAMIN = `Teks 1\nRhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.\n\nTeks 2\nRhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan xanthenes dyes, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.`;
+
+    const TEKS_UKM = `Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)\n\nEkonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan e-commerce, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan (artificial intelligence).\n\nSalah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform e-commerce. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai marketplace daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.\n\nSelain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.\n\nMeskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.\n\n(Sumber: Kementerian Koperasi dan UKM Republik Indonesia)`;
+
+    const TEKS_SERAGAM = `Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.\nBertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.\nSaat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. ”Tidak ganti baju?” tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.\nSaya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.\n\n(Kutipan Cerpen Seragam karya Aris Kurniawan Basuki dengan penyesuaian)`;
+
+    const TEKS_TEKNOLOGI = `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\n\nSumber: https://www.rri.co.id/iptek/1281411/`;
+
+    const TEKS_BUWUHAN = `Tradisi Buwuhan: Antara Gotong Royong dan Utang Piutang\n\nTradisi buwuhan merupakan bagian dari budaya masyarakat Jawa, khususnya di kota-kota besar seperti Surabaya. Tradisi ini dilakukan ketika ada acara penting seperti pernikahan atau khitanan yang diadakan di daerah tersebut. Buwuhan merujuk pada kegiatan memberi bantuan, baik berupa barang, uang, maupun tenaga kepada seseorang yang sedang mengadakan hajatan, atau bisa juga disebut sebagai kegiatan menyumbang. Tradisi ini mencerminkan nilai gotong royong dan solidaritas sosial karena keluarga dan tetangga saling bahu-membahu dalam membantu sesama.\n\nNamun, praktik buwuhan tidak lepas dari unsur pertukaran atau dipandang sebagai utang. Masyarakat meyakini bahwa segala bentuk bantuan yang diberikan akan kembali dalam bentuk yang setara ketika si pemberi mengadakan hajatan serupa. Hal ini menyebabkan buwuhan tidak lagi dipandang murni sebagai hibah atau sedekah, tetapi sebagai bentuk "utang tidak tertulis" yang menimbulkan kewajiban moral untuk membalas.\n\nDalam praktiknya, buwuhan memang meringankan beban tuan rumah, tetapi dapat menimbulkan tekanan psikologis bagi penerima bantuan. Rasa malu dan kekhawatiran kehilangan harga diri mendorong sebagian orang untuk berutang demi mengembalikan buwuhan. Hal ini menyebabkan terbaginya cara pandang terhadap buwuhan. Ada yang melihatnya sebagai bentuk tolong-menolong, tetapi ada juga yang justru menganggapnya menjadi sistem utang piutang berbasis sosial. Sebagian pihak berpendapat bahwa buwuhan adalah hibah karena tujuannya adalah untuk membantu. Namun, apabila ada keharusan pengembalian, maka secara hukum dan etika, buwuhan telah bergeser dari semangat gotong royong menjadi sebuah kewajiban ekonomi yang membebani. Oleh karena itu, pemahaman masyarakat terhadap tradisi buwuhan perlu diluruskan agar nilai luhur tolong-menolong tetap terjaga tanpa menimbulkan beban yang tidak perlu.\n\nSumber: Rachmawati, S. A., & Anwar, M. K. (2021). Budaya dan Tradisi Buwuh sebagai Utang Piutang dalam Adat Pernikahan di Kota Surabaya. Jurnal Ekonomika dan Bisnis Islam, 4(3), hl 69-83.`;
+
+    const TEKS_LAYUR = `Layur, Teruslah Berlayar\n\n"Bapak, pulanglah," lirih Layur berharap. Ini hari keenam. Tiga hari adalah waktu terlama nelayan berada di laut. Dengan susah payah, Layur berpindah duduk ke dalam sebuah perahu tua. Penyangga kedua kaki Layur yang tak utuh ia letakkan di sampingnya.\n"Jangan-jangan..."\n"Tidak ... Aku tidak boleh berpikiran buruk. Bapak pasti pulang dengan selamat. Aku akan tetap menunggunya di sini sambil berdoa."\nLayur masih ingat masa-masa dulu, ketika Bapak berlayar pada malam hari dan keesokan harinya sudah merapat kembali di pantai dengan membawa ikan berlimpah.\n"Ayo! Siapa mau udang?" panggil Bapak. Layur berlari kencang bersama teman-temannya. Namun, itu adalah kenangan sepuluh tahun silam. Kini, udang dan ikan kecil adalah anugerah besar. Itu pun harus dijaring di tengah laut.\nLayur ingat betul, Bapak adalah pembuat bondet paling disegani, juga berpengaruh di dusun. Setiap hari, nelayan silih berganti datang ke rumah memesan bondet. Hasil panen ikan berlimpah. Tinggal melemparkan bondet ke dalam laut dan bum! Berkuintal-kuintal ikan terapung tinggal diserok menggunakan jaring.\nSampai suatu ketika\nDUAAAR!\nSeparuh rumah Layur luluh lantak karena simpanan bondet di gudang meledak. Ledakan bondet di gudang tak hanya merusak rumah tetapi juga mencelakai anak semata wayang. Ia berteriak minta tolong, menepuk-nepuk dadanya, dan menangis. Itulah titik balik yang amat disesali Bapak. Sejak itu, Bapak meninggalkan usaha pembuatan bondet. Demikian pula dengan warga Dusun Prau tempat mereka berdiam berangsur-angsur meninggalkan cara menangkap ikan dengan bondet.\nLamat-lamat terlihat kibaran layar bercorak biru. Layur beringsut menuruni perahu tempatnya duduk. Lambaian tangan bapaknya semakin jelas dan semakin dekat.\n"Bapak dari mana? Bapak sudah tiga hari telat pulang!" Seru Layur kesal. Matanya berkaca-kaca, menahan rindu, dan cemas.\n\nKarya Anang YB\nDaftar Istilah: Bondet: istilah lokal yang merujuk pada bahan peledak rakitan, sering disebut juga bom ikan.\nSumber: https://buku.kemdikbud.go.id/katalog/layur-tetaplah-berlayar (dengan pengubahan)`;
+
+    const TEKS_PANTAI = `Pantai Bersih Tanpa Sampah\n\nDi sebuah daerah wisata yang terkenal dengan pantainya yang indah, pemerintah setempat gencar mengampanyekan "Pantai Bersih Tanpa Sampah." Spanduk dan papan peringatan terpampang di berbagai sudut. Namun, kenyataannya seringkali berbeda.\nSuatu sore, Pak Wayan, seorang nelayan tua yang sudah puluhan tahun melaut, sedang membersihkan jaringnya di tepi pantai. Di sampingnya, sekelompok turis muda asyik berpose untuk berfoto. Mereka mengenakan topi pantai yang modis, kacamata hitam, dan membawa botol minum berwarna-warni.\n"Wah, pantainya bersih banget ya, guys!" seru salah satu turis sambil memegang ponselnya. "Pas banget buat konten liburan ramah lingkungan!"\nTemannya menimpali, "Iya! Nanti caption-nya 'Menikmati keindahan alam tanpa jejak, menjaga bumi kita tercinta!"\nSetelah puas berfoto dari berbagai sudut dengan beragam filter, mereka beranjak pergi. Namun mereka meninggalkan botol minum plastik kosong, bungkus keripik, dan beberapa puntung rokok yang disembunyikan di balik semak-semak. Mereka bahkan tidak berusaha mencari tempat sampah yang hanya berjarak beberapa meter.\nPak Wayan hanya bisa menggelengkan kepala. Ia berjalan mendekat dan memungut sampah-sampah itu satu per satu. Ia sudah terbiasa dengan pemandangan ini. Para turis datang untuk menikmati keindahan, berfoto, membuat konten, lalu pergi meninggalkan "kenangan" dalam bentuk sampah.\nTak lama kemudian, seorang petugas kebersihan berseragam oranye datang dengan sapu dan karung. "Pak Wayan, sudah banyak lagi ya sampahnya?" tanyanya sambil menghela napas.\n"Sudah biasa, Nak," jawab Pak Wayan. "Ini namanya 'sampah estetik'. Cuma bagus di foto, tapi busuk di mata dan bau di hidung."\nPetugas itu tersenyum masam. "Iya, Pak. Kata mereka peduli lingkungan, tapi pedulinya cuma di caption media sosial."\nMalam harinya, di akun media sosial Pak Wayan - yang diajari cucunya - ia melihat foto-foto pantai yang diunggah para turis tadi. Pantai tampak bersih sempurna, dihiasi filter matahari terbenam yang memukau. Ia membaca caption-nya: "Surgaku, jangan kau kotori!"\nPak Wayan hanya bisa tersenyum getir. Sepertinya, slogan "Pantai Bersih Tanpa Sampah" itu hanya berlaku untuk kamera dan media sosial. Sementara di balik layar, jejak yang ditinggalkan justru lebih nyata dan memprihatinkan daripada gambar yang dipamerkan.`;
+
+    const TEKS_PULIHKAN = `Pulihkan Ekosistem, Menjaga Planet Kita dari Generasi ke Generasi\n\nBerdasarkan hasil riset LIPI (Lembaga Ilmu Pengetahuan Indonesia) terjadi peningkatan sampah plastik selama pandemik. Hal ini disebabkan oleh penggunaan layanan delivery makanan lewat jasa transportasi online, 96% paket dibungkus dengan plastik yang tebal dan ditambah dengan bubble wrap. Selain itu selotip, bungkus plastik, dan bubble wrap merupakan pembungkus berbahan plastik yang paling sering ditemukan. Sampah medis juga melonjak. Kementerian Lingkungan Hidup dan Kehutanan (KLHK) menyatakan bahwa selama pandemi, terjadi peningkatan timbunan sampah medis sebesar 30% hingga 50%. Dari data tersebut, Indonesia merupakan negara ke-2 penyumbang polusi sampah di lautan (3,22 metrik ton per tahun).\n\nSalah satu faktor penyebab dari permasalahan tersebut adalah dengan pertambahan jumlah penduduk akan terjadi peningkatan aktivitas manusia dan daya konsumsi yang melonjak. Hal itu menyebabkan meningkatnya jumlah dan jenis limbah sehingga menyebabkan lingkungan menjadi tercemar. Selain sampah, penebangan pohon secara liar sampai pada kebakaran hutan menjadi penyumbang terbesar dalam kerusakan ekosistem. Banyak aktivitas manusia yang mengancam pelestarian lingkungan sehingga menyebabkan ketidakseimbangan ekosistem. Manusia punya peran besar dalam menjaga keseimbangan ekosistem, bukan cuma untuk sekarang, tapi juga untuk generasi mendatang. Tanggung jawab dalam menjaga lingkungan, tentunya bukan hanya dibebankan oleh pemerintah saja, tetapi seluruh elemen masyarakat harus bahu-membahu dalam menjaga dan melestarikan lingkungan.\n\nBertepatan dengan peringatan Hari Lingkungan Hidup Sedunia, yang tidak hanya sebagai seremonial belaka, tentunya menjadi sebuah harapan dalam meningkatkan kesadaran menjaga dan melestarikan lingkungan. Selain itu, memberikan semangat baru bagi kita semua untuk komitmen menjaga lingkungan. Dengan memulai dari diri sendiri dan hal paling kecil, yaitu tidak membuang sampah sembarangan, terutama sampah plastik karena merusak ekosistem laut, tidak menebang pohon dengan liar hingga membuat gundul hutan. Mari bersama merobohkan jurang ekologi, memulihkan ekosistem bumi dengan pendekatan pengelolaan sumber daya alam yang adil dan berkelanjutan.\n\nSumber: https://uiad.ac.id/2021/06/06/opini-pulihkan-ekosistem-menjaga-planet-kita-dari-generasi-ke-generasi/ (dengan pengubahan)`;
+
+    const TEKS_EKONOMI_GLOBAL = `Prospek Ekonomi Global di Tengah Ketidakpastian\nJakarta, Senin, 16 Juni 2025\n\nPerekonomian global terus menghadapi tantangan signifikan di tengah ketidakpastian geopolitik dan tekanan inflasi yang persisten. Analisis terbaru yang dirilis pada (Senin, 2/6/2025), oleh Dana Moneter Internasional (IMF) menunjukkan adanya divergensi dalam laju pemulihan ekonomi antarwilayah, di mana beberapa negara seperti Amerika Serikat dan India menunjukkan ketahanan yang lebih baik, sementara negara-negara di Eropa dan Tiongkok masih berjuang mengatasi dampak guncangan eksternal.\n\nKenaikan harga energi dan pangan tetap menjadi pendorong utama inflasi di banyak negara, dipicu oleh gangguan rantai pasok global dan konflik di Ukraina, memaksa bank sentral untuk mempertahankan kebijakan moneter yang ketat. Upaya ini, meskipun esensial untuk mengendalikan kenaikan harga, berpotensi mengerem pertumbuhan ekonomi. Para pengambil kebijakan dihadapkan pada dilema sulit: menyeimbangkan kebutuhan untuk meredam inflasi tanpa memicu resesi yang dalam.\n\n"Kami melihat adanya perlambatan pertumbuhan global yang signifikan di tahun ini, dan risiko resesi menjadi lebih nyata jika bank sentral terlalu agresif dalam menaikkan suku bunga," ujar seorang ekonom senior dari Bank Dunia, dalam sebuah webinar yang diadakan, (Rabu, 11/6).\n\nDi sisi lain, sektor manufaktur global menunjukkan tanda-tanda perlambatan, tercermin dari menurunnya indeks manajer pembelian (PMI) di beberapa ekonomi besar seperti Jerman dan Jepang. Penurunan permintaan ekspor dan gangguan rantai pasok masih menjadi perhatian utama bagi produsen. Namun, sektor jasa justru menunjukkan resiliensi yang lebih kuat, didukung oleh kembali normalnya aktivitas setelah pandemi, sebuah tren yang mulai terlihat sejak awal Desember 2024.\n\nPasar tenaga kerja di beberapa negara maju masih relatif ketat, dengan tingkat pengangguran yang rendah. Kondisi ini memberikan dukungan terhadap daya beli konsumen, meskipun tekanan biaya hidup yang tinggi dapat mengikis dampaknya. Sementara itu, investasi langsung asing (FDI) cenderung melambat, mencerminkan kehati-hatian investor di tengah prospek ekonomi yang tidak menentu.\n\nKe depan, koordinasi kebijakan ekonomi antarnegara akan menjadi kunci untuk menstabilkan kondisi global. Reformasi struktural yang bertujuan meningkatkan produktivitas dan daya saing juga dianggap krusial untuk memastikan pertumbuhan yang berkelanjutan dalam jangka panjang. Para ekonom memprediksi bahwa prospek ekonomi akan sangat bergantung pada evolusi inflasi, respons kebijakan moneter, dan perkembangan situasi geopolitik di seluruh dunia. Bagi Indonesia, kondisi ini menuntut kewaspadaan dan diversifikasi ekonomi agar tidak terlalu rentan terhadap gejolak global dalam kurun waktu tiga hingga enam bulan ke depan, terhitung sejak (16/6/2025).\n\nSumber: Disadur dan diadaptasi dari rilis pers dan laporan Global Economic Prospects, Juni 2025 oleh World Bank (Bank Dunia).`;
+
+    const TEKS_HUDOQ = `Tari Hudoq: Warisan Budaya yang Harus Dilestarikan\n\nTari Hudoq dari suku Dayak Modang di Kalimantan Timur bukan sekadar tontonan seni biasa. Lebih dari itu, tarian ini adalah warisan budaya yang sarat akan makna spiritual dan simbolis. Oleh karena itu, melestarikan Tari Hudoq menjadi sebuah keharusan, tidak hanya untuk menjaga keragaman budaya Indonesia, tetapi juga untuk mengingatkan kita akan pentingnya hubungan harmonis antara manusia dan alam.\n\nPertama, Tari Hudoq adalah cerminan dari kearifan lokal yang mengajarkan nilai-nilai fundamental. Tarian ini merupakan bagian integral dari ritual keagamaan untuk menjalin hubungan harmonis dengan roh penjaga pertanian, Halaeng Heboung, dan roh pelindung umat manusia, Selo Sen. Dalam era modern yang sering kali mengabaikan hubungan manusia dengan alam, tarian ini berfungsi sebagai pengingat kuat akan ketergantungan kita pada alam dan pentingnya menghormati kekuatan yang lebih besar dari diri kita.\n\nKedua, setiap elemen dalam Tari Hudoq mengandung simbolisme yang mendalam dan relevan. Penggunaan topeng kayu yang besar dan dedaunan yang menutupi tubuh penari bukan sekadar properti, melainkan representasi kekuatan dan perlindungan dari roh-roh tersebut. Gerakan tari yang menggambarkan keteguhan petani serta nyanyian tradisional yang mengiringinya adalah permohonan tulus kepada alam semesta untuk memberikan keseimbangan dan kesuksesan panen. Menghilangkan tarian ini berarti menghilangkan simbolisme penting yang telah diwariskan turun-temurun, yang merupakan esensi dari budaya Dayak Modang itu sendiri.\n\nKetiga, Tari Hudoq memiliki nilai edukatif yang tinggi bagi masyarakat luas, termasuk wisatawan. Pertunjukan ini tidak hanya memukau secara visual, tetapi juga memberikan pemahaman tentang pentingnya keseimbangan alam dan hubungan spiritual yang mendalam. Dengan melestarikan dan memperkenalkan tarian ini kepada publik yang lebih luas, kita tidak hanya menjaga keberadaan tarian itu sendiri, tetapi juga menyebarkan pesan tentang pentingnya menjaga lingkungan dan menghargai nilai-nilai tradisional.\n\nDengan demikian, jelaslah bahwa Tari Hudoq bukan sekadar pertunjukan, melainkan sebuah jembatan spiritual yang menghubungkan manusia dengan alam dan leluhur. Mengabaikan pelestariannya sama saja dengan mengabaikan kekayaan spiritual dan kearifan lokal yang menjadi fondasi budaya kita. Pelestarian Tari Hudoq adalah investasi untuk masa depan, memastikan bahwa nilai-nilai berharga ini tetap hidup dan relevan bagi generasi mendatang.\n\nSumber: Kebudayaan Kemdikbud, Pustaka Borneo, Times Nusantara (dengan penyesuaian)`;
+
+    const TEKS_MERATUS = `Roh Meratus\n\nKami kembali berjalan pulang. Kondisiku sudah sepenuhnya normal. Tetua melangkah di depanku. Tak kusangka, dalam keadaan kritis ternyata kami telah sangat jauh memasuki belantara. Aku memperhatikan pohon-pohon besar yang kami lewati. Sinar matahari bahkan hampir tak bisa menembus ke bawah.\nAku merasa asing di tempat ini. Pohon-pohon yang berlumut itu, sulur-sulur yang bergantungan, semak-semak yang rimbun itu. Oh... ternyata belantara ini adalah tempat menakjubkan. Bayangkan, di lumut batang pohon itu udang-udang kecil berloncatan lincah. Belum pernah aku melihat udang hidup di batang pohon!\n"Kau tahu anak muda, tempat ini merasa terancam dengan keberadaan..." tetua menghentikan langkahnya dan mengambil sesuatu dalam butah. "Roh Meratus meniupkan wisa ke tubuh kalian, sayang kawan-kawanmu yang lain terlambat," sambungnya kemudian melemparkan gulungan kertas yang diambil dari butah. Sigap kutangkap gulungan itu.\n"Itu peta yang kuambil dari ranselmu. Ternyata kalian memasang patok-patok dan memberi tanda pohon-pohon besar untuk ditebang. Dan perlu kau ketahui anak muda, tempat ini juga termasuk wilayah yang akan kalian pasangi patok-patok itu," katanya dingin.\nPerlahan kubuka gulungan peta di tanganku. Dari peta terlihat jelas, pekerjaan kami tinggal sedikit lagi. Jika saja semuanya lancar, maka kami akan sampai di tempat ini dan selesailah kontrak kerja kami. Dalam waktu singkat, mungkin alat-alat berat akan didatangkan! Pohon-pohon ini, sulur-sulur ini, lumut-lumut ini, udang-udang ini... akan bagaimana?\n"Tetua, izinkan aku tinggal di sini dan bersama kaummu menjaga tempat ini..." Akhirnya setelah lama hanya diam, aku menatap mata tetua mantap.\n\n(Cerpen karya Zaidinoor)\nGlosarium:\nButah: wadah atau tempat yang digunakan untuk membawa sesuatu, biasanya terbuat dari anyaman rotan atau bambu\nWisa: bisa atau racun`;
+
+    const TEKS_BELIS = `Tradisi Belis: Simbol Budaya yang Menyimpan Beban Finansial di Era Modern\n\nBelis adalah tradisi di wilayah Indonesia bagian timur seperti Nusa Tenggara Timur, yang secara umum di Indonesia dikenal dengan mas kawin atau mahar. Tradisi ini melambangkan penghormatan kepada wanita dan penyatuan keluarga. Namun, di balik nilainya, belis sering menjadi beban finansial berat bagi pihak laki-laki, yang kadang memicu tekanan psikologis dan mengganggu hubungan kekeluargaan. Beberapa pihak, terutama para sesepuh desa atau orang-orang tua, kadang terlalu kukuh untuk mempertahankan tradisi dan membuat tekanan dengan nilai yang semakin naik.\n\nBelis memiliki makna yang mendalam dan dianggap sebagai bentuk pengakuan atas peran penting seorang perempuan di dalam keluarga. Belis merupakan representasi keseriusan dan komitmen seorang pria untuk membangun keluarga. Proses penyerahan belis tidak hanya dimaknai sebagai pertukaran materi, tetapi juga sebagai simbol penyatuan dua komunitas besar, yakni keluarga kedua belah pihak. Pada masyarakat Lamaholot misalnya, belis diwujudkan dalam bentuk gading gajah atau bala, yang besarnya disesuaikan dengan status sosial seorang perempuan. Selain itu, disertakan juga pelengkap belis seperti sarung tenun sutra dan ternak. Uniknya, meskipun belis dari pihak laki-laki, pihak keluarga perempuan memberikan balasan simbolis kepada pihak laki-laki dalam bentuk barang berharga lainnya. Tradisi ini mengajarkan keseimbangan dan saling menghargai di antara kedua belah pihak.\n\nMeskipun belis mengandung nilai-nilai yang positif, tantangannya saat ini adalah menjaga agar tradisi tersebut tidak menjadi beban finansial yang berat. Tuntutan belis yang tinggi sering kali menjadi sumber tekanan, terutama bagi keluarga laki-laki. Dalam beberapa kasus, perkara belis dapat berimbas pada kesehatan mental hingga memicu tindakan tragis, seperti yang pernah terjadi di Kupang. Selain menjadi tantangan finansial, besarnya tuntutan materi untuk belis juga sering kali menimbulkan ketegangan dan konflik di antara pasangan dan keluarganya. Ketika keluarga perempuan menetapkan nominal belis yang tinggi, tidak jarang hal ini membangkitkan sentimen negatif dari pihak laki-laki yang merasa tertekan dan kehilangan martabat jika tidak mampu memenuhinya. Alhasil, penundaan pernikahan diambil guna memenuhi permintaan belis. Konflik semacam ini bisa merusak hubungan dua keluarga yang harusnya harmonis.\n\nSumber: Berita Kini, Krajan.id (dengan penyesuaian)`;
+
+    // ==========================================
+    // 2. DATA MATERI PEMBELAJARAN
     // ==========================================
     const materiData = [
       {
@@ -199,25 +204,11 @@
     ];
 
     // ==========================================
-    // 2. DATA BACAAN & SOAL LATIHAN PUSMENDIK
+    // 3. DATA 20 SOAL LATIHAN PUSMENDIK
     // ==========================================
-    const TEKS_LAUTAN = `Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.\n\nDibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.\n\nSolusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.\n\nProdusen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.`;
-
-    const TEKS_DANGAU = `“E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim maddongi (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah.”\n\nAku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. “Bagaimana kalau aku ke rumah iyye-ku (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah.”\n\nEsok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah iyye-ku.\n“Kenapa kamu lesu?” Iyye menanyakan keadaanku. Aku pun menceritakan semuanya kepada iyye.\n“Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang,” ujar iyye-ku.\n\n(Piala di Atas Dangau, Muhammad Isrul, dengan penyesuaian)`;
-
-    const TEKS_RHODAMIN = `Teks 1\nRhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.\n\nTeks 2\nRhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan xanthenes dyes, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.`;
-
-    const TEKS_UKM = `Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)\n\nEkonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan e-commerce, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan (artificial intelligence).\n\nSalah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform e-commerce. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai marketplace daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.\n\nSelain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.\n\nMeskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.\n\n(Sumber: Kementerian Koperasi dan UKM Republik Indonesia)`;
-
-    const TEKS_SERAGAM = `Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.\nBertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.\nSaat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. ”Tidak ganti baju?” tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.\nSaya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.\n\n(Kutipan Cerpen Seragam karya Aris Kurniawan Basuki dengan penyesuaian)`;
-
-    const TEKS_TEKNOLOGI = `(1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.\n\n(1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.\n\n(1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.\n\n(1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.\n\nSumber: https://www.rri.co.id/iptek/1281411/`;
-
     const latihanSoalData = [
       {
-        id: 1,
-        subBab: 1,
-        noSoal: 1,
+        id: 1, subBab: 1, noSoal: 1,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -229,9 +220,7 @@
         explanation: "Istilah 'mobilisasi' bermakna mengerahkan atau menggerakkan orang/sumber daya secara bersama-sama untuk tujuan tertentu."
       },
       {
-        id: 2,
-        subBab: 2,
-        noSoal: 2,
+        id: 2, subBab: 2, noSoal: 2,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -249,14 +238,12 @@
         explanation: "Paragraf pertama berfokus pada ancaman serius penggunaan plastik terhadap ekosistem lautan di samping pemanasan global."
       },
       {
-        id: 3,
-        subBab: 2,
-        noSoal: 3,
+        id: 3, subBab: 2, noSoal: 3,
         kompetensi: "Pemahaman Literal",
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_LAUTAN,
-        question: "Mengapa lautan menghadapi ancaman pada 2050?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Mengapa lautan menghadapi ancaman pada 2050?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Sampah plastik di laut akan lebih banyak daripada jumlah ikan.",
@@ -269,14 +256,12 @@
         explanation: "Berdasarkan teks, ancaman tahun 2050 dikaitkan dengan sampah plastik yang melebihi jumlah ikan serta konsumsi plastik yang terus meningkat tanpa pengelolaan yang baik."
       },
       {
-        id: 4,
-        subBab: 3,
-        noSoal: 4,
+        id: 4, subBab: 3, noSoal: 4,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai ketepatan dan kesesuaian penggunaan bahasa dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_LAUTAN,
-        question: "“Solusi tersebut tidak mudah.”<br>Mengapa penulis menggunakan kalimat tersebut pada teks?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+        question: "“Solusi tersebut tidak mudah.”<br>Mengapa penulis menggunakan kalimat tersebut pada teks?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -288,14 +273,12 @@
         explanation: "Kalimat tersebut bertujuan menunjukkan kompleksitas permasalahan daur ulang plastik yang rumit dari segi biaya ekonomi dan kebiasaan masyarakat."
       },
       {
-        id: 5,
-        subBab: 2,
-        noSoal: 5,
+        id: 5, subBab: 2, noSoal: 5,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_DANGAU,
-        question: "Apa permasalahan yang dihadapi tokoh aku dalam kutipan tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
+        question: "Apa permasalahan yang dihadapi tokoh aku dalam kutipan tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -307,14 +290,12 @@
         explanation: "Fokus konflik utama adalah kesedihan dan kekecewaan tokoh aku karena dilarang bersekolah saat lomba sudah sangat dekat."
       },
       {
-        id: 6,
-        subBab: 2,
-        noSoal: 6,
+        id: 6, subBab: 2, noSoal: 6,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_DANGAU,
-        question: "Apa yang akan terjadi jika tokoh aku tidak datang ke rumah <i>iyye</i>?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Apa yang akan terjadi jika tokoh aku tidak datang ke rumah <i>iyye</i>?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "<i>Iyye</i> akan datang menasehati Ayah karena melarang tokoh aku untuk belajar.",
@@ -327,9 +308,7 @@
         explanation: "Jika tidak ke rumah neneknya (satu-satunya sosok yang disegani Ayah), tokoh aku terancam kehilangan kesempatan belajar dan masalahnya akan terus berlarut."
       },
       {
-        id: 7,
-        subBab: 3,
-        noSoal: 7,
+        id: 7, subBab: 3, noSoal: 7,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai relevansi peristiwa dalam teks dengan kehidupan sehari-hari",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -347,9 +326,7 @@
         explanation: "Cerpen merefleksikan realitas sosial pedesaan di mana sebagian orang tua mengesampingkan sekolah anak demi membantu panen/mata pencaharian keluarga."
       },
       {
-        id: 8,
-        subBab: 2,
-        noSoal: 8,
+        id: 8, subBab: 2, noSoal: 8,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan ide pokok, gagasan pendukung, tokoh, peristiwa, latar, konflik, atau nilai-nilai dalam teks.",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -367,9 +344,7 @@
         explanation: "Teks 1 memfokuskan uraian pada bahaya dan efek kronis jangka panjang konsumsi Rhodamin B bagi kesehatan tubuh manusia."
       },
       {
-        id: 9,
-        subBab: 2,
-        noSoal: 9,
+        id: 9, subBab: 2, noSoal: 9,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -387,14 +362,12 @@
         explanation: "Kedua teks menyatakan fungsi asli Rhodamin B sebagai pewarna industri (tekstil, kertas) dan menegaskan bahaya kesehatannya jika tertelan."
       },
       {
-        id: 10,
-        subBab: 3,
-        noSoal: 10,
+        id: 10, subBab: 3, noSoal: 10,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_RHODAMIN,
-        question: "Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Mendorong masyarakat untuk menghindari Rhodamin B dalam berbagai keperluan.",
@@ -407,9 +380,7 @@
         explanation: "Teks bertujuan membangun kewaspadaan publik terhadap makanan berwarna mencolok serta bahaya karsinogenik jangka panjang Rhodamin B."
       },
       {
-        id: 11,
-        subBab: 1,
-        noSoal: 11,
+        id: 11, subBab: 1, noSoal: 11,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Menyusun kerangka atau bagan berdasarkan bagian-bagian penting dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -434,14 +405,12 @@
         explanation: "Bagan A merangkum empat pilar bahasan teks: Dampak ekonomi digital, Manfaat teknis yang diperoleh, Tantangan adaptasi & keamanan, serta Peluang pertumbuhan UKM."
       },
       {
-        id: 12,
-        subBab: 2,
-        noSoal: 12,
+        id: 12, subBab: 2, noSoal: 12,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_UKM,
-        question: "Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</span>",
+        question: "Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -453,14 +422,12 @@
         explanation: "Paragraf 1 berpola kausalitas, paragraf 2 menguraikan mekanisme/proses pemanfaatan toko daring, dan paragraf 3 bukan klasifikasi melainkan elaborasi manfaat."
       },
       {
-        id: 13,
-        subBab: 3,
-        noSoal: 13,
+        id: 13, subBab: 3, noSoal: 13,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK Kategori",
-        stimulus: TEKS_UKM + `\n\n---\nTranskrip Percakapan:\n\nDini : Teks tersebut sangat menarik dan bisa menambah wawasan kita, terutama jika kita berencana untuk mengembangkan suatu bisnis kecil.\n\nRio : Iya, pilihan katanya juga sangat mudah dimengerti sehingga orang yang awam terhadap istilah di bidang ekonomi juga mudah untuk memahami isi informasi yang disajikan.\n\nSena : Aku sependapat dengan kalian berdua, tetapi rasanya teks tersebut akan lebih baik jika disertai data pertumbuhan UKM dalam kurun waktu lima tahun terakhir atau pendapat ahli di bidang ekonomi.`,
-        question: "Berdasarkan percakapan tersebut, mengapa pendapat Sena sangat baik dalam menilai keakuratan dari informasi yang disajikan tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan berikut!</span>",
+        stimulus: TEKS_UKM + `\n\n---\nTranskrip Percakapan:\nDini : Teks tersebut sangat menarik dan bisa menambah wawasan kita, terutama jika kita berencana untuk mengembangkan suatu bisnis kecil.\nRio : Iya, pilihan katanya juga sangat mudah dimengerti sehingga orang yang awam terhadap istilah di bidang ekonomi juga mudah untuk memahami isi informasi yang disajikan.\nSena : Aku sependapat dengan kalian berdua, tetapi rasanya teks tersebut akan lebih baik jika disertai data pertumbuhan UKM dalam kurun waktu lima tahun terakhir atau pendapat ahli di bidang ekonomi.`,
+        question: "Berdasarkan percakapan tersebut, mengapa pendapat Sena sangat baik dalam menilai keakuratan dari informasi yang disajikan tersebut?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Setuju", "Tidak Setuju"],
         statements: [
@@ -472,9 +439,7 @@
         explanation: "Sena secara kritis menyoroti perlunya data kuantitatif dan pendapat ahli sebagai dasar verifikasi keakuratan informasi ilmiah."
       },
       {
-        id: 14,
-        subBab: 1,
-        noSoal: 14,
+        id: 14, subBab: 1, noSoal: 14,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -492,14 +457,12 @@
         explanation: "Kata daerah 'boyongan' dalam tradisi masyarakat Jawa bermakna pindah rumah secara besar-besaran bersama seluruh anggota keluarga dan seluruh perabotan rumah tangga."
       },
       {
-        id: 15,
-        subBab: 2,
-        noSoal: 15,
+        id: 15, subBab: 2, noSoal: 15,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_SERAGAM,
-        question: "Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh saya tidak ikut mencari jangkrik malam itu?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</span>",
+        question: "Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh saya tidak ikut mencari jangkrik malam itu?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Tepat", "Tidak Tepat"],
         statements: [
@@ -511,14 +474,12 @@
         explanation: "Seragam sahabat rusak karena digunakan untuk memadamkan api di punggung tokoh saya. Yang terbakar adalah punggung tokoh saya, bukan sahabatnya."
       },
       {
-        id: 16,
-        subBab: 3,
-        noSoal: 16,
+        id: 16, subBab: 3, noSoal: 16,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai ketepatan bagian teks untuk menggambarkan karakter, peristiwa, atau latar dalam teks fiksi",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_SERAGAM,
-        question: "Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh saya merupakan seorang yang setia kawan?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh saya merupakan seorang yang setia kawan?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Saya langsung menyatakan ingin ikut, tapi dia keberatan.",
@@ -531,14 +492,12 @@
         explanation: "Kalimat C, D, dan E menunjukkan kerelaan berkorban, pertolongan sigap, dan rasa tanggung jawab besar dari sang sahabat."
       },
       {
-        id: 17,
-        subBab: 1,
-        noSoal: 17,
+        id: 17, subBab: 1, noSoal: 17,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi penggunaan kata serapan dari bahasa daerah/asing dalam berbagai bidang",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_TEKNOLOGI,
-        question: "Manakah kalimat yang memiliki penggunaan kata serapan yang tepat?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut!</span>",
+        question: "Manakah kalimat yang memiliki penggunaan kata serapan yang tepat?<br><span class='text-xs font-semibold text-blue-600'>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut!</span>",
         type: "matrix",
         matrixColumns: ["Tepat", "Tidak Tepat"],
         statements: [
@@ -547,12 +506,10 @@
           "Kata “polusi” pada kalimat (1) paragraf keempat."
         ],
         correctAnswer: ["Tepat", "Tidak Tepat", "Tepat"],
-        explanation: "Kata 'deforestasi' dan 'polusi' digunakan secara tepat sesuai konteks lingkungan hidup, sedangkan 'menginvestigasi' kurang tepat konteksnya untuk penanganan banjir (seharusnya adaptasi/mitigasi)."
+        explanation: "Kata 'deforestasi' dan 'polusi' digunakan secara tepat sesuai konteks lingkungan hidup, sedangkan 'menginvestigasi' kurang tepat konteksnya untuk penanganan banjir."
       },
       {
-        id: 18,
-        subBab: 2,
-        noSoal: 18,
+        id: 18, subBab: 2, noSoal: 18,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan/atau antarparagraf dalam teks.",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -570,9 +527,7 @@
         explanation: "Kalimat (2) menjabarkan dampak buruk perubahan iklim (sebab), dan kalimat (3) menyatakan ajakan bertindak tegas (akibat/konsekuensi logis)."
       },
       {
-        id: 19,
-        subBab: 2,
-        noSoal: 19,
+        id: 19, subBab: 2, noSoal: 19,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi lanjutan atau akhir uraian/cerita berdasarkan bagian tertentu dalam teks.",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -590,14 +545,12 @@
         explanation: "Kalimat C memberikan penegasan positif yang selaras dengan pesan keberlanjutan dan kelestarian bumi di masa mendatang."
       },
       {
-        id: 20,
-        subBab: 3,
-        noSoal: 20,
+        id: 20, subBab: 3, noSoal: 20,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai keakuratan, kesesuaian, kecukupan, atau ketepatan informasi dalam teks",
         bentukSoal: "PGK MCMA",
         stimulus: TEKS_TEKNOLOGI,
-        question: "Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
+        question: "Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim?<br><span class='text-xs font-semibold text-blue-600'>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</span>",
         type: "mcma",
         options: [
           "Teknologi hijau merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.",
@@ -612,21 +565,11 @@
     ];
 
     // ==========================================
-    // 3. DATA 28 SOAL ASLI PENILAIAN TKA 2025
+    // 4. DATA 28 SOAL PENILAIAN RESMI TKA 2025
     // ==========================================
-    const TEKS_BUWUHAN = `Tradisi Buwuhan: Antara Gotong Royong dan Utang Piutang\n\nTradisi buwuhan merupakan bagian dari budaya masyarakat Jawa, khususnya di kota-kota besar seperti Surabaya. Tradisi ini dilakukan ketika ada acara penting seperti pernikahan atau khitanan yang diadakan di daerah tersebut. Buwuhan merujuk pada kegiatan memberi bantuan, baik berupa barang, uang, maupun tenaga kepada seseorang yang sedang mengadakan hajatan, atau bisa juga disebut sebagai kegiatan menyumbang. Tradisi ini mencerminkan nilai gotong royong dan solidaritas sosial karena keluarga dan tetangga saling bahu-membahu dalam membantu sesama.\n\nNamun, praktik buwuhan tidak lepas dari unsur pertukaran atau dipandang sebagai utang. Masyarakat meyakini bahwa segala bentuk bantuan yang diberikan akan kembali dalam bentuk yang setara ketika si pemberi mengadakan hajatan serupa. Hal ini menyebabkan buwuhan tidak lagi dipandang murni sebagai hibah atau sedekah, tetapi sebagai bentuk "utang tidak tertulis" yang menimbulkan kewajiban moral untuk membalas.\n\nDalam praktiknya, buwuhan memang meringankan beban tuan rumah, tetapi dapat menimbulkan tekanan psikologis bagi penerima bantuan. Rasa malu dan kekhawatiran kehilangan harga diri mendorong sebagian orang untuk berutang demi mengembalikan buwuhan. Hal ini menyebabkan terbaginya cara pandang terhadap buwuhan. Ada yang melihatnya sebagai bentuk tolong-menolong, tetapi ada juga yang justru menganggapnya menjadi sistem utang piutang berbasis sosial. Sebagian pihak berpendapat bahwa buwuhan adalah hibah karena tujuannya adalah untuk membantu. Namun, apabila ada keharusan pengembalian, maka secara hukum dan etika, buwuhan telah bergeser dari semangat gotong royong menjadi sebuah kewajiban ekonomi yang membebani. Oleh karena itu, pemahaman masyarakat terhadap tradisi buwuhan perlu diluruskan agar nilai luhur tolong-menolong tetap terjaga tanpa menimbulkan beban yang tidak perlu.\n\nSumber: Rachmawati, S. A., & Anwar, M. K. (2021). Budaya dan Tradisi Buwuh sebagai Utang Piutang dalam Adat Pernikahan di Kota Surabaya. Jurnal Ekonomika dan Bisnis Islam, 4(3), hl 69-83.`;
-    const TEKS_LAYUR = `Layur, Teruslah Berlayar\n\n"Bapak, pulanglah," lirih Layur berharap. Ini hari keenam. Tiga hari adalah waktu terlama nelayan berada di laut. Dengan susah payah, Layur berpindah duduk ke dalam sebuah perahu tua. Penyangga kedua kaki Layur yang tak utuh ia letakkan di sampingnya.\n"Jangan-jangan..."\n"Tidak ... Aku tidak boleh berpikiran buruk. Bapak pasti pulang dengan selamat. Aku akan tetap menunggunya di sini sambil berdoa."\nLayur masih ingat masa-masa dulu, ketika Bapak berlayar pada malam hari dan keesokan harinya sudah merapat kembali di pantai dengan membawa ikan berlimpah.\n"Ayo! Siapa mau udang?" panggil Bapak. Layur berlari kencang bersama teman-temannya. Namun, itu adalah kenangan sepuluh tahun silam. Kini, udang dan ikan kecil adalah anugerah besar. Itu pun harus dijaring di tengah laut.\nLayur ingat betul, Bapak adalah pembuat bondet paling disegani, juga berpengaruh di dusun. Setiap hari, nelayan silih berganti datang ke rumah memesan bondet. Hasil panen ikan berlimpah. Tinggal melemparkan bondet ke dalam laut dan bum! Berkuintal-kuintal ikan terapung tinggal diserok menggunakan jaring.\nSampai suatu ketika\nDUAAAR!\nSeparuh rumah Layur luluh lantak karena simpanan bondet di gudang meledak. Ledakan bondet di gudang tak hanya merusak rumah tetapi juga mencelakai anak semata wayang. Ia berteriak minta tolong, menepuk-nepuk dadanya, dan menangis. Itulah titik balik yang amat disesali Bapak. Sejak itu, Bapak meninggalkan usaha pembuatan bondet. Demikian pula dengan warga Dusun Prau tempat mereka berdiam berangsur-angsur meninggalkan cara menangkap ikan dengan bondet.\nLamat-lamat terlihat kibaran layar bercorak biru. Layur beringsut menuruni perahu tempatnya duduk. Lambaian tangan bapaknya semakin jelas dan semakin dekat.\n"Bapak dari mana? Bapak sudah tiga hari telat pulang!" Seru Layur kesal. Matanya berkaca-kaca, menahan rindu, dan cemas.\n\nKarya Anang YB\nDaftar Istilah: Bondet: istilah lokal yang merujuk pada bahan peledak rakitan, sering disebut juga bom ikan.\nSumber: https://buku.kemdikbud.go.id/katalog/layur-tetaplah-berlayar (dengan pengubahan)`;
-    const TEKS_PANTAI = `Pantai Bersih Tanpa Sampah\n\nDi sebuah daerah wisata yang terkenal dengan pantainya yang indah, pemerintah setempat gencar mengampanyekan "Pantai Bersih Tanpa Sampah." Spanduk dan papan peringatan terpampang di berbagai sudut. Namun, kenyataannya seringkali berbeda.\nSuatu sore, Pak Wayan, seorang nelayan tua yang sudah puluhan tahun melaut, sedang membersihkan jaringnya di tepi pantai. Di sampingnya, sekelompok turis muda asyik berpose untuk berfoto. Mereka mengenakan topi pantai yang modis, kacamata hitam, dan membawa botol minum berwarna-warni.\n"Wah, pantainya bersih banget ya, guys!" seru salah satu turis sambil memegang ponselnya. "Pas banget buat konten liburan ramah lingkungan!"\nTemannya menimpali, "Iya! Nanti caption-nya 'Menikmati keindahan alam tanpa jejak, menjaga bumi kita tercinta!"\nSetelah puas berfoto dari berbagai sudut dengan beragam filter, mereka beranjak pergi. Namun mereka meninggalkan botol minum plastik kosong, bungkus keripik, dan beberapa puntung rokok yang disembunyikan di balik semak-semak. Mereka bahkan tidak berusaha mencari tempat sampah yang hanya berjarak beberapa meter.\nPak Wayan hanya bisa menggelengkan kepala. Ia berjalan mendekat dan memungut sampah-sampah itu satu per satu. Ia sudah terbiasa dengan pemandangan ini. Para turis datang untuk menikmati keindahan, berfoto, membuat konten, lalu pergi meninggalkan "kenangan" dalam bentuk sampah.\nTak lama kemudian, seorang petugas kebersihan berseragam oranye datang dengan sapu dan karung. "Pak Wayan, sudah banyak lagi ya sampahnya?" tanyanya sambil menghela napas.\n"Sudah biasa, Nak," jawab Pak Wayan. "Ini namanya 'sampah estetik'. Cuma bagus di foto, tapi busuk di mata dan bau di hidung."\nPetugas itu tersenyum masam. "Iya, Pak. Kata mereka peduli lingkungan, tapi pedulinya cuma di caption media sosial."\nMalam harinya, di akun media sosial Pak Wayan - yang diajari cucunya - ia melihat foto-foto pantai yang diunggah para turis tadi. Pantai tampak bersih sempurna, dihiasi filter matahari terbenam yang memukau. Ia membaca caption-nya: "Surgaku, jangan kau kotori!"\nPak Wayan hanya bisa tersenyum getir. Sepertinya, slogan "Pantai Bersih Tanpa Sampah" itu hanya berlaku untuk kamera dan media sosial. Sementara di balik layar, jejak yang ditinggalkan justru lebih nyata dan memprihatinkan daripada gambar yang dipamerkan.`;
-    const TEKS_PULIHKAN = `Pulihkan Ekosistem, Menjaga Planet Kita dari Generasi ke Generasi\n\nBerdasarkan hasil riset LIPI (Lembaga Ilmu Pengetahuan Indonesia) terjadi peningkatan sampah plastik selama pandemik. Hal ini disebabkan oleh penggunaan layanan delivery makanan lewat jasa transportasi online, 96% paket dibungkus dengan plastik yang tebal dan ditambah dengan bubble wrap. Selain itu selotip, bungkus plastik, dan bubble wrap merupakan pembungkus berbahan plastik yang paling sering ditemukan. Sampah medis juga melonjak. Kementerian Lingkungan Hidup dan Kehutanan (KLHK) menyatakan bahwa selama pandemi, terjadi peningkatan timbunan sampah medis sebesar 30% hingga 50%. Dari data tersebut, Indonesia merupakan negara ke-2 penyumbang polusi sampah di lautan (3,22 metrik ton per tahun).\n\nSalah satu faktor penyebab dari permasalahan tersebut adalah dengan pertambahan jumlah penduduk akan terjadi peningkatan aktivitas manusia dan daya konsumsi yang melonjak. Hal itu menyebabkan meningkatnya jumlah dan jenis limbah sehingga menyebabkan lingkungan menjadi tercemar. Selain sampah, penebangan pohon secara liar sampai pada kebakaran hutan menjadi penyumbang terbesar dalam kerusakan ekosistem. Banyak aktivitas manusia yang mengancam pelestarian lingkungan sehingga menyebabkan ketidakseimbangan ekosistem. Manusia punya peran besar dalam menjaga keseimbangan ekosistem, bukan cuma untuk sekarang, tapi juga untuk generasi mendatang. Tanggung jawab dalam menjaga lingkungan, tentunya bukan hanya dibebankan oleh pemerintah saja, tetapi seluruh elemen masyarakat harus bahu-membahu dalam menjaga dan melestarikan lingkungan.\n\nBertepatan dengan peringatan Hari Lingkungan Hidup Sedunia, yang tidak hanya sebagai seremonial belaka, tentunya menjadi sebuah harapan dalam meningkatkan kesadaran menjaga dan melestarikan lingkungan. Selain itu, memberikan semangat baru bagi kita semua untuk komitmen menjaga lingkungan. Dengan memulai dari diri sendiri dan hal paling kecil, yaitu tidak membuang sampah sembarangan, terutama sampah plastik karena merusak ekosistem laut, tidak menebang pohon dengan liar hingga membuat gundul hutan. Mari bersama merobohkan jurang ekologi, memulihkan ekosistem bumi dengan pendekatan pengelolaan sumber daya alam yang adil dan berkelanjutan.\n\nSumber: https://uiad.ac.id/2021/06/06/opini-pulihkan-ekosistem-menjaga-planet-kita-dari-generasi-ke-generasi/ (dengan pengubahan)`;
-    const TEKS_EKONOMI_GLOBAL = `Prospek Ekonomi Global di Tengah Ketidakpastian\nJakarta, Senin, 16 Juni 2025\n\nPerekonomian global terus menghadapi tantangan signifikan di tengah ketidakpastian geopolitik dan tekanan inflasi yang persisten. Analisis terbaru yang dirilis pada (Senin, 2/6/2025), oleh Dana Moneter Internasional (IMF) menunjukkan adanya divergensi dalam laju pemulihan ekonomi antarwilayah, di mana beberapa negara seperti Amerika Serikat dan India menunjukkan ketahanan yang lebih baik, sementara negara-negara di Eropa dan Tiongkok masih berjuang mengatasi dampak guncangan eksternal.\n\nKenaikan harga energi dan pangan tetap menjadi pendorong utama inflasi di banyak negara, dipicu oleh gangguan rantai pasok global dan konflik di Ukraina, memaksa bank sentral untuk mempertahankan kebijakan moneter yang ketat. Upaya ini, meskipun esensial untuk mengendalikan kenaikan harga, berpotensi mengerem pertumbuhan ekonomi. Para pengambil kebijakan dihadapkan pada dilema sulit: menyeimbangkan kebutuhan untuk meredam inflasi tanpa memicu resesi yang dalam.\n\n"Kami melihat adanya perlambatan pertumbuhan global yang signifikan di tahun ini, dan risiko resesi menjadi lebih nyata jika bank sentral terlalu agresif dalam menaikkan suku bunga," ujar seorang ekonom senior dari Bank Dunia, dalam sebuah webinar yang diadakan, (Rabu, 11/6).\n\nDi sisi lain, sektor manufaktur global menunjukkan tanda-tanda perlambatan, tercermin dari menurunnya indeks manajer pembelian (PMI) di beberapa ekonomi besar seperti Jerman dan Jepang. Penurunan permintaan ekspor dan gangguan rantai pasok masih menjadi perhatian utama bagi produsen. Namun, sektor jasa justru menunjukkan resiliensi yang lebih kuat, didukung oleh kembali normalnya aktivitas setelah pandemi, sebuah tren yang mulai terlihat sejak awal Desember 2024.\n\nPasar tenaga kerja di beberapa negara maju masih relatif ketat, dengan tingkat pengangguran yang rendah. Kondisi ini memberikan dukungan terhadap daya beli konsumen, meskipun tekanan biaya hidup yang tinggi dapat mengikis dampaknya. Sementara itu, investasi langsung asing (FDI) cenderung melambat, mencerminkan kehati-hatian investor di tengah prospek ekonomi yang tidak menentu.\n\nKe depan, koordinasi kebijakan ekonomi antarnegara akan menjadi kunci untuk menstabilkan kondisi global. Reformasi struktural yang bertujuan meningkatkan produktivitas dan daya saing juga dianggap krusial untuk memastikan pertumbuhan yang berkelanjutan dalam jangka panjang. Para ekonom memprediksi bahwa prospek ekonomi akan sangat bergantung pada evolusi inflasi, respons kebijakan moneter, dan perkembangan situasi geopolitik di seluruh dunia. Bagi Indonesia, kondisi ini menuntut kewaspadaan dan diversifikasi ekonomi agar tidak terlalu rentan terhadap gejolak global dalam kurun waktu tiga hingga enam bulan ke depan, terhitung sejak (16/6/2025).\n\nSumber: Disadur dan diadaptasi dari rilis pers dan laporan Global Economic Prospects, Juni 2025 oleh World Bank (Bank Dunia).`;
-    const TEKS_HUDOQ = `Tari Hudoq: Warisan Budaya yang Harus Dilestarikan\n\nTari Hudoq dari suku Dayak Modang di Kalimantan Timur bukan sekadar tontonan seni biasa. Lebih dari itu, tarian ini adalah warisan budaya yang sarat akan makna spiritual dan simbolis. Oleh karena itu, melestarikan Tari Hudoq menjadi sebuah keharusan, tidak hanya untuk menjaga keragaman budaya Indonesia, tetapi juga untuk mengingatkan kita akan pentingnya hubungan harmonis antara manusia dan alam.\n\nPertama, Tari Hudoq adalah cerminan dari kearifan lokal yang mengajarkan nilai-nilai fundamental. Tarian ini merupakan bagian integral dari ritual keagamaan untuk menjalin hubungan harmonis dengan roh penjaga pertanian, Halaeng Heboung, dan roh pelindung umat manusia, Selo Sen. Dalam era modern yang sering kali mengabaikan hubungan manusia dengan alam, tarian ini berfungsi sebagai pengingat kuat akan ketergantungan kita pada alam dan pentingnya menghormati kekuatan yang lebih besar dari diri kita.\n\nKedua, setiap elemen dalam Tari Hudoq mengandung simbolisme yang mendalam dan relevan. Penggunaan topeng kayu yang besar dan dedaunan yang menutupi tubuh penari bukan sekadar properti, melainkan representasi kekuatan dan perlindungan dari roh-roh tersebut. Gerakan tari yang menggambarkan keteguhan petani serta nyanyian tradisional yang mengiringinya adalah permohonan tulus kepada alam semesta untuk memberikan keseimbangan dan kesuksesan panen. Menghilangkan tarian ini berarti menghilangkan simbolisme penting yang telah diwariskan turun-temurun, yang merupakan esensi dari budaya Dayak Modang itu sendiri.\n\nKetiga, Tari Hudoq memiliki nilai edukatif yang tinggi bagi masyarakat luas, termasuk wisatawan. Pertunjukan ini tidak hanya memukau secara visual, tetapi juga memberikan pemahaman tentang pentingnya keseimbangan alam dan hubungan spiritual yang mendalam. Dengan melestarikan dan memperkenalkan tarian ini kepada publik yang lebih luas, kita tidak hanya menjaga keberadaan tarian itu sendiri, tetapi juga menyebarkan pesan tentang pentingnya menjaga lingkungan dan menghargai nilai-nilai tradisional.\n\nDengan demikian, jelaslah bahwa Tari Hudoq bukan sekadar pertunjukan, melainkan sebuah jembatan spiritual yang menghubungkan manusia dengan alam dan leluhur. Mengabaikan pelestariannya sama saja dengan mengabaikan kekayaan spiritual dan kearifan lokal yang menjadi fondasi budaya kita. Pelestarian Tari Hudoq adalah investasi untuk masa depan, memastikan bahwa nilai-nilai berharga ini tetap hidup dan relevan bagi generasi mendatang.\n\nSumber: Kebudayaan Kemdikbud, Pustaka Borneo, Times Nusantara (dengan penyesuaian)`;
-    const TEKS_MERATUS = `Roh Meratus\n\nKami kembali berjalan pulang. Kondisiku sudah sepenuhnya normal. Tetua melangkah di depanku. Tak kusangka, dalam keadaan kritis ternyata kami telah sangat jauh memasuki belantara. Aku memperhatikan pohon-pohon besar yang kami lewati. Sinar matahari bahkan hampir tak bisa menembus ke bawah.\nAku merasa asing di tempat ini. Pohon-pohon yang berlumut itu, sulur-sulur yang bergantungan, semak-semak yang rimbun itu. Oh... ternyata belantara ini adalah tempat menakjubkan. Bayangkan, di lumut batang pohon itu udang-udang kecil berloncatan lincah. Belum pernah aku melihat udang hidup di batang pohon!\n"Kau tahu anak muda, tempat ini merasa terancam dengan keberadaan..." tetua menghentikan langkahnya dan mengambil sesuatu dalam butah. "Roh Meratus meniupkan wisa ke tubuh kalian, sayang kawan-kawanmu yang lain terlambat," sambungnya kemudian melemparkan gulungan kertas yang diambil dari butah. Sigap kutangkap gulungan itu.\n"Itu peta yang kuambil dari ranselmu. Ternyata kalian memasang patok-patok dan memberi tanda pohon-pohon besar untuk ditebang. Dan perlu kau ketahui anak muda, tempat ini juga termasuk wilayah yang akan kalian pasangi patok-patok itu," katanya dingin.\nPerlahan kubuka gulungan peta di tanganku. Dari peta terlihat jelas, pekerjaan kami tinggal sedikit lagi. Jika saja semuanya lancar, maka kami akan sampai di tempat ini dan selesailah kontrak kerja kami. Dalam waktu singkat, mungkin alat-alat berat akan didatangkan! Pohon-pohon ini, sulur-sulur ini, lumut-lumut ini, udang-udang ini... akan bagaimana?\n"Tetua, izinkan aku tinggal di sini dan bersama kaummu menjaga tempat ini..." Akhirnya setelah lama hanya diam, aku menatap mata tetua mantap.\n\n(Cerpen karya Zaidinoor)\nGlosarium:\nButah: wadah atau tempat yang digunakan untuk membawa sesuatu, biasanya terbuat dari anyaman rotan atau bambu\nWisa: bisa atau racun`;
-    const TEKS_BELIS = `Tradisi Belis: Simbol Budaya yang Menyimpan Beban Finansial di Era Modern\n\nBelis adalah tradisi di wilayah Indonesia bagian timur seperti Nusa Tenggara Timur, yang secara umum di Indonesia dikenal dengan mas kawin atau mahar. Tradisi ini melambangkan penghormatan kepada wanita dan penyatuan keluarga. Namun, di balik nilainya, belis sering menjadi beban finansial berat bagi pihak laki-laki, yang kadang memicu tekanan psikologis dan mengganggu hubungan kekeluargaan. Beberapa pihak, terutama para sesepuh desa atau orang-orang tua, kadang terlalu kukuh untuk mempertahankan tradisi dan membuat tekanan dengan nilai yang semakin naik.\n\nBelis memiliki makna yang mendalam dan dianggap sebagai bentuk pengakuan atas peran penting seorang perempuan di dalam keluarga. Belis merupakan representasi keseriusan dan komitmen seorang pria untuk membangun keluarga. Proses penyerahan belis tidak hanya dimaknai sebagai pertukaran materi, tetapi juga sebagai simbol penyatuan dua komunitas besar, yakni keluarga kedua belah pihak. Pada masyarakat Lamaholot misalnya, belis diwujudkan dalam bentuk gading gajah atau bala, yang besarnya disesuaikan dengan status sosial seorang perempuan. Selain itu, disertakan juga pelengkap belis seperti sarung tenun sutra dan ternak. Uniknya, meskipun belis dari pihak laki-laki, pihak keluarga perempuan memberikan balasan simbolis kepada pihak laki-laki dalam bentuk barang berharga lainnya. Tradisi ini mengajarkan keseimbangan dan saling menghargai di antara kedua belah pihak.\n\nMeskipun belis mengandung nilai-nilai yang positif, tantangannya saat ini adalah menjaga agar tradisi tersebut tidak menjadi beban finansial yang berat. Tuntutan belis yang tinggi sering kali menjadi sumber tekanan, terutama bagi keluarga laki-laki. Dalam beberapa kasus, perkara belis dapat berimbas pada kesehatan mental hingga memicu tindakan tragis, seperti yang pernah terjadi di Kupang. Selain menjadi tantangan finansial, besarnya tuntutan materi untuk belis juga sering kali menimbulkan ketegangan dan konflik di antara pasangan dan keluarganya. Ketika keluarga perempuan menetapkan nominal belis yang tinggi, tidak jarang hal ini membangkitkan sentimen negatif dari pihak laki-laki yang merasa tertekan dan kehilangan martabat jika tidak mampu memenuhinya. Alhasil, penundaan pernikahan diambil guna memenuhi permintaan belis. Konflik semacam ini bisa merusak hubungan dua keluarga yang harusnya harmonis.\n\nSumber: Berita Kini, Krajan.id (dengan penyesuaian)`;
-
     const penilaianSoalData = [
       {
-        id: 1,
-        noSoal: 1,
+        id: 1, noSoal: 1,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi makna kata/istilah dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -644,8 +587,7 @@
         explanation: "Hajatan bermakna kenduri, selamatan, atau pesta/acara penting seperti pernikahan dan khitanan."
       },
       {
-        id: 2,
-        noSoal: 2,
+        id: 2, noSoal: 2,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan gagasan pendukung dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -663,8 +605,7 @@
         explanation: "Paragraf kedua menyebutkan adanya kewajiban moral untuk membalas/mengembalikan bantuan dalam bentuk setara di kemudian hari."
       },
       {
-        id: 3,
-        noSoal: 3,
+        id: 3, noSoal: 3,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menjelaskan hubungan makna antarparagraf dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -682,8 +623,7 @@
         explanation: "Paragraf kedua mengemukakan pergeseran pandangan buwuhan menjadi utang (sebab), dan paragraf ketiga memaparkan akibat tekanan psikologis bagi penerima."
       },
       {
-        id: 4,
-        noSoal: 4,
+        id: 4, noSoal: 4,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai kesesuaian simpulan pada teks argumentasi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -701,8 +641,7 @@
         explanation: "Kalimat tersebut merangkum solusi atas permasalahan pergeseran esensi buwuhan agar nilai tolong-menolong tetap lestari."
       },
       {
-        id: 5,
-        noSoal: 5,
+        id: 5, noSoal: 5,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan karakter tokoh dalam teks fiksi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -720,8 +659,7 @@
         explanation: "Layur terus setia menunggui bapaknya di tepi pantai dengan doa penuh harap dan rasa kasih sayang mendalam."
       },
       {
-        id: 6,
-        noSoal: 6,
+        id: 6, noSoal: 6,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan penyebab konflik emosi tokoh",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -739,8 +677,7 @@
         explanation: "Bapak sudah terlambat tiga hari (total enam hari melaut) melampaui kebiasaan tiga hari melaut."
       },
       {
-        id: 7,
-        noSoal: 7,
+        id: 7, noSoal: 7,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi kelanjutan cerita narasi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -758,8 +695,7 @@
         explanation: "Kelegaan Layur akan tercapai ketika Bapak menjelaskan alasan keterlambatannya dan meminta maaf atas kecemasan sang anak."
       },
       {
-        id: 8,
-        noSoal: 8,
+        id: 8, noSoal: 8,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi respons tokoh dalam cerita",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -777,8 +713,7 @@
         explanation: "Teks menyebutkan: 'Itulah titik balik yang amat disesali Bapak. Sejak itu, Bapak meninggalkan usaha pembuatan bondet.'"
       },
       {
-        id: 9,
-        noSoal: 9,
+        id: 9, noSoal: 9,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Menentukan urutan peristiwa atau alur dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -797,8 +732,7 @@
         explanation: "Alur ceritanya: Turis berfoto membuat konten ria, lalu Pak Wayan memungut sampah mereka, disusul petugas oranye yang datang menyapu."
       },
       {
-        id: 10,
-        noSoal: 10,
+        id: 10, noSoal: 10,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai relevansi peristiwa dalam teks dengan realitas sosial",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -817,8 +751,7 @@
         explanation: "Kritik paling tajam adalah kemunafikan konten kreator yang membuat caption peduli lingkungan hanya demi estetika dan impresi medsos."
       },
       {
-        id: 11,
-        noSoal: 11,
+        id: 11, noSoal: 11,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menjelaskan hubungan makna antarkalimat dan antarparagraf",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -836,13 +769,12 @@
         explanation: "Paragraf 1 mengemukakan fenomena lonjakan sampah, sedangkan paragraf 2 menguraikan faktor penyebabnya (pertambahan penduduk dan peningkatan konsumsi)."
       },
       {
-        id: 12,
-        noSoal: 12,
+        id: 12, noSoal: 12,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai keakuratan data visual dan bukti pendukung opini",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_PULIHKAN,
-        question: "Aktivitas manusia memberikan dampak besar terhadap pencemaran lingkungan di Indonesia. Data apa saja yang mendukung opini penulis tersebut?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Klik pilihan Benar atau Salah untuk setiap pernyataan sesuai isi teks!</span>",
+        question: "Aktivitas manusia memberikan dampak besar terhadap pencemaran lingkungan di Indonesia. Data apa saja yang mendukung opini penulis tersebut?<br><span class='text-xs font-semibold text-blue-600'>Klik pilihan Benar atau Salah untuk setiap pernyataan sesuai isi teks!</span>",
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -854,8 +786,7 @@
         explanation: "Pernyataan 1 dan 2 sesuai dengan rincian data LIPI dan KLHK, sedangkan data negara ke-2 penyumbang sampah berkaitan dengan sampah lautan, bukan kebakaran hutan."
       },
       {
-        id: 13,
-        noSoal: 13,
+        id: 13, noSoal: 13,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai kesesuaian penggunaan bahasa/idiom dalam teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -873,8 +804,7 @@
         explanation: "Ungkapan 'bahu-membahu' menegaskan pentingnya solidaritas dan kerja sama kolektif seluruh lapisan masyarakat."
       },
       {
-        id: 14,
-        noSoal: 14,
+        id: 14, noSoal: 14,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi makna istilah ekonomi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -892,8 +822,7 @@
         explanation: "Inflasi secara baku bermakna kenaikan harga komoditas pangan, energi, dan barang/jasa secara umum dan terus-menerus."
       },
       {
-        id: 15,
-        noSoal: 15,
+        id: 15, noSoal: 15,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan fakta tantangan perekonomian",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -911,8 +840,7 @@
         explanation: "Teks menyebut kenaikan harga energi dan pangan akibat gangguan rantai pasok global dan konflik menekan daya beli masyarakat."
       },
       {
-        id: 16,
-        noSoal: 16,
+        id: 16, noSoal: 16,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi kelanjutan uraian teks eksposisi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -930,8 +858,7 @@
         explanation: "Paragraf terakhir menyatakan prospek ke depan akan sangat bergantung pada evaluasi inflasi, respons kebijakan moneter, dan geopolitik global."
       },
       {
-        id: 17,
-        noSoal: 17,
+        id: 17, noSoal: 17,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi makna istilah daerah/spiritual",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -949,8 +876,7 @@
         explanation: "Paragraf 2 menyatakan Halaeng Heboung adalah roh penjaga pertanian dan Selo Sen adalah roh pelindung umat manusia."
       },
       {
-        id: 18,
-        noSoal: 18,
+        id: 18, noSoal: 18,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menemukan bukti pendukung ide pokok",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -968,8 +894,7 @@
         explanation: "Nilai ekologis-spiritual tertuang jelas pada fungsi tarian sebagai pengingat ketergantungan mutlak manusia pada alam semesta."
       },
       {
-        id: 19,
-        noSoal: 19,
+        id: 19, noSoal: 19,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menganalisis koherensi hubungan antarparagraf",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -987,8 +912,7 @@
         explanation: "Paragraf 3 (simbolisme) dan paragraf 4 (nilai edukatif) bersama-sama melengkapi pilar argumen perlunya pelestarian Tari Hudoq."
       },
       {
-        id: 20,
-        noSoal: 20,
+        id: 20, noSoal: 20,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai kesesuaian bagian simpulan teks",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1006,8 +930,7 @@
         explanation: "Paragraf pamungkas berfungsi merangkum seluruh esensi spiritual dan memberikan penegasan kuat perlunya pelestarian tarian tersebut bagi generasi penerus."
       },
       {
-        id: 21,
-        noSoal: 21,
+        id: 21, noSoal: 21,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi latar tempat dalam teks fiksi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1025,8 +948,7 @@
         explanation: "Latar digambarkan pohon berlumut besar, sulur bergantungan, rimbun lebat hingga sinar matahari tak mampu menembus tanah."
       },
       {
-        id: 22,
-        noSoal: 22,
+        id: 22, noSoal: 22,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menyimpulkan penyebab konflik dalam cerita fiksi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1044,8 +966,7 @@
         explanation: "Konflik bermula karena kedatangan kelompok proyek yang memasang patok pembabatan pohon dianggap merusak dan mengancam kelestarian hutan adat."
       },
       {
-        id: 23,
-        noSoal: 23,
+        id: 23, noSoal: 23,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Memprediksi tindakan tokoh cerita fiksi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1063,13 +984,12 @@
         explanation: "Di akhir teks tokoh utama memohon: 'Tetua, izinkan aku tinggal di sini dan bersama kaummu menjaga tempat ini...'"
       },
       {
-        id: 24,
-        noSoal: 24,
+        id: 24, noSoal: 24,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai kesesuaian tindakan tokoh dengan karakter",
         bentukSoal: "PGK Kategori",
         stimulus: TEKS_MERATUS,
-        question: `Perubahan sikap tokoh utama ditunjukkan melalui tindakannya di akhir kutipan.<br>Manakah pernyataan yang paling tepat untuk menilai kesesuaian antara karakter tokoh dan tindakannya?<br><span class='text-xs font-semibold text-blue-600 mt-2 inline-block'>Klik Benar atau Salah pada setiap pernyataan berikut!</span>`,
+        question: `Perubahan sikap tokoh utama ditunjukkan melalui tindakannya di akhir kutipan.<br>Manakah pernyataan yang paling tepat untuk menilai kesesuaian antara karakter tokoh dan tindakannya?<br><span class='text-xs font-semibold text-blue-600'>Klik Benar atau Salah pada setiap pernyataan berikut!</span>`,
         type: "matrix",
         matrixColumns: ["Benar", "Salah"],
         statements: [
@@ -1081,8 +1001,7 @@
         explanation: "Pernyataan 1 benar karena tokoh mengalami transformasi nurani setelah menyaksikan keajaiban alam hutan Meratus."
       },
       {
-        id: 25,
-        noSoal: 25,
+        id: 25, noSoal: 25,
         kompetensi: "Pemahaman Tekstual",
         subKompetensi: "Mengidentifikasi makna kata/istilah adat",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1100,8 +1019,7 @@
         explanation: "Kata 'sesepuh' bermakna orang yang dituakan, dihormati, atau menjadi panutan adat dalam lingkungan masyarakat."
       },
       {
-        id: 26,
-        noSoal: 26,
+        id: 26, noSoal: 26,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menemukan gagasan penjelas yang mendukung gagasan utama",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1119,8 +1037,7 @@
         explanation: "Gagasan positif didukung pernyataan bahwa belis merupakan simbol penghormatan martabat wanita dan perekat persaudaraan dua rumpun keluarga."
       },
       {
-        id: 27,
-        noSoal: 27,
+        id: 27, noSoal: 27,
         kompetensi: "Pemahaman Inferensial",
         subKompetensi: "Menganalisis hubungan makna antarparagraf",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1138,8 +1055,7 @@
         explanation: "Paragraf 2 menjelaskan makna filosofis yang luhur, sedangkan paragraf 3 menyoroti distorsi dan beban finansial yang memberatkan."
       },
       {
-        id: 28,
-        noSoal: 28,
+        id: 28, noSoal: 28,
         kompetensi: "Evaluasi dan Apresiasi",
         subKompetensi: "Menilai ketepatan simpulan teks argumentasi",
         bentukSoal: "Pilihan Ganda (PG)",
@@ -1158,14 +1074,15 @@
       }
     ];
 
+
     // ==========================================
-    // 4. APLIKASI UTAMA REACT (CBT & PORTAL)
+    // 5. APLIKASI UTAMA REACT (CBT & PORTAL)
     // ==========================================
     function App() {
-      const [currentTab, setCurrentTab] = useState("home"); // home, materi, latihan, penilaian, exam, result, bacacepat
+      const [currentTab, setCurrentTab] = useState("home"); // home, materi, latihan, bacacepat, penilaian, exam, result
       const [activeMateri, setActiveMateri] = useState(materiData[0]);
       
-      // State CBT Ujian
+      // Mode Ujian
       const [examMode, setExamMode] = useState("latihan"); // "latihan" | "penilaian"
       const [examTitle, setExamTitle] = useState("");
       const [activeQuestions, setActiveQuestions] = useState([]);
@@ -1176,33 +1093,33 @@
       const [zoomImage, setZoomImage] = useState(null);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-      // State Baca Cepat (RSVP)
-      const [bacaCepatSpeed, setBacaCepatSpeed] = useState(300); // ms per word. 300ms = 200WPM (Pelan)
-      const [bacaCepatIsPlaying, setBacaCepatIsPlaying] = useState(false);
-      const [bacaCepatIndex, setBacaCepatIndex] = useState(0);
-      const bacaCepatText = TEKS_DANGAU;
-      const bacaCepatWords = useMemo(() => bacaCepatText.trim().split(/\s+/), [bacaCepatText]);
+      // Mode RSVP (Baca Cepat)
+      const rsvpTextSource = TEKS_DANGAU;
+      const rsvpWords = useMemo(() => rsvpTextSource.replace(/\n/g, ' ').split(/\s+/).filter(w => w.trim() !== ""), [rsvpTextSource]);
+      const [rsvpIndex, setRsvpIndex] = useState(0);
+      const [rsvpPlaying, setRsvpPlaying] = useState(false);
+      const [rsvpWpm, setRsvpWpm] = useState(300); // Default Sedang
 
-      // Logic Baca Cepat
       useEffect(() => {
         let interval;
-        if (bacaCepatIsPlaying && bacaCepatIndex < bacaCepatWords.length) {
+        if (rsvpPlaying && rsvpIndex < rsvpWords.length) {
+          const msPerWord = 60000 / rsvpWpm;
           interval = setInterval(() => {
-            setBacaCepatIndex((prev) => {
-              if (prev + 1 >= bacaCepatWords.length) {
-                setBacaCepatIsPlaying(false);
-                return prev; // Stop at last word
+            setRsvpIndex(prev => {
+              if (prev + 1 >= rsvpWords.length) {
+                setRsvpPlaying(false);
+                return prev; // Berhenti di kata terakhir
               }
               return prev + 1;
             });
-          }, bacaCepatSpeed);
+          }, msPerWord);
         }
         return () => clearInterval(interval);
-      }, [bacaCepatIsPlaying, bacaCepatSpeed, bacaCepatIndex, bacaCepatWords.length]);
+      }, [rsvpPlaying, rsvpIndex, rsvpWpm, rsvpWords.length]);
 
-      const resetBacaCepat = () => {
-        setBacaCepatIsPlaying(false);
-        setBacaCepatIndex(0);
+      const resetRsvp = () => {
+        setRsvpPlaying(false);
+        setRsvpIndex(0);
       };
 
       // Helper Scroll to Top
@@ -1255,7 +1172,7 @@
 
       // Kalkulasi Nilai Akhir
       const scoreCalculation = useMemo(() => {
-        if (activeQuestions.length === 0) return { totalScore: 0, correctCount: 0 };
+        if (activeQuestions.length === 0) return { totalScore: 0, correctCount: 0, total: 0 };
         let correctCount = 0;
 
         activeQuestions.forEach(q => {
@@ -1282,33 +1199,22 @@
 
       const currentQ = activeQuestions[currentIndex];
 
-      // Formatter Key Jawaban
-      const getAnswerKeyText = (q) => {
-        if (q.type === "single") {
-          return String.fromCharCode(65 + q.correctAnswer);
-        } else if (q.type === "mcma") {
-          return q.correctAnswer.map(idx => String.fromCharCode(65 + idx)).join(", ");
-        } else if (q.type === "matrix") {
-          return q.statements.map((_, i) => `${String.fromCharCode(65 + i)}: ${q.correctAnswer[i]}`).join(" | ");
-        }
-        return "";
-      };
-
       return (
         <div className="min-h-screen flex flex-col font-sans">
+          
           {/* HEADER NAVIGASI */}
-          <header className="sticky top-0 z-40 glass-nav border-b border-slate-200/60 shadow-sm transition-all duration-300">
+          <header className="sticky top-0 z-50 glass-nav transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               <div 
                 className="flex items-center gap-3 cursor-pointer select-none group"
                 onClick={() => { setCurrentTab("home"); scrollToTop(); }}
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
                   ID
                 </div>
                 <div>
-                  <h1 className="font-extrabold text-slate-800 leading-tight text-sm sm:text-base tracking-tight">Materi TKA Bahasa Indonesia</h1>
-                  <p className="text-xs text-slate-500 font-medium hidden sm:block">Pusat Asesmen & Standar Literasi Akademis</p>
+                  <h1 className="font-extrabold text-slate-900 leading-tight text-sm sm:text-base tracking-tight">Materi TKA Bahasa Indonesia</h1>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider hidden sm:block">Pusat Asesmen & Standar Literasi</p>
                 </div>
               </div>
 
@@ -1316,42 +1222,42 @@
               <nav className="hidden md:flex items-center gap-1.5">
                 <button
                   onClick={() => { setCurrentTab("home"); scrollToTop(); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    currentTab === "home" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    currentTab === "home" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   Beranda
                 </button>
                 <button
                   onClick={() => { setCurrentTab("materi"); scrollToTop(); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    currentTab === "materi" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    currentTab === "materi" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   Modul Materi
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("bacacepat"); resetBacaCepat(); scrollToTop(); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    currentTab === "bacacepat" ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    currentTab === "latihan" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  Latihan Soal
+                </button>
+                <button
+                  onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    currentTab === "bacacepat" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   ⚡ Baca Cepat
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    currentTab === "latihan" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  Latihan Soal (20)
-                </button>
-                <button
                   onClick={() => { setCurrentTab("penilaian"); scrollToTop(); }}
                   className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
                     currentTab === "penilaian" 
-                      ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-orange-500/20" 
-                      : "text-amber-700 bg-amber-50 hover:bg-amber-100/80"
+                      ? "bg-amber-100 text-amber-800 shadow-sm" 
+                      : "text-amber-700 hover:bg-amber-50"
                   }`}
                 >
                   🎯 Penilaian (28)
@@ -1361,7 +1267,7 @@
               {/* Mobile Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:ring-2 focus:ring-blue-100 transition"
+                className="md:hidden p-2 rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 transition"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
@@ -1371,34 +1277,34 @@
 
             {/* Mobile Drawer */}
             {mobileMenuOpen && (
-              <div className="md:hidden border-t border-slate-200/60 bg-white/95 backdrop-blur-md px-4 py-3 space-y-1 shadow-lg absolute w-full animate-slide-up">
+              <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1 shadow-lg absolute w-full z-50">
                 <button
                   onClick={() => { setCurrentTab("home"); setMobileMenuOpen(false); scrollToTop(); }}
-                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
                 >
                   Beranda
                 </button>
                 <button
                   onClick={() => { setCurrentTab("materi"); setMobileMenuOpen(false); scrollToTop(); }}
-                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
                 >
                   Modul Materi
                 </button>
                 <button
-                  onClick={() => { setCurrentTab("bacacepat"); resetBacaCepat(); setMobileMenuOpen(false); scrollToTop(); }}
-                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-emerald-600 hover:bg-slate-50 transition"
-                >
-                  ⚡ Latihan Baca Cepat
-                </button>
-                <button
                   onClick={() => { setCurrentTab("latihan"); setMobileMenuOpen(false); scrollToTop(); }}
-                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
                 >
                   Latihan Soal (20 Soal)
                 </button>
                 <button
+                  onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border-b border-slate-50"
+                >
+                  ⚡ Latihan Baca Cepat
+                </button>
+                <button
                   onClick={() => { setCurrentTab("penilaian"); setMobileMenuOpen(false); scrollToTop(); }}
-                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold text-amber-800 bg-gradient-to-r from-amber-50 to-orange-50 transition"
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-amber-800 bg-amber-50 hover:bg-amber-100"
                 >
                   🎯 Penilaian Resmi (28 Soal)
                 </button>
@@ -1408,56 +1314,51 @@
 
           {/* MAIN CONTAINER */}
           <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-            {/* TAB 1: BERANDA */}
+            
+            {/* TAB BERANDA */}
             {currentTab === "home" && (
-              <div className="space-y-10 animate-fade-in">
-                <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 rounded-[2rem] text-white p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-                  {/* Decorative Elements */}
-                  <div className="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
-                  <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-64 h-64 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
-                  
-                  <div className="relative z-10 max-w-3xl space-y-5">
-                    <span className="inline-block px-3.5 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-widest uppercase text-blue-200 border border-white/10">
+              <div className="space-y-8 animate-fadeIn">
+                <div className="bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 rounded-3xl text-white p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+                  <div className="relative z-10 max-w-2xl space-y-5">
+                    <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black tracking-widest uppercase shadow-sm">
                       Portal Akademis TKA
                     </span>
                     <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
                       Kuasai Literasi Membaca & Tes Kemampuan Akademik
                     </h2>
-                    <p className="text-blue-100 text-base sm:text-lg leading-relaxed max-w-2xl font-light">
-                      Sistem belajar interaktif berstandar Kemendikdasmen. Dilengkapi dengan modul teoretis komprehensif, latihan bertahap, dan simulasi penilaian asli.
+                    <p className="text-blue-100 text-sm sm:text-base leading-relaxed font-medium">
+                      Sistem belajar interaktif berstandar Kemendikdasmen. Dilengkapi dengan modul teoretis komprehensif, latihan bertahap, simulasi penilaian asli, dan fitur Baca Cepat (RSVP).
                     </p>
-                    <div className="flex flex-wrap gap-4 pt-4">
-                      <button
-                        onClick={() => { setCurrentTab("materi"); scrollToTop(); }}
-                        className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-                      >
-                        Pelajari Materi
-                      </button>
-                      <button
-                        onClick={() => { setCurrentTab("bacacepat"); scrollToTop(); }}
-                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl border border-emerald-400 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-                      >
-                        ⚡ Latihan Baca Cepat
-                      </button>
+                    <div className="flex flex-wrap gap-3 pt-4">
                       <button
                         onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
-                        className="px-6 py-3 bg-blue-600/80 backdrop-blur-sm hover:bg-blue-600 text-white font-bold text-sm rounded-xl border border-white/20 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                        className="px-6 py-3 bg-white text-blue-800 font-extrabold text-sm rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
                       >
                         Mulai Latihan Soal
                       </button>
+                      <button
+                        onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); scrollToTop(); }}
+                        className="px-6 py-3 bg-indigo-500/30 text-white border border-indigo-400/50 font-extrabold text-sm rounded-xl hover:bg-indigo-500/50 hover:scale-105 transition-all duration-300"
+                      >
+                        ⚡ Coba Baca Cepat
+                      </button>
                     </div>
                   </div>
+                  
+                  {/* Ornaments */}
+                  <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+                  <div className="absolute bottom-[-50px] right-[10%] w-48 h-48 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div 
                     onClick={() => { setActiveMateri(materiData[0]); setCurrentTab("materi"); scrollToTop(); }}
-                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                    className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-inner">
                       1
                     </div>
-                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-blue-700 transition-colors">Pemahaman Tekstual</h3>
+                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-blue-700 transition-colors">Pemahaman Tekstual</h3>
                     <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Kaidah pembakuan kata serapan, identifikasi fakta eksplisit fiksi/nonfiksi, dan perancangan bagan alur wacana.
                     </p>
@@ -1465,12 +1366,12 @@
 
                   <div 
                     onClick={() => { setActiveMateri(materiData[1]); setCurrentTab("materi"); scrollToTop(); }}
-                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                    className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 shadow-inner">
                       2
                     </div>
-                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-indigo-700 transition-colors">Pemahaman Inferensial</h3>
+                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-indigo-700 transition-colors">Pemahaman Inferensial</h3>
                     <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Teknik abstraksi gagasan tersirat, hubungan kohesi kausalitas antarkalimat, serta proyeksi kelanjutan cerita.
                     </p>
@@ -1478,12 +1379,12 @@
 
                   <div 
                     onClick={() => { setActiveMateri(materiData[2]); setCurrentTab("materi"); scrollToTop(); }}
-                    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                    className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner">
                       3
                     </div>
-                    <h3 className="font-extrabold text-slate-900 text-xl mb-3 group-hover:text-amber-700 transition-colors">Evaluasi dan Apresiasi</h3>
+                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-amber-700 transition-colors">Evaluasi dan Apresiasi</h3>
                     <p className="text-sm text-slate-600 leading-relaxed font-medium">
                       Menilai kesahihan data empiris, efektivitas gaya bahasa/sarkasme, serta refleksi kritis nilai sastra dalam masyarakat.
                     </p>
@@ -1494,135 +1395,96 @@
 
             {/* TAB BACA CEPAT (RSVP) */}
             {currentTab === "bacacepat" && (
-              <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
-                <div className="text-center space-y-3">
-                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">Latihan Baca Cepat (RSVP)</h2>
-                  <p className="text-base text-slate-500 font-medium">
-                    Fokuskan pandangan Anda di tengah layar. Teknik ini dirancang untuk mengurangi subvokalisasi dan meningkatkan kecepatan membaca Anda.
-                  </p>
+              <div className="space-y-6 animate-fadeIn max-w-4xl mx-auto">
+                <div className="text-center space-y-2 mb-8">
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">⚡ Latihan Baca Cepat (RSVP)</h2>
+                  <p className="text-slate-500 text-sm font-medium">Latih fokus mata Anda tanpa subvokalisasi. Teks bacaan menggunakan cuplikan cerpen <i>Piala di Atas Dangau</i>.</p>
                 </div>
 
-                {/* Reader Box */}
-                <div className="bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[350px]">
-                  {/* Progress Bar Top */}
-                  <div className="absolute top-0 left-0 h-1.5 bg-slate-800 w-full">
+                <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-lg border border-slate-200">
+                  {/* Kontrol Kecepatan */}
+                  <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                    <span className="text-sm font-bold text-slate-500 mr-2">Kecepatan Membaca:</span>
+                    {[
+                      { label: "Pelan (200 WPM)", val: 200 },
+                      { label: "Sedang (300 WPM)", val: 300 },
+                      { label: "Cepat (400 WPM)", val: 400 }
+                    ].map(speed => (
+                      <button
+                        key={speed.val}
+                        onClick={() => { setRsvpWpm(speed.val); setRsvpPlaying(false); }}
+                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 ${
+                          rsvpWpm === speed.val 
+                          ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/30 scale-105" 
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {speed.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Area Penampil Teks (RSVP Reader Box) */}
+                  <div className="rsvp-box bg-slate-900 rounded-2xl p-8 sm:p-16 flex items-center justify-center min-h-[280px] relative overflow-hidden group">
+                    <div className="absolute top-4 right-6 text-slate-500 text-xs font-bold tracking-widest uppercase">
+                      KATA {rsvpIndex + 1} / {rsvpWords.length}
+                    </div>
+                    
+                    {/* Visual Focus Lines (Crosshair) */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-800/50 -translate-x-1/2 pointer-events-none"></div>
+                    <div className="absolute left-1/2 top-4 w-0.5 h-4 bg-rose-500 -translate-x-1/2 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
+                    <div className="absolute left-1/2 bottom-4 w-0.5 h-4 bg-rose-500 -translate-x-1/2 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
+
+                    <div className="text-4xl sm:text-7xl font-black text-white tracking-tight text-center leading-none select-none transition-transform duration-75">
+                      {rsvpIndex < rsvpWords.length ? rsvpWords[rsvpIndex] : <span className="text-emerald-400">SELESAI!</span>}
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="w-full bg-slate-100 h-2 mt-6 rounded-full overflow-hidden shadow-inner">
                     <div 
-                      className="h-full bg-emerald-500 transition-all duration-150 ease-linear"
-                      style={{ width: \`\${(bacaCepatIndex / (bacaCepatWords.length - 1)) * 100}%\` }}
+                      className="bg-indigo-600 h-full transition-all duration-200 ease-linear"
+                      style={{ width: `${(rsvpIndex / (rsvpWords.length - 1)) * 100}%` }}
                     ></div>
                   </div>
 
-                  {/* Word Display Area */}
-                  <div className="flex-1 flex items-center justify-center w-full relative">
-                    {/* Visual Focus Lines (Optional crosshair effect) */}
-                    <div className="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -translate-y-1/2"></div>
-                    <div className="absolute top-0 left-1/2 w-[1px] h-full bg-white/10 -translate-x-1/2"></div>
-                    
-                    <div className="text-5xl md:text-7xl font-black text-white text-center leading-none tracking-tight z-10 px-4 select-none">
-                      {bacaCepatIndex < bacaCepatWords.length ? (
-                        bacaCepatWords[bacaCepatIndex]
-                      ) : (
-                        <span className="text-emerald-400">Selesai!</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Info Status */}
-                  <div className="absolute bottom-6 left-8 text-slate-400 text-sm font-bold tracking-widest uppercase">
-                    KATA {bacaCepatIndex + 1} / {bacaCepatWords.length}
-                  </div>
-                </div>
-
-                {/* Controls */}
-                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
-                  
-                  {/* Speed Selector */}
-                  <div className="flex flex-col gap-2 w-full sm:w-auto">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center sm:text-left">Kecepatan Membaca</span>
-                    <div className="flex p-1 bg-slate-100 rounded-xl w-full">
-                      <button
-                        onClick={() => { setBacaCepatSpeed(300); resetBacaCepat(); }}
-                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                          bacaCepatSpeed === 300 ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                        }`}
-                      >
-                        Pelan <span className="block text-[10px] font-normal mt-0.5 opacity-70">200 KPM</span>
-                      </button>
-                      <button
-                        onClick={() => { setBacaCepatSpeed(200); resetBacaCepat(); }}
-                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                          bacaCepatSpeed === 200 ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                        }`}
-                      >
-                        Sedang <span className="block text-[10px] font-normal mt-0.5 opacity-70">300 KPM</span>
-                      </button>
-                      <button
-                        onClick={() => { setBacaCepatSpeed(150); resetBacaCepat(); }}
-                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                          bacaCepatSpeed === 150 ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                        }`}
-                      >
-                        Cepat <span className="block text-[10px] font-normal mt-0.5 opacity-70">400 KPM</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Playback Controls */}
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={resetBacaCepat}
-                      className="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 flex items-center justify-center transition-colors"
+                  {/* Kontrol Playback */}
+                  <div className="flex justify-center items-center gap-4 mt-8">
+                    <button 
+                      onClick={resetRsvp}
+                      className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 hover:text-slate-900 transition-colors"
                       title="Ulangi dari Awal"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </button>
                     
-                    <button
+                    <button 
                       onClick={() => {
-                        if (bacaCepatIndex >= bacaCepatWords.length) resetBacaCepat();
-                        setBacaCepatIsPlaying(!bacaCepatIsPlaying);
+                        if (rsvpIndex >= rsvpWords.length - 1) setRsvpIndex(0);
+                        setRsvpPlaying(!rsvpPlaying);
                       }}
-                      className={`px-8 py-3 rounded-xl font-black text-white shadow-lg transition-all flex items-center gap-2 ${
-                        bacaCepatIsPlaying 
-                          ? "bg-amber-500 hover:bg-amber-600 shadow-amber-500/30" 
-                          : "bg-blue-600 hover:bg-blue-700 shadow-blue-500/30 hover:-translate-y-0.5"
-                      }`}
+                      className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-xl shadow-indigo-500/30 hover:scale-105 hover:bg-indigo-700 transition-all duration-300"
                     >
-                      {bacaCepatIsPlaying ? (
-                        <>
-                          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                          Jeda (Pause)
-                        </>
+                      {rsvpPlaying ? (
+                        <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg>
                       ) : (
-                        <>
-                          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                          Mulai (Play)
-                        </>
+                        <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
                       )}
                     </button>
                   </div>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl">
-                  <h4 className="font-bold text-sm text-slate-800 mb-2">💡 Tips Latihan:</h4>
-                  <ul className="text-sm text-slate-600 space-y-1 list-disc pl-5">
-                    <li>KPM = <strong>Kata Per Menit</strong> (Words Per Minute). Rata-rata orang dewasa membaca 200-250 KPM.</li>
-                    <li>Jangan mencoba "mengucapkan" kata di dalam hati (subvokalisasi). Biarkan mata dan otak Anda langsung memproses maknanya secara visual.</li>
-                    <li>Teks yang digunakan adalah cuplikan cerpen <em>"Piala di Atas Dangau"</em> dari Modul Latihan TKA.</li>
-                  </ul>
                 </div>
               </div>
             )}
 
-            {/* TAB 2: MODUL MATERI */}
+            {/* TAB MODUL MATERI */}
             {currentTab === "materi" && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200">
+              <div className="space-y-6 animate-fadeIn">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-200">
                   <div>
-                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Modul Teoretis Kebahasaan</h2>
-                    <p className="text-base text-slate-500 mt-2 font-medium">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & PUEBI</p>
+                    <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Modul Teoretis Kebahasaan</h2>
+                    <p className="text-sm text-slate-500 mt-1 font-medium">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & PUEBI</p>
                   </div>
-                  <div className="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
+                  <div className="flex bg-slate-100 p-1.5 rounded-xl w-full md:w-auto">
                     {materiData.map(m => (
                       <button
                         key={m.id}
@@ -1639,7 +1501,7 @@
                   </div>
                 </div>
 
-                <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-sm shadow-slate-200/50 space-y-8">
+                <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-8">
                   <div className="border-b border-slate-100 pb-6">
                     <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black tracking-wider uppercase rounded-lg border border-blue-100">
                       Subbab {activeMateri.id}
@@ -1649,7 +1511,7 @@
                   </div>
 
                   <div 
-                    className="prose max-w-none text-slate-700 text-base"
+                    className="prose max-w-none text-slate-700 text-sm sm:text-base"
                     dangerouslySetInnerHTML={{ __html: activeMateri.content }}
                   />
 
@@ -1661,7 +1523,7 @@
                       }}
                       className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                     >
-                      Uji Pemahaman: Latihan Subbab {activeMateri.id} 
+                      Uji Pemahaman Subbab {activeMateri.id} 
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                   </div>
@@ -1669,9 +1531,9 @@
               </div>
             )}
 
-            {/* TAB 3: MENU LATIHAN SOAL */}
+            {/* TAB MENU LATIHAN SOAL */}
             {currentTab === "latihan" && (
-              <div className="space-y-8 animate-fade-in">
+              <div className="space-y-8 animate-fadeIn">
                 <div>
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Paket Latihan Mandiri (20 Soal)</h2>
                   <p className="text-base text-slate-500 mt-2 font-medium">Uji kemampuan membaca Anda tanpa batasan waktu dengan teks bacaan utuh dan mandiri.</p>
@@ -1694,7 +1556,7 @@
                   </div>
 
                   {/* Card Subbab 1 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
                        onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 1);
                         startExam(filtered, "Latihan Subbab 1: Pemahaman Tekstual", "latihan");
@@ -1712,7 +1574,7 @@
                   </div>
 
                   {/* Card Subbab 2 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
                        onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 2);
                         startExam(filtered, "Latihan Subbab 2: Pemahaman Inferensial", "latihan");
@@ -1730,7 +1592,7 @@
                   </div>
 
                   {/* Card Subbab 3 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
                        onClick={() => {
                         const filtered = latihanSoalData.filter(q => q.subBab === 3);
                         startExam(filtered, "Latihan Subbab 3: Evaluasi & Apresiasi", "latihan");
@@ -1750,9 +1612,9 @@
               </div>
             )}
 
-            {/* TAB 4: MENU PENILAIAN */}
+            {/* TAB MENU PENILAIAN */}
             {currentTab === "penilaian" && (
-              <div className="space-y-8 animate-fade-in">
+              <div className="space-y-8 animate-fadeIn">
                 <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 p-8 sm:p-12 rounded-[2rem] text-white shadow-xl shadow-orange-500/20 relative overflow-hidden">
                   <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
                   
@@ -1776,7 +1638,7 @@
                   </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 space-y-4">
+                <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                   <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
                     <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span> Ketentuan Teknis Pengerjaan:
                   </h3>
@@ -1792,9 +1654,8 @@
 
             {/* INTERFACE PENGERJAAN CBT */}
             {currentTab === "exam" && currentQ && (
-              <div className="space-y-5 animate-fade-in">
-                {/* Exam Sub-Header */}
-                <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 flex flex-wrap items-center justify-between gap-4">
+              <div className="space-y-5 animate-fadeIn">
+                <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
                   <div>
                     <span className={`text-xs font-black uppercase tracking-widest ${examMode === "penilaian" ? "text-orange-600" : "text-blue-600"}`}>
                       {examMode === "penilaian" ? "🎯 Penilaian Resmi" : "✍️ Sesi Latihan"}
@@ -1828,7 +1689,7 @@
                       onClick={() => toggleFlag(currentQ.id)}
                       className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-300 flex items-center gap-1.5 ${
                         flagged[currentQ.id]
-                          ? "bg-amber-400 border-amber-400 text-slate-900 shadow-md shadow-amber-400/20"
+                          ? "bg-amber-400 border-amber-400 text-amber-950 shadow-md shadow-amber-400/20"
                           : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
                       }`}
                     >
@@ -1837,10 +1698,10 @@
                   </div>
                 </div>
 
-                {/* Split Screen Container */}
+                {/* Split Screen */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  {/* PANEL KIRI: BAHAN BACAAN / STIMULUS */}
-                  <div className="lg:col-span-6 xl:col-span-7 bg-amber-50/30 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-h-[78vh] overflow-y-auto">
+                  {/* KIRI: STIMULUS */}
+                  <div className="lg:col-span-6 xl:col-span-7 bg-amber-50/40 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-h-[78vh] overflow-y-auto">
                     <div className="border-b border-slate-200/60 pb-4 mb-5 flex items-center justify-between sticky top-0 bg-amber-50/90 backdrop-blur-sm z-10 -mt-2 pt-2">
                       <h3 className="font-extrabold text-slate-800 text-base flex items-center gap-2 tracking-tight">
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
@@ -1851,7 +1712,6 @@
                       </span>
                     </div>
 
-                    {/* Gambar Stimulus (Jika Ada) */}
                     {currentQ.stimulusImage && (
                       <div className="mb-6 rounded-2xl overflow-hidden border border-slate-200 bg-white p-3 shadow-sm hover:shadow-md transition-shadow">
                         <img 
@@ -1859,9 +1719,7 @@
                           alt="Stimulus Soal"
                           className="w-full h-auto object-contain rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
                           onClick={() => setZoomImage(currentQ.stimulusImage)}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
+                          onError={(e) => { e.target.style.display = "none"; }}
                         />
                         <p className="text-center text-xs font-medium text-slate-400 mt-2 bg-slate-50 py-1.5 rounded-lg">🔍 Klik gambar untuk memperbesar</p>
                       </div>
@@ -1872,10 +1730,11 @@
                     </div>
                   </div>
 
-                  {/* PANEL KANAN: TABEL SPESIFIKASI & LEMBAR SOAL */}
+                  {/* KANAN: SOAL & OPSI */}
                   <div className="lg:col-span-6 xl:col-span-5 space-y-5">
-                    {/* TABEL SPESIFIKASI PUSMENDIK */}
-                    <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm shadow-slate-200/50">
+                    
+                    {/* Tabel Spesifikasi */}
+                    <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
                       <table className="w-full text-left text-xs sm:text-sm">
                         <tbody className="divide-y divide-slate-100">
                           <tr>
@@ -1898,14 +1757,13 @@
                       </table>
                     </div>
 
-                    {/* SOAL & PILIHAN INTERAKTIF */}
-                    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-lg shadow-slate-200/50 space-y-6">
+                    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
                       <div 
                         className={`font-bold text-slate-900 leading-relaxed ${fontSizeClass}`}
                         dangerouslySetInnerHTML={{ __html: currentQ.question }}
                       />
 
-                      {/* Tipe 1: Pilihan Ganda Tunggal (PG) */}
+                      {/* Opsi PG */}
                       {currentQ.type === "single" && (
                         <div className="space-y-3">
                           {currentQ.options.map((opt, idx) => {
@@ -1917,7 +1775,7 @@
                                 onClick={() => handleSingleSelect(currentQ.id, idx)}
                                 className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
                                   isSelected
-                                    ? "border-blue-500 bg-blue-50/50 shadow-sm"
+                                    ? "border-blue-600 bg-blue-50/50 shadow-sm"
                                     : "border-slate-100 hover:border-blue-200 hover:bg-slate-50"
                                 }`}
                               >
@@ -1946,7 +1804,7 @@
                         </div>
                       )}
 
-                      {/* Tipe 2: PGK MCMA (Jawaban Lebih dari Satu) */}
+                      {/* Opsi MCMA */}
                       {currentQ.type === "mcma" && (
                         <div className="space-y-3">
                           {currentQ.options.map((opt, idx) => {
@@ -1965,9 +1823,7 @@
                                   isChecked ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/30" : "border-slate-300 bg-white"
                                 }`}>
                                   {isChecked && (
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
-                                    </svg>
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                                   )}
                                 </div>
                                 <div className={`text-slate-700 font-medium flex-1 leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
@@ -1977,7 +1833,7 @@
                         </div>
                       )}
 
-                      {/* Tipe 3: PGK Kategori Matriks (Benar/Salah) */}
+                      {/* Opsi Matrix */}
                       {currentQ.type === "matrix" && (
                         <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
                           <table className="w-full text-left text-sm">
@@ -2019,7 +1875,7 @@
                     </div>
 
                     {/* Navigasi Soal Bawah */}
-                    <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 flex flex-wrap gap-4 items-center justify-between">
+                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-wrap gap-4 items-center justify-between">
                       <button
                         disabled={currentIndex === 0}
                         onClick={() => setCurrentIndex(prev => prev - 1)}
@@ -2058,10 +1914,9 @@
                       )}
                     </div>
 
-                    {/* Palet Nomor Soal */}
-                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm shadow-slate-200/50 space-y-4">
+                    {/* Palet Nomor */}
+                    <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                       <h4 className="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         Peta Navigasi Soal
                       </h4>
                       <div className="grid grid-cols-7 sm:grid-cols-10 gap-2.5">
@@ -2093,9 +1948,9 @@
               </div>
             )}
 
-            {/* TAB 5: LEMBAR HASIL & PEMBAHASAN */}
+            {/* TAB HASIL UJIAN */}
             {currentTab === "result" && (
-              <div className="space-y-8 animate-fade-in">
+              <div className="space-y-8 animate-fadeIn max-w-5xl mx-auto">
                 <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-8 sm:p-14 shadow-2xl text-center space-y-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
                   
@@ -2120,7 +1975,6 @@
                   </div>
                 </div>
 
-                {/* Tinjauan Pembahasan Tiap Nomor */}
                 <div className="space-y-6">
                   <h3 className="font-black text-slate-900 text-2xl tracking-tight flex items-center gap-3">
                     <span className="w-2 h-8 bg-blue-600 rounded-full"></span> Tinjauan dan Pembahasan Lengkap
@@ -2129,23 +1983,27 @@
                   {activeQuestions.map((q, idx) => {
                     const ans = userAnswers[q.id];
                     let isCorrect = false;
+                    let strKey = "";
 
                     if (q.type === "single") {
                       isCorrect = ans === q.correctAnswer;
+                      strKey = String.fromCharCode(65 + q.correctAnswer); // Mengubah 0 jadi A, 1 jadi B, dst.
                     } else if (q.type === "mcma") {
                       if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
                         isCorrect = ans.length === q.correctAnswer.length && ans.every((v, i) => v === q.correctAnswer[i]);
                       }
+                      strKey = q.correctAnswer.map(ansIdx => String.fromCharCode(65 + ansIdx)).join(", ");
                     } else if (q.type === "matrix") {
                       if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
                         isCorrect = q.statements.every((_, i) => ans[i] === q.correctAnswer[i]);
                       }
+                      strKey = q.correctAnswer.map((ansStr, i) => `${String.fromCharCode(65+i)}: ${ansStr}`).join(" | ");
                     }
 
-                    const keyText = getAnswerKeyText(q);
-
                     return (
-                      <div key={idx} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm shadow-slate-200/50 space-y-5">
+                      <div key={idx} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5 relative overflow-hidden">
+                        <div className={`absolute top-0 left-0 w-1.5 h-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
+                        
                         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
                           <span className="text-sm font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200">
                             Soal Nomor {q.noSoal}
@@ -2169,10 +2027,9 @@
                         <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-3">
                           <h5 className="font-extrabold text-sm text-blue-900 flex items-center gap-2">
                             <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Kunci & Pembahasan Resmi
+                            Kunci Jawaban Resmi: {strKey}
                           </h5>
                           <div className="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
-                            <span className="block mb-2"><strong className="text-slate-900">Kunci: {keyText}</strong></span>
                             {q.explanation}
                           </div>
                         </div>
@@ -2187,7 +2044,7 @@
           {/* MODAL ZOOM GAMBAR */}
           {zoomImage && (
             <div 
-              className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out animate-fade-in"
+              className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out animate-fadeIn"
               onClick={() => setZoomImage(null)}
             >
               <div className="max-w-5xl max-h-[90vh] bg-white p-2 rounded-2xl shadow-2xl overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
@@ -2203,7 +2060,7 @@
           )}
 
           {/* FOOTER */}
-          <footer className="border-t border-slate-200/60 bg-white py-8 text-center mt-auto">
+          <footer className="border-t border-slate-200 bg-white py-8 text-center mt-auto">
             <p className="text-sm font-medium text-slate-500">
               © 2026 Materi & Soal TKA Bahasa Indonesia SMA/SMK.<br className="sm:hidden" /> Sesuai Standar Pusmendik & KBBI.
             </p>
