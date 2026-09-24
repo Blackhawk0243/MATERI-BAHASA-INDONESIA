@@ -75,13 +75,17 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
+    
+    .rsvp-focus-point {
+      color: #ef4444; /* Red color for focus letter */
+    }
   </style>
 </head>
 <body class="text-slate-800 min-h-screen selection:bg-blue-200 selection:text-blue-900">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
     // ==========================================
     // 1. DATA MATERI PEMBELAJARAN
@@ -95,7 +99,7 @@
           <div class="space-y-6 text-slate-700 leading-relaxed text-[15px]">
             <div>
               <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2"><span class="w-1.5 h-6 bg-blue-600 rounded-full"></span> Identifikasi Kata Serapan Asing dan Daerah</h3>
-              <p class="mb-3">Bahasa Indonesia memperkaya kosakatanya melalui proses penyerapan unsur bahasa daerah maupun bahasa asing. Berdasarkan EYD Versi 5 dan KBBI, penyerapan dibagi menjadi tiga jalur utama:</p>
+              <p class="mb-3">Bahasa Indonesia memperkaya kosakatanya melalui proses penyerapan unsur bahasa daerah maupun bahasa asing. Berdasarkan Pedoman Umum Ejaan Bahasa Indonesia (PUEBI) dan KBBI, penyerapan dibagi menjadi tiga jalur utama:</p>
               <ul class="list-disc pl-6 space-y-2 marker:text-blue-500">
                 <li><strong>Adopsi:</strong> Pengambilan bentuk kata dan maknanya secara utuh tanpa modifikasi fonologis (misalnya: <em>supermarket</em>, <em>de facto</em>, <em>status quo</em>).</li>
                 <li><strong>Adaptasi:</strong> Penyesuaian ejaan dan lafal asing dengan kaidah fonologi bahasa Indonesia (misalnya: <em>coordination</em> → <strong>koordinasi</strong>, <em>system</em> → <strong>sistem</strong>, <em>efforts</em> → <strong>upaya</strong>).</li>
@@ -1158,10 +1162,10 @@
     // 4. APLIKASI UTAMA REACT (CBT & PORTAL)
     // ==========================================
     function App() {
-      const [currentTab, setCurrentTab] = useState("home"); // home, materi, latihan, penilaian, exam, result
+      const [currentTab, setCurrentTab] = useState("home"); // home, materi, latihan, penilaian, exam, result, bacacepat
       const [activeMateri, setActiveMateri] = useState(materiData[0]);
       
-      // Mode Ujian
+      // State CBT Ujian
       const [examMode, setExamMode] = useState("latihan"); // "latihan" | "penilaian"
       const [examTitle, setExamTitle] = useState("");
       const [activeQuestions, setActiveQuestions] = useState([]);
@@ -1172,8 +1176,39 @@
       const [zoomImage, setZoomImage] = useState(null);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-      // Scroll to top helper
-      const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+      // State Baca Cepat (RSVP)
+      const [bacaCepatSpeed, setBacaCepatSpeed] = useState(300); // ms per word. 300ms = 200WPM (Pelan)
+      const [bacaCepatIsPlaying, setBacaCepatIsPlaying] = useState(false);
+      const [bacaCepatIndex, setBacaCepatIndex] = useState(0);
+      const bacaCepatText = TEKS_DANGAU;
+      const bacaCepatWords = useMemo(() => bacaCepatText.trim().split(/\s+/), [bacaCepatText]);
+
+      // Logic Baca Cepat
+      useEffect(() => {
+        let interval;
+        if (bacaCepatIsPlaying && bacaCepatIndex < bacaCepatWords.length) {
+          interval = setInterval(() => {
+            setBacaCepatIndex((prev) => {
+              if (prev + 1 >= bacaCepatWords.length) {
+                setBacaCepatIsPlaying(false);
+                return prev; // Stop at last word
+              }
+              return prev + 1;
+            });
+          }, bacaCepatSpeed);
+        }
+        return () => clearInterval(interval);
+      }, [bacaCepatIsPlaying, bacaCepatSpeed, bacaCepatIndex, bacaCepatWords.length]);
+
+      const resetBacaCepat = () => {
+        setBacaCepatIsPlaying(false);
+        setBacaCepatIndex(0);
+      };
+
+      // Helper Scroll to Top
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
 
       // Mulai Ujian / Latihan
       const startExam = (questions, title, mode = "latihan") => {
@@ -1296,6 +1331,14 @@
                   Modul Materi
                 </button>
                 <button
+                  onClick={() => { setCurrentTab("bacacepat"); resetBacaCepat(); scrollToTop(); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    currentTab === "bacacepat" ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  ⚡ Baca Cepat
+                </button>
+                <button
                   onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     currentTab === "latihan" ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -1342,6 +1385,12 @@
                   Modul Materi
                 </button>
                 <button
+                  onClick={() => { setCurrentTab("bacacepat"); resetBacaCepat(); setMobileMenuOpen(false); scrollToTop(); }}
+                  className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-emerald-600 hover:bg-slate-50 transition"
+                >
+                  ⚡ Latihan Baca Cepat
+                </button>
+                <button
                   onClick={() => { setCurrentTab("latihan"); setMobileMenuOpen(false); scrollToTop(); }}
                   className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
                 >
@@ -1383,6 +1432,12 @@
                         className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
                       >
                         Pelajari Materi
+                      </button>
+                      <button
+                        onClick={() => { setCurrentTab("bacacepat"); scrollToTop(); }}
+                        className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl border border-emerald-400 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                      >
+                        ⚡ Latihan Baca Cepat
                       </button>
                       <button
                         onClick={() => { setCurrentTab("latihan"); scrollToTop(); }}
@@ -1437,13 +1492,135 @@
               </div>
             )}
 
+            {/* TAB BACA CEPAT (RSVP) */}
+            {currentTab === "bacacepat" && (
+              <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+                <div className="text-center space-y-3">
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">Latihan Baca Cepat (RSVP)</h2>
+                  <p className="text-base text-slate-500 font-medium">
+                    Fokuskan pandangan Anda di tengah layar. Teknik ini dirancang untuk mengurangi subvokalisasi dan meningkatkan kecepatan membaca Anda.
+                  </p>
+                </div>
+
+                {/* Reader Box */}
+                <div className="bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[350px]">
+                  {/* Progress Bar Top */}
+                  <div className="absolute top-0 left-0 h-1.5 bg-slate-800 w-full">
+                    <div 
+                      className="h-full bg-emerald-500 transition-all duration-150 ease-linear"
+                      style={{ width: \`\${(bacaCepatIndex / (bacaCepatWords.length - 1)) * 100}%\` }}
+                    ></div>
+                  </div>
+
+                  {/* Word Display Area */}
+                  <div className="flex-1 flex items-center justify-center w-full relative">
+                    {/* Visual Focus Lines (Optional crosshair effect) */}
+                    <div className="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -translate-y-1/2"></div>
+                    <div className="absolute top-0 left-1/2 w-[1px] h-full bg-white/10 -translate-x-1/2"></div>
+                    
+                    <div className="text-5xl md:text-7xl font-black text-white text-center leading-none tracking-tight z-10 px-4 select-none">
+                      {bacaCepatIndex < bacaCepatWords.length ? (
+                        bacaCepatWords[bacaCepatIndex]
+                      ) : (
+                        <span className="text-emerald-400">Selesai!</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Info Status */}
+                  <div className="absolute bottom-6 left-8 text-slate-400 text-sm font-bold tracking-widest uppercase">
+                    KATA {bacaCepatIndex + 1} / {bacaCepatWords.length}
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+                  
+                  {/* Speed Selector */}
+                  <div className="flex flex-col gap-2 w-full sm:w-auto">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center sm:text-left">Kecepatan Membaca</span>
+                    <div className="flex p-1 bg-slate-100 rounded-xl w-full">
+                      <button
+                        onClick={() => { setBacaCepatSpeed(300); resetBacaCepat(); }}
+                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                          bacaCepatSpeed === 300 ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        Pelan <span className="block text-[10px] font-normal mt-0.5 opacity-70">200 KPM</span>
+                      </button>
+                      <button
+                        onClick={() => { setBacaCepatSpeed(200); resetBacaCepat(); }}
+                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                          bacaCepatSpeed === 200 ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        Sedang <span className="block text-[10px] font-normal mt-0.5 opacity-70">300 KPM</span>
+                      </button>
+                      <button
+                        onClick={() => { setBacaCepatSpeed(150); resetBacaCepat(); }}
+                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                          bacaCepatSpeed === 150 ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                        }`}
+                      >
+                        Cepat <span className="block text-[10px] font-normal mt-0.5 opacity-70">400 KPM</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Playback Controls */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={resetBacaCepat}
+                      className="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 flex items-center justify-center transition-colors"
+                      title="Ulangi dari Awal"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        if (bacaCepatIndex >= bacaCepatWords.length) resetBacaCepat();
+                        setBacaCepatIsPlaying(!bacaCepatIsPlaying);
+                      }}
+                      className={`px-8 py-3 rounded-xl font-black text-white shadow-lg transition-all flex items-center gap-2 ${
+                        bacaCepatIsPlaying 
+                          ? "bg-amber-500 hover:bg-amber-600 shadow-amber-500/30" 
+                          : "bg-blue-600 hover:bg-blue-700 shadow-blue-500/30 hover:-translate-y-0.5"
+                      }`}
+                    >
+                      {bacaCepatIsPlaying ? (
+                        <>
+                          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                          Jeda (Pause)
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                          Mulai (Play)
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl">
+                  <h4 className="font-bold text-sm text-slate-800 mb-2">💡 Tips Latihan:</h4>
+                  <ul className="text-sm text-slate-600 space-y-1 list-disc pl-5">
+                    <li>KPM = <strong>Kata Per Menit</strong> (Words Per Minute). Rata-rata orang dewasa membaca 200-250 KPM.</li>
+                    <li>Jangan mencoba "mengucapkan" kata di dalam hati (subvokalisasi). Biarkan mata dan otak Anda langsung memproses maknanya secara visual.</li>
+                    <li>Teks yang digunakan adalah cuplikan cerpen <em>"Piala di Atas Dangau"</em> dari Modul Latihan TKA.</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
             {/* TAB 2: MODUL MATERI */}
             {currentTab === "materi" && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200">
                   <div>
                     <h2 className="text-3xl font-black text-slate-900 tracking-tight">Modul Teoretis Kebahasaan</h2>
-                    <p className="text-base text-slate-500 mt-2 font-medium">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & EYD Versi 5</p>
+                    <p className="text-base text-slate-500 mt-2 font-medium">Pondasi keilmuan bahasa dan pedoman penulisan baku sesuai KBBI & PUEBI</p>
                   </div>
                   <div className="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto">
                     {materiData.map(m => (
