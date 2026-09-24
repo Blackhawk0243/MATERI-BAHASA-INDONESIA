@@ -69,7 +69,9 @@
 
     const TEKS_BELIS = `Tradisi Belis: Simbol Budaya yang Menyimpan Beban Finansial di Era Modern\n\nBelis adalah tradisi di wilayah Indonesia bagian timur seperti Nusa Tenggara Timur, yang secara umum di Indonesia dikenal dengan mas kawin atau mahar. Tradisi ini melambangkan penghormatan kepada wanita dan penyatuan keluarga. Namun, di balik nilainya, <i>belis</i> sering menjadi beban finansial berat bagi pihak laki-laki, yang kadang memicu tekanan psikologis dan mengganggu hubungan kekeluargaan. Beberapa pihak, terutama para sesepuh desa atau orang-orang tua, kadang terlalu kukuh untuk mempertahankan tradisi dan membuat tekanan dengan nilai yang semakin naik.\n\n<i>Belis</i> memiliki makna yang mendalam dan dianggap sebagai bentuk pengakuan atas peran penting seorang perempuan di dalam keluarga. <i>Belis</i> merupakan representasi keseriusan dan komitmen seorang pria untuk membangun keluarga. Proses penyerahan <i>belis</i> tidak hanya dimaknai sebagai pertukaran materi, tetapi juga sebagai simbol penyatuan dua komunitas besar, yakni keluarga kedua belah pihak. Pada masyarakat Lamaholot misalnya, <i>belis</i> diwujudkan dalam bentuk gading gajah atau <i>bala</i>, yang besarnya disesuaikan dengan status sosial seorang perempuan. Selain itu, disertakan juga pelengkap <i>belis</i> seperti sarung tenun sutra dan ternak. Uniknya, meskipun <i>belis</i> dari pihak laki-laki, pihak keluarga perempuan memberikan balasan simbolis kepada pihak laki-laki dalam bentuk barang berharga lainnya. Tradisi ini mengajarkan keseimbangan dan saling menghargai di antara kedua belah pihak.\n\nMeskipun <i>belis</i> mengandung nilai-nilai yang positif, tantangannya saat ini adalah menjaga agar tradisi tersebut tidak menjadi beban finansial yang berat. Tuntutan <i>belis</i> yang tinggi sering kali menjadi sumber tekanan, terutama bagi keluarga laki-laki. Dalam beberapa kasus, perkara <i>belis</i> dapat berimbas pada kesehatan mental hingga memicu tindakan tragis, seperti yang pernah terjadi di Kupang. Selain menjadi tantangan finansial, besarnya tuntutan materi untuk <i>belis</i> juga sering kali menimbulkan ketegangan dan konflik di antara pasangan dan keluarganya. Ketika keluarga perempuan menetapkan nominal <i>belis</i> yang tinggi, tidak jarang hal ini membangkitkan sentimen negatif dari pihak laki-laki yang merasa tertekan dan kehilangan martabat jika tidak mampu memenuhinya. Alhasil, penundaan pernikahan diambil guna memenuhi permintaan <i>belis</i>. Konflik semacam ini bisa merusak hubungan dua keluarga yang harusnya harmonis.\n\nSumber: Berita Kini, Krajan.id (dengan penyesuaian)`;
 
-
+    // ==========================================
+    // 2. DATA MATERI PEMBELAJARAN
+    // ==========================================
     const materiData = [
       {
         id: 1,
@@ -175,7 +177,7 @@
     ];
 
     // ==========================================
-    // 2. DATA 20 SOAL LATIHAN PUSMENDIK UTUH
+    // 3. DATA 20 SOAL LATIHAN PUSMENDIK (UTUH)
     // ==========================================
     const latihanSoalData = [
       {
@@ -459,7 +461,7 @@
     ];
 
     // ==========================================
-    // 3. DATA 28 SOAL ASLI PENILAIAN TKA 2025
+    // 4. DATA 28 SOAL ASLI PENILAIAN TKA 2025
     // ==========================================
     const penilaianSoalData = [
       {
@@ -727,13 +729,12 @@
     ];
 
     // ==========================================
-    // 4. APLIKASI UTAMA REACT (CBT & PORTAL)
+    // 5. APLIKASI UTAMA REACT
     // ==========================================
     function App() {
       const [currentTab, setCurrentTab] = useState("home"); 
       const [activeMateri, setActiveMateri] = useState(materiData[0]);
       
-      // Mode Ujian
       const [examMode, setExamMode] = useState("latihan"); 
       const [examTitle, setExamTitle] = useState("");
       const [activeQuestions, setActiveQuestions] = useState([]);
@@ -743,39 +744,71 @@
       const [fontSizeClass, setFontSizeClass] = useState("text-base");
       const [zoomImage, setZoomImage] = useState(null);
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-      const [showConfirmModal, setShowConfirmModal] = useState(false); // Modal Pengganti confirm()
+      const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-      // Mode RSVP (Baca Cepat) -> TEKS_LAUTAN
-      const rsvpTextSource = TEKS_LAUTAN;
-      const rsvpWords = useMemo(() => rsvpTextSource.replace(/\n/g, ' ').split(/\s+/).filter(w => w.trim() !== ""), [rsvpTextSource]);
+      // --- LOGIKA BACA CEPAT (RSVP - Per Frasa) ---
+      const [rsvpLevel, setRsvpLevel] = useState("pelan"); // pelan, sedang, cepat
+      const [rsvpWpm, setRsvpWpm] = useState(200);
+      
+      const getPhrases = (level) => {
+        let textSource = "";
+        if (level === "pelan") textSource = TEKS_LAUTAN;
+        if (level === "sedang") textSource = TEKS_DANGAU;
+        if (level === "cepat") textSource = TEKS_RHODAMIN;
+
+        // Bersihkan HTML tag agar tidak muncul saat RSVP
+        const cleanText = textSource.replace(/<[^>]+>/g, '').replace(/\n/g, ' ');
+        const wordsArray = cleanText.split(/\s+/).filter(w => w.trim() !== "");
+        
+        // Memecah menjadi per frasa (2 kata per layar)
+        const phraseArray = [];
+        for (let i = 0; i < wordsArray.length; i += 2) {
+          phraseArray.push({
+            text: wordsArray.slice(i, i + 2).join(" "),
+            wordCount: wordsArray.slice(i, i + 2).length
+          });
+        }
+        return phraseArray;
+      };
+
+      const rsvpPhrases = useMemo(() => getPhrases(rsvpLevel), [rsvpLevel]);
       const [rsvpIndex, setRsvpIndex] = useState(0);
       const [rsvpPlaying, setRsvpPlaying] = useState(false);
-      const [rsvpWpm, setRsvpWpm] = useState(300);
 
       useEffect(() => {
-        let interval;
-        if (rsvpPlaying && rsvpIndex < rsvpWords.length) {
-          const msPerWord = 60000 / rsvpWpm;
-          interval = setInterval(() => {
+        let timeout;
+        if (rsvpPlaying && rsvpIndex < rsvpPhrases.length) {
+          const currentPhrase = rsvpPhrases[rsvpIndex];
+          // Kalkulasi durasi: (60.000 ms / WPM) * jumlah kata dalam frasa
+          const delay = (60000 / rsvpWpm) * currentPhrase.wordCount;
+          
+          timeout = setTimeout(() => {
             setRsvpIndex(prev => {
-              if (prev + 1 >= rsvpWords.length) {
+              if (prev + 1 >= rsvpPhrases.length) {
                 setRsvpPlaying(false);
                 return prev; 
               }
               return prev + 1;
             });
-          }, msPerWord);
+          }, delay);
         }
-        return () => clearInterval(interval);
-      }, [rsvpPlaying, rsvpIndex, rsvpWpm, rsvpWords.length]);
+        return () => clearTimeout(timeout);
+      }, [rsvpPlaying, rsvpIndex, rsvpWpm, rsvpPhrases]);
 
       const resetRsvp = () => {
         setRsvpPlaying(false);
         setRsvpIndex(0);
       };
 
-      // Mulai Ujian / Latihan
-      const startExam = (questions, title, mode = "latihan") => {
+      const handleSetRsvpLevel = (level, wpm) => {
+        setRsvpLevel(level);
+        setRsvpWpm(wpm);
+        setRsvpIndex(0);
+        setRsvpPlaying(false);
+      };
+
+      // --- LOGIKA UJIAN ---
+      const startExam = (questions, title, mode) => {
         setActiveQuestions(questions);
         setExamTitle(title);
         setExamMode(mode);
@@ -786,7 +819,6 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       };
 
-      // Handler Jawaban
       const handleSingleSelect = (qId, optionIdx) => {
         setUserAnswers(prev => ({ ...prev, [qId]: optionIdx }));
       };
@@ -795,12 +827,8 @@
         setUserAnswers(prev => {
           const curr = Array.isArray(prev[qId]) ? [...prev[qId]] : [];
           const exists = curr.indexOf(optionIdx);
-          if (exists > -1) {
-            curr.splice(exists, 1);
-          } else {
-            curr.push(optionIdx);
-            curr.sort((a, b) => a - b);
-          }
+          if (exists > -1) curr.splice(exists, 1);
+          else { curr.push(optionIdx); curr.sort((a, b) => a - b); }
           return { ...prev, [qId]: curr };
         });
       };
@@ -813,183 +841,97 @@
         });
       };
 
-      const toggleFlag = (qId) => {
-        setFlagged(prev => ({ ...prev, [qId]: !prev[qId] }));
-      };
+      const toggleFlag = (qId) => setFlagged(prev => ({ ...prev, [qId]: !prev[qId] }));
 
-      // Kalkulasi Nilai Akhir
       const scoreCalculation = useMemo(() => {
         if (activeQuestions.length === 0) return { totalScore: 0, correctCount: 0, total: 0 };
         let correctCount = 0;
-
         activeQuestions.forEach(q => {
           const ans = userAnswers[q.id];
-          if (q.type === "single") {
-            if (ans === q.correctAnswer) correctCount++;
-          } else if (q.type === "mcma") {
-            if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
-              if (ans.length === q.correctAnswer.length && ans.every((v, i) => v === q.correctAnswer[i])) {
-                correctCount++;
-              }
-            }
-          } else if (q.type === "matrix") {
-            if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
-              const isMatch = q.statements.every((_, i) => ans[i] === q.correctAnswer[i]);
-              if (isMatch) correctCount++;
-            }
+          if (q.type === "single" && ans === q.correctAnswer) correctCount++;
+          else if (q.type === "mcma" && Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
+            if (ans.length === q.correctAnswer.length && ans.every((v, i) => v === q.correctAnswer[i])) correctCount++;
+          } else if (q.type === "matrix" && Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
+            if (q.statements.every((_, i) => ans[i] === q.correctAnswer[i])) correctCount++;
           }
         });
-
-        const totalScore = Math.round((correctCount / activeQuestions.length) * 100);
-        return { totalScore, correctCount, total: activeQuestions.length };
+        return { totalScore: Math.round((correctCount / activeQuestions.length) * 100), correctCount, total: activeQuestions.length };
       }, [userAnswers, activeQuestions]);
 
       const currentQ = activeQuestions[currentIndex];
 
       return (
         <div className="min-h-screen flex flex-col">
-          
-          {}
           {/* HEADER NAVIGASI */}
           <header className="sticky top-0 z-40 glass-nav shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-              <div 
-                className="flex items-center gap-3 cursor-pointer select-none group"
-                onClick={() => { setCurrentTab("home"); window.scrollTo(0,0); }}
-              >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
-                  ID
-                </div>
+              <div onClick={() => { setCurrentTab("home"); window.scrollTo(0,0); }} className="flex items-center gap-3 cursor-pointer select-none group">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-lg group-hover:scale-105 transition-transform duration-300">ID</div>
                 <div>
                   <h1 className="font-extrabold text-slate-900 leading-tight text-sm sm:text-base tracking-tight">Materi TKA Bahasa Indonesia</h1>
                   <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider hidden sm:block">Pusat Asesmen & Standar Literasi</p>
                 </div>
               </div>
 
-              {/* Desktop Menu */}
               <nav className="hidden md:flex items-center gap-1.5">
-                <button
-                  onClick={() => { setCurrentTab("home"); window.scrollTo(0,0); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                    currentTab === "home" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  Beranda
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("materi"); window.scrollTo(0,0); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                    currentTab === "materi" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  Modul Materi
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("latihan"); window.scrollTo(0,0); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                    currentTab === "latihan" ? "bg-blue-600 text-white shadow-md shadow-blue-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  Latihan Soal
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); window.scrollTo(0,0); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                    currentTab === "bacacepat" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                  }`}
-                >
-                  ⚡ Baca Cepat
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("penilaian"); window.scrollTo(0,0); }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                    currentTab === "penilaian" 
-                      ? "bg-amber-100 text-amber-800 shadow-sm" 
-                      : "text-amber-700 hover:bg-amber-50"
-                  }`}
-                >
-                  🎯 Penilaian (28)
-                </button>
+                {[
+                  { id: "home", label: "Beranda" },
+                  { id: "materi", label: "Modul Materi" },
+                  { id: "latihan", label: "Latihan Soal" },
+                  { id: "bacacepat", label: "⚡ Baca Cepat" },
+                  { id: "penilaian", label: "🎯 Penilaian (28)" }
+                ].map(nav => (
+                  <button key={nav.id} onClick={() => { setCurrentTab(nav.id); window.scrollTo(0,0); }}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                      currentTab === nav.id 
+                        ? (nav.id === 'bacacepat' ? 'bg-indigo-600 text-white shadow-md' : nav.id === 'penilaian' ? 'bg-amber-100 text-amber-800 shadow-sm' : 'bg-blue-600 text-white shadow-md')
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    {nav.label}
+                  </button>
+                ))}
               </nav>
 
-              {/* Mobile Hamburger */}
-              <button 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 transition"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
-                </svg>
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path></svg>
               </button>
             </div>
 
-            {/* Mobile Drawer */}
             {mobileMenuOpen && (
               <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1 shadow-lg absolute w-full z-50">
-                <button
-                  onClick={() => { setCurrentTab("home"); setMobileMenuOpen(false); window.scrollTo(0,0); }}
-                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
-                >
-                  Beranda
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("materi"); setMobileMenuOpen(false); window.scrollTo(0,0); }}
-                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
-                >
-                  Modul Materi
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("latihan"); setMobileMenuOpen(false); window.scrollTo(0,0); }}
-                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-100 border-b border-slate-50"
-                >
-                  Latihan Soal (20 Soal)
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); setMobileMenuOpen(false); window.scrollTo(0,0); }}
-                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border-b border-slate-50"
-                >
-                  ⚡ Baca Cepat
-                </button>
-                <button
-                  onClick={() => { setCurrentTab("penilaian"); setMobileMenuOpen(false); window.scrollTo(0,0); }}
-                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-amber-800 bg-amber-50 hover:bg-amber-100"
-                >
-                  🎯 Penilaian Resmi (28 Soal)
-                </button>
+                {[
+                  { id: "home", label: "Beranda" },
+                  { id: "materi", label: "Modul Materi" },
+                  { id: "latihan", label: "Latihan Soal (20 Soal)" },
+                  { id: "bacacepat", label: "⚡ Baca Cepat" },
+                  { id: "penilaian", label: "🎯 Penilaian Resmi (28 Soal)" }
+                ].map(nav => (
+                  <button key={nav.id} onClick={() => { setCurrentTab(nav.id); setMobileMenuOpen(false); window.scrollTo(0,0); }}
+                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold border-b border-slate-50 ${
+                      nav.id === 'bacacepat' ? 'text-indigo-700 bg-indigo-50 hover:bg-indigo-100' : nav.id === 'penilaian' ? 'text-amber-800 bg-amber-50 hover:bg-amber-100' : 'text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    {nav.label}
+                  </button>
+                ))}
               </div>
             )}
           </header>
 
           <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
             
-            {}
             {/* TAB BERANDA */}
             {currentTab === "home" && (
               <div className="space-y-8 animate-fadeIn">
                 <div className="bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 rounded-3xl text-white p-8 sm:p-12 shadow-2xl relative overflow-hidden">
                   <div className="relative z-10 max-w-2xl space-y-5">
-                    <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black tracking-widest uppercase shadow-sm">
-                      Portal Akademis TKA
-                    </span>
-                    <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                      Kuasai Literasi Membaca & Tes Kemampuan Akademik
-                    </h2>
-                    <p className="text-blue-100 text-sm sm:text-base leading-relaxed font-medium">
-                      Sistem belajar interaktif berstandar Kemendikdasmen. Dilengkapi dengan modul teoretis komprehensif, latihan bertahap, simulasi penilaian asli, dan fitur <strong>Baca Cepat (RSVP)</strong>.
-                    </p>
+                    <span className="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black tracking-widest uppercase shadow-sm">Portal Akademis TKA</span>
+                    <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">Kuasai Literasi Membaca & Tes Akademik</h2>
+                    <p className="text-blue-100 text-sm sm:text-base leading-relaxed font-medium">Sistem belajar interaktif berstandar Kemendikdasmen. Dilengkapi modul teoretis komprehensif, latihan bertahap, simulasi penilaian asli, dan fitur <strong>Baca Cepat (RSVP)</strong>.</p>
                     <div className="flex flex-wrap gap-3 pt-4">
-                      <button
-                        onClick={() => { setCurrentTab("latihan"); window.scrollTo(0,0); }}
-                        className="px-6 py-3 bg-white text-blue-800 font-extrabold text-sm rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
-                      >
-                        Mulai Latihan Soal
-                      </button>
-                      <button
-                        onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); window.scrollTo(0,0); }}
-                        className="px-6 py-3 bg-indigo-500/30 text-white border border-indigo-400/50 font-extrabold text-sm rounded-xl hover:bg-indigo-500/50 hover:scale-105 transition-all duration-300"
-                      >
-                        ⚡ Coba Baca Cepat
-                      </button>
+                      <button onClick={() => { setCurrentTab("latihan"); window.scrollTo(0,0); }} className="px-6 py-3 bg-white text-blue-800 font-extrabold text-sm rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">Mulai Latihan Soal</button>
+                      <button onClick={() => { setCurrentTab("bacacepat"); resetRsvp(); window.scrollTo(0,0); }} className="px-6 py-3 bg-indigo-500/30 text-white border border-indigo-400/50 font-extrabold text-sm rounded-xl hover:bg-indigo-500/50 hover:scale-105 transition-all duration-300">⚡ Coba Baca Cepat</button>
                     </div>
                   </div>
                   <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
@@ -997,50 +939,36 @@
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div onClick={() => { setActiveMateri(materiData[0]); setCurrentTab("materi"); window.scrollTo(0,0); }} className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
-                    <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-inner">1</div>
-                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-blue-700 transition-colors">Pemahaman Tekstual</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed font-medium">Kaidah pembakuan kata serapan, identifikasi fakta eksplisit fiksi/nonfiksi, dan perancangan bagan alur wacana.</p>
-                  </div>
-                  <div onClick={() => { setActiveMateri(materiData[1]); setCurrentTab("materi"); window.scrollTo(0,0); }} className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
-                    <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 shadow-inner">2</div>
-                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-indigo-700 transition-colors">Pemahaman Inferensial</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed font-medium">Teknik abstraksi gagasan tersirat, hubungan kohesi kausalitas antarkalimat, serta proyeksi kelanjutan cerita.</p>
-                  </div>
-                  <div onClick={() => { setActiveMateri(materiData[2]); setCurrentTab("materi"); window.scrollTo(0,0); }} className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
-                    <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-xl mb-5 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner">3</div>
-                    <h3 className="font-extrabold text-slate-900 text-lg mb-3 group-hover:text-amber-700 transition-colors">Evaluasi dan Apresiasi</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed font-medium">Menilai kesahihan data empiris, efektivitas gaya bahasa/sarkasme, serta refleksi kritis nilai sastra dalam masyarakat.</p>
-                  </div>
+                  {materiData.map(m => (
+                    <div key={m.id} onClick={() => { setActiveMateri(m); setCurrentTab("materi"); window.scrollTo(0,0); }} className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl mb-5 transition-colors duration-300 shadow-inner ${m.id === 1 ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : m.id === 2 ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' : 'bg-amber-50 text-amber-600 group-hover:bg-amber-500 group-hover:text-white'}`}>{m.id}</div>
+                      <h3 className={`font-extrabold text-slate-900 text-lg mb-3 transition-colors ${m.id === 1 ? 'group-hover:text-blue-700' : m.id === 2 ? 'group-hover:text-indigo-700' : 'group-hover:text-amber-700'}`}>{m.title}</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed font-medium">{m.subtitle}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
-            {}
-            {/* TAB BACA CEPAT (RSVP) */}
+            {/* TAB BACA CEPAT (RSVP - Per Frasa) */}
             {currentTab === "bacacepat" && (
               <div className="space-y-6 animate-fadeIn max-w-4xl mx-auto">
                 <div className="text-center space-y-2 mb-8">
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">⚡ Latihan Baca Cepat (RSVP)</h2>
-                  <p className="text-slate-500 text-sm font-medium">Latih fokus mata Anda tanpa subvokalisasi.<br/>Teks: <i>"Lautan mengalami ancaman pemanasan..."</i></p>
+                  <p className="text-slate-500 text-sm font-medium">Latih fokus mata dengan teknik membaca per frasa tanpa subvokalisasi.</p>
                 </div>
 
                 <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-lg border border-slate-200">
-                  {/* Kontrol Kecepatan */}
                   <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-                    <span className="text-sm font-bold text-slate-500 mr-2">Kecepatan Membaca:</span>
+                    <span className="text-sm font-bold text-slate-500 mr-2">Tingkat Kecepatan:</span>
                     {[
-                      { label: "Pelan (200 WPM)", val: 200 },
-                      { label: "Sedang (300 WPM)", val: 300 },
-                      { label: "Cepat (400 WPM)", val: 400 }
+                      { label: "Pelan (200 WPM)", val: 200, id: "pelan" },
+                      { label: "Sedang (300 WPM)", val: 300, id: "sedang" },
+                      { label: "Cepat (400 WPM)", val: 400, id: "cepat" }
                     ].map(speed => (
-                      <button
-                        key={speed.val}
-                        onClick={() => { setRsvpWpm(speed.val); setRsvpPlaying(false); }}
+                      <button key={speed.id} onClick={() => handleSetRsvpLevel(speed.id, speed.val)}
                         className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 ${
-                          rsvpWpm === speed.val 
-                          ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/30 scale-105" 
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                          rsvpLevel === speed.id ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/30 scale-105" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                         }`}
                       >
                         {speed.label}
@@ -1048,59 +976,36 @@
                     ))}
                   </div>
 
-                  {/* Area Penampil Teks */}
                   <div className="rsvp-box bg-slate-900 rounded-2xl p-8 sm:p-16 flex items-center justify-center min-h-[280px] relative overflow-hidden group">
                     <div className="absolute top-4 right-6 text-slate-500 text-xs font-bold tracking-widest uppercase">
-                      KATA {rsvpIndex + 1} / {rsvpWords.length}
+                      {rsvpPhrases.length > 0 ? Math.round(((rsvpIndex + 1) / rsvpPhrases.length) * 100) : 0}%
                     </div>
                     
-                    {/* Visual Focus Lines */}
                     <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-800/50 -translate-x-1/2 pointer-events-none"></div>
                     <div className="absolute left-1/2 top-4 w-0.5 h-4 bg-rose-500 -translate-x-1/2 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
                     <div className="absolute left-1/2 bottom-4 w-0.5 h-4 bg-rose-500 -translate-x-1/2 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
 
-                    <div className="text-4xl sm:text-7xl font-black text-white tracking-tight text-center leading-none select-none transition-transform duration-75">
-                      {rsvpIndex < rsvpWords.length ? rsvpWords[rsvpIndex] : <span className="text-emerald-400">SELESAI!</span>}
+                    <div className="text-4xl sm:text-6xl font-black text-white tracking-tight text-center leading-tight transition-transform duration-75">
+                      {rsvpIndex < rsvpPhrases.length ? rsvpPhrases[rsvpIndex].text : <span className="text-emerald-400">SELESAI!</span>}
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
                   <div className="w-full bg-slate-100 h-2 mt-6 rounded-full overflow-hidden shadow-inner">
-                    <div 
-                      className="bg-indigo-600 h-full transition-all duration-200 ease-linear"
-                      style={{ width: `${(rsvpIndex / (rsvpWords.length - 1)) * 100}%` }}
-                    ></div>
+                    <div className="bg-indigo-600 h-full transition-all duration-200 ease-linear" style={{ width: `${(rsvpIndex / (rsvpPhrases.length - 1 || 1)) * 100}%` }}></div>
                   </div>
 
-                  {/* Kontrol Playback */}
                   <div className="flex justify-center items-center gap-4 mt-8">
-                    <button 
-                      onClick={resetRsvp}
-                      className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 hover:text-slate-900 transition-colors"
-                      title="Ulangi dari Awal"
-                    >
+                    <button onClick={resetRsvp} className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 hover:text-slate-900 transition-colors" title="Ulangi dari Awal">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </button>
-                    
-                    <button 
-                      onClick={() => {
-                        if (rsvpIndex >= rsvpWords.length - 1) setRsvpIndex(0);
-                        setRsvpPlaying(!rsvpPlaying);
-                      }}
-                      className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-xl shadow-indigo-500/30 hover:scale-105 hover:bg-indigo-700 transition-all duration-300"
-                    >
-                      {rsvpPlaying ? (
-                        <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg>
-                      ) : (
-                        <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
-                      )}
+                    <button onClick={() => { if (rsvpIndex >= rsvpPhrases.length - 1) setRsvpIndex(0); setRsvpPlaying(!rsvpPlaying); }} className="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-xl shadow-indigo-500/30 hover:scale-105 hover:bg-indigo-700 transition-all duration-300">
+                      {rsvpPlaying ? <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg> : <svg className="w-7 h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>}
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-            {}
             {/* TAB MODUL MATERI */}
             {currentTab === "materi" && (
               <div className="space-y-6 animate-fadeIn">
@@ -1111,15 +1016,7 @@
                   </div>
                   <div className="flex bg-slate-100 p-1.5 rounded-xl w-full md:w-auto">
                     {materiData.map(m => (
-                      <button
-                        key={m.id}
-                        onClick={() => setActiveMateri(m)}
-                        className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
-                          activeMateri.id === m.id
-                            ? "bg-white text-blue-700 shadow-sm"
-                            : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
-                        }`}
-                      >
+                      <button key={m.id} onClick={() => setActiveMateri(m)} className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${activeMateri.id === m.id ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"}`}>
                         Subbab {m.id}
                       </button>
                     ))}
@@ -1128,159 +1025,68 @@
 
                 <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-8">
                   <div className="border-b border-slate-100 pb-6">
-                    <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black tracking-wider uppercase rounded-lg border border-blue-100">
-                      Subbab {activeMateri.id}
-                    </span>
+                    <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black tracking-wider uppercase rounded-lg border border-blue-100">Subbab {activeMateri.id}</span>
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-4 tracking-tight">{activeMateri.title}</h3>
                     <p className="text-base text-slate-500 mt-2 font-medium">{activeMateri.subtitle}</p>
                   </div>
-
-                  <div 
-                    className="prose max-w-none text-slate-700 text-sm sm:text-base"
-                    dangerouslySetInnerHTML={{ __html: activeMateri.content }}
-                  />
-
+                  <div className="prose max-w-none text-slate-700 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: activeMateri.content }} />
                   <div className="pt-8 border-t border-slate-100 flex justify-end">
-                    <button
-                      onClick={() => {
-                        const filtered = latihanSoalData.filter(q => q.subBab === activeMateri.id);
-                        startExam(filtered, `Latihan Mandiri Subbab ${activeMateri.id}`, "latihan");
-                      }}
-                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                    >
-                      Uji Pemahaman Subbab {activeMateri.id} 
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                    <button onClick={() => { const filtered = latihanSoalData.filter(q => q.subBab === activeMateri.id); startExam(filtered, `Latihan Mandiri Subbab ${activeMateri.id}`, "latihan"); }} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
+                      Uji Pemahaman Subbab {activeMateri.id} <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-            {}
-            {/* TAB MENU LATIHAN SOAL */}
+            {/* TAB LATIHAN SOAL */}
             {currentTab === "latihan" && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Paket Latihan Mandiri (20 Soal)</h2>
                   <p className="text-base text-slate-500 mt-2 font-medium">Uji kemampuan membaca Anda tanpa batasan waktu dengan teks bacaan utuh dan mandiri.</p>
                 </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* Card Paket Lengkap */}
-                  <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-3xl shadow-lg shadow-blue-500/20 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-transform duration-300"
-                       onClick={() => startExam(latihanSoalData, "Paket Lengkap 20 Soal Latihan", "latihan")}>
+                  <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-3xl shadow-lg shadow-blue-500/20 flex flex-col justify-between group cursor-pointer hover:-translate-y-1 transition-transform duration-300" onClick={() => startExam(latihanSoalData, "Paket Lengkap 20 Soal Latihan", "latihan")}>
                     <div>
-                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider rounded-lg border border-white/20">
-                        Paket Latihan
-                      </span>
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-[10px] font-black uppercase tracking-wider rounded-lg border border-white/20">Paket Latihan</span>
                       <h3 className="font-extrabold text-white text-xl mt-4 leading-snug">Semua Soal Latihan</h3>
                       <p className="text-sm text-blue-100 mt-2 font-medium opacity-90">Latihan 20 soal variatif berstandar Pusmendik tanpa batasan waktu.</p>
                     </div>
-                    <div className="mt-6 flex items-center gap-2 text-white font-bold text-sm bg-white/10 p-3 rounded-xl justify-center group-hover:bg-white/20 transition-colors">
-                      Mulai Latihan Lengkap
-                    </div>
+                    <div className="mt-6 flex items-center gap-2 text-white font-bold text-sm bg-white/10 p-3 rounded-xl justify-center group-hover:bg-white/20 transition-colors">Mulai Latihan Lengkap</div>
                   </div>
-
-                  {/* Card Subbab 1 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
-                       onClick={() => {
-                        const filtered = latihanSoalData.filter(q => q.subBab === 1);
-                        startExam(filtered, "Latihan Subbab 1: Pemahaman Tekstual", "latihan");
-                      }}>
-                    <div>
-                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
-                        Subbab 1
-                      </span>
-                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-blue-600 transition-colors">Pemahaman Tekstual</h3>
-                      <p className="text-sm text-slate-500 mt-2 font-medium">Latihan kata serapan, ejaan KBBI, dan penyusunan bagan.</p>
+                  {materiData.map((m, idx) => (
+                    <div key={idx} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group" onClick={() => { const filtered = latihanSoalData.filter(q => q.subBab === m.id); startExam(filtered, `Latihan Subbab ${m.id}: ${m.title}`, "latihan"); }}>
+                      <div>
+                        <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">Subbab {m.id}</span>
+                        <h3 className={`font-extrabold text-slate-900 text-xl mt-4 leading-snug transition-colors ${m.id===1?'group-hover:text-blue-600':m.id===2?'group-hover:text-indigo-600':'group-hover:text-amber-600'}`}>{m.title}</h3>
+                        <p className="text-sm text-slate-500 mt-2 font-medium">{m.subtitle}</p>
+                      </div>
+                      <div className={`mt-6 font-bold text-sm p-3 rounded-xl text-center transition-colors ${m.id===1?'text-slate-700 bg-slate-50 group-hover:bg-blue-50 group-hover:text-blue-700':m.id===2?'text-slate-700 bg-slate-50 group-hover:bg-indigo-50 group-hover:text-indigo-700':'text-slate-700 bg-slate-50 group-hover:bg-amber-50 group-hover:text-amber-700'}`}>Mulai Latihan Subbab {m.id}</div>
                     </div>
-                    <div className="mt-6 font-bold text-sm text-slate-700 bg-slate-50 p-3 rounded-xl text-center group-hover:bg-blue-50 group-hover:text-blue-700 transition-colors">
-                      Mulai Latihan Subbab 1
-                    </div>
-                  </div>
-
-                  {/* Card Subbab 2 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
-                       onClick={() => {
-                        const filtered = latihanSoalData.filter(q => q.subBab === 2);
-                        startExam(filtered, "Latihan Subbab 2: Pemahaman Inferensial", "latihan");
-                      }}>
-                    <div>
-                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
-                        Subbab 2
-                      </span>
-                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-indigo-600 transition-colors">Pemahaman Inferensial</h3>
-                      <p className="text-sm text-slate-500 mt-2 font-medium">Ide pokok tersirat, kohesi, kausalitas paragraf, dan prediksi teks.</p>
-                    </div>
-                    <div className="mt-6 font-bold text-sm text-slate-700 bg-slate-50 p-3 rounded-xl text-center group-hover:bg-indigo-50 group-hover:text-indigo-700 transition-colors">
-                      Mulai Latihan Subbab 2
-                    </div>
-                  </div>
-
-                  {/* Card Subbab 3 */}
-                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group"
-                       onClick={() => {
-                        const filtered = latihanSoalData.filter(q => q.subBab === 3);
-                        startExam(filtered, "Latihan Subbab 3: Evaluasi & Apresiasi", "latihan");
-                      }}>
-                    <div>
-                      <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider rounded-lg border border-slate-200">
-                        Subbab 3
-                      </span>
-                      <h3 className="font-extrabold text-slate-900 text-xl mt-4 leading-snug group-hover:text-amber-600 transition-colors">Evaluasi & Apresiasi</h3>
-                      <p className="text-sm text-slate-500 mt-2 font-medium">Validitas data, opini vs fakta, gaya bahasa, dan apresiasi sastra.</p>
-                    </div>
-                    <div className="mt-6 font-bold text-sm text-slate-700 bg-slate-50 p-3 rounded-xl text-center group-hover:bg-amber-50 group-hover:text-amber-700 transition-colors">
-                      Mulai Latihan Subbab 3
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             )}
 
-            {}
-            {/* TAB MENU PENILAIAN */}
+            {/* TAB PENILAIAN */}
             {currentTab === "penilaian" && (
               <div className="space-y-8 animate-fadeIn">
                 <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 p-8 sm:p-12 rounded-[2rem] text-white shadow-xl shadow-orange-500/20 relative overflow-hidden">
                   <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
-                  
                   <div className="relative z-10">
-                    <span className="px-3.5 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest border border-white/20 shadow-sm">
-                      Ujian Penilaian Kemampuan Mandiri
-                    </span>
-                    <h2 className="text-3xl sm:text-5xl font-black mt-5 tracking-tight leading-tight">Simulasi Asesmen Asli TKA 2025 SMA/SMK</h2>
-                    <p className="text-amber-50 text-base sm:text-lg mt-4 max-w-2xl leading-relaxed font-medium">
-                      Ujian resmi berisi 28 butir soal lengkap yang menguji seluruh spektrum literasi membaca teks sastra dan nonfiksi kontemporer.
-                    </p>
+                    <span className="px-3.5 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest border border-white/20 shadow-sm">Ujian Penilaian Kemampuan Mandiri</span>
+                    <h2 className="text-3xl sm:text-5xl font-black mt-5 tracking-tight leading-tight">Simulasi Asesmen Asli TKA 2025</h2>
+                    <p className="text-amber-50 text-base sm:text-lg mt-4 max-w-2xl leading-relaxed font-medium">Ujian resmi berisi 28 butir soal lengkap yang menguji seluruh spektrum literasi membaca teks sastra dan nonfiksi kontemporer.</p>
                     <div className="mt-8">
-                      <button
-                        onClick={() => startExam(penilaianSoalData, "Penilaian Resmi TKA 2025 (28 Soal)", "penilaian")}
-                        className="px-8 py-3.5 bg-white text-orange-600 font-black text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 flex items-center gap-2 w-max"
-                      >
-                        Mulai Penilaian Sekarang 
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                      </button>
+                      <button onClick={() => startExam(penilaianSoalData, "Penilaian Resmi TKA 2025 (28 Soal)", "penilaian")} className="px-8 py-3.5 bg-white text-orange-600 font-black text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 flex items-center gap-2 w-max">Mulai Penilaian Sekarang <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></button>
                     </div>
                   </div>
-                </div>
-
-                <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                  <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-orange-500 rounded-full"></span> Ketentuan Teknis Pengerjaan:
-                  </h3>
-                  <ul className="list-disc pl-6 text-base text-slate-600 space-y-2 marker:text-orange-400 font-medium">
-                    <li>Terdiri atas <strong>28 nomor soal</strong> dengan teks wacana mandiri pada setiap butir soal.</li>
-                    <li>Mencakup beragam tipe soal asesmen nasional: <em>Pilihan Ganda Tunggal (PG)</em> dan <em>PGK Kategori Matriks (Benar/Salah)</em>.</li>
-                    <li>Dilengkapi tabel spesifikasi resmi (*No Soal*, *Kompetensi*, *Sub Kompetensi*, *Bentuk Soal*) pada setiap butir soal.</li>
-                    <li>Analisis nilai akhir dan tinjauan kunci jawaban akan ditampilkan secara otomatis setelah Anda mengonfirmasi penyelesaian ujian.</li>
-                  </ul>
                 </div>
               </div>
             )}
 
-            {}
-            {/* INTERFACE PENGERJAAN CBT */}
+            {/* INTERFACE CBT */}
             {currentTab === "exam" && currentQ && (
               <div className="space-y-5 animate-fadeIn">
                 <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
@@ -1290,138 +1096,68 @@
                     </span>
                     <h2 className="font-extrabold text-slate-900 text-lg sm:text-xl mt-1 tracking-tight">{examTitle}</h2>
                   </div>
-
                   <div className="flex items-center gap-3">
                     <div className="flex items-center bg-slate-100 rounded-xl p-1 text-sm font-bold border border-slate-200/60 shadow-inner">
-                      <button 
-                        onClick={() => setFontSizeClass("text-sm")}
-                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-sm" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-                      >
-                        A-
-                      </button>
-                      <button 
-                        onClick={() => setFontSizeClass("text-base")}
-                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-base" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-                      >
-                        A
-                      </button>
-                      <button 
-                        onClick={() => setFontSizeClass("text-lg")}
-                        className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-lg" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-                      >
-                        A+
-                      </button>
+                      <button onClick={() => setFontSizeClass("text-sm")} className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-sm" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>A-</button>
+                      <button onClick={() => setFontSizeClass("text-base")} className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-base" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>A</button>
+                      <button onClick={() => setFontSizeClass("text-lg")} className={`px-3 py-1.5 rounded-lg transition-all ${fontSizeClass === "text-lg" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>A+</button>
                     </div>
-
-                    <button
-                      onClick={() => toggleFlag(currentQ.id)}
-                      className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-300 flex items-center gap-1.5 ${
-                        flagged[currentQ.id]
-                          ? "bg-amber-400 border-amber-400 text-amber-950 shadow-md shadow-amber-400/20"
-                          : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
-                      }`}
-                    >
+                    <button onClick={() => toggleFlag(currentQ.id)} className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-300 flex items-center gap-1.5 ${flagged[currentQ.id] ? "bg-amber-400 border-amber-400 text-amber-950 shadow-md shadow-amber-400/20" : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"}`}>
                       {flagged[currentQ.id] ? "★ Ragu-ragu" : "☆ Tandai Ragu"}
                     </button>
                   </div>
                 </div>
 
-                {/* Split Screen */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   {/* KIRI: STIMULUS */}
                   <div className="lg:col-span-6 xl:col-span-7 bg-amber-50/40 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-h-[78vh] overflow-y-auto">
                     <div className="border-b border-slate-200/60 pb-4 mb-5 flex items-center justify-between sticky top-0 bg-amber-50/90 backdrop-blur-sm z-10 -mt-2 pt-2">
                       <h3 className="font-extrabold text-slate-800 text-base flex items-center gap-2 tracking-tight">
-                        <span className="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                        Bahan Bacaan & Stimulus
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-800"></span> Bahan Bacaan & Stimulus
                       </h3>
-                      <span className="text-xs font-bold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                        {currentIndex + 1} / {activeQuestions.length}
-                      </span>
+                      <span className="text-xs font-bold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-slate-200">{currentIndex + 1} / {activeQuestions.length}</span>
                     </div>
 
                     {currentQ.stimulusImage && (
                       <div className="mb-6 rounded-2xl overflow-hidden border border-slate-200 bg-white p-3 shadow-sm hover:shadow-md transition-shadow">
-                        <img 
-                          src={currentQ.stimulusImage}
-                          alt="Stimulus Soal"
-                          className="w-full h-auto object-contain rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
-                          onClick={() => setZoomImage(currentQ.stimulusImage)}
-                          onError={(e) => { e.target.style.display = "none"; }}
-                        />
+                        <img src={currentQ.stimulusImage} alt="Stimulus Soal" className="w-full h-auto object-contain rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity" onClick={() => setZoomImage(currentQ.stimulusImage)} onError={(e) => { e.target.style.display = "none"; }} />
                         <p className="text-center text-xs font-medium text-slate-400 mt-2 bg-slate-50 py-1.5 rounded-lg">🔍 Klik gambar untuk memperbesar</p>
                       </div>
                     )}
 
-                    <div className={`reading-font whitespace-pre-line text-slate-800 leading-loose ${fontSizeClass}`}>
-                      {currentQ.stimulus}
-                    </div>
+                    {/* Menggunakan dangerouslySetInnerHTML agar tag <i> ter-render sempurna menjadi teks miring */}
+                    <div className={`reading-font whitespace-pre-line text-slate-800 leading-loose ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: currentQ.stimulus }} />
                   </div>
 
-                  {/* KANAN: SOAL & OPSI */}
+                  {/* KANAN: SOAL */}
                   <div className="lg:col-span-6 xl:col-span-5 space-y-5">
-                    
-                    {/* Tabel Spesifikasi */}
                     <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
                       <table className="w-full text-left text-xs sm:text-sm">
                         <tbody className="divide-y divide-slate-100">
-                          <tr>
-                            <td className="py-2 font-semibold text-slate-500 w-32">No Soal</td>
-                            <td className="py-2 font-black text-slate-900">{currentQ.noSoal}</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-slate-500">Kompetensi</td>
-                            <td className="py-2 font-bold text-slate-900">{currentQ.kompetensi}</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-slate-500 align-top">Sub Kompetensi</td>
-                            <td className="py-2 text-slate-700 font-medium leading-relaxed">{currentQ.subKompetensi}</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2 font-semibold text-slate-500">Bentuk Soal</td>
-                            <td className="py-2 font-black text-blue-600">{currentQ.bentukSoal}</td>
-                          </tr>
+                          <tr><td className="py-2 font-semibold text-slate-500 w-32">No Soal</td><td className="py-2 font-black text-slate-900">{currentQ.noSoal}</td></tr>
+                          <tr><td className="py-2 font-semibold text-slate-500">Kompetensi</td><td className="py-2 font-bold text-slate-900">{currentQ.kompetensi}</td></tr>
+                          <tr><td className="py-2 font-semibold text-slate-500 align-top">Sub Kompetensi</td><td className="py-2 text-slate-700 font-medium leading-relaxed">{currentQ.subKompetensi}</td></tr>
+                          <tr><td className="py-2 font-semibold text-slate-500">Bentuk Soal</td><td className="py-2 font-black text-blue-600">{currentQ.bentukSoal}</td></tr>
                         </tbody>
                       </table>
                     </div>
 
                     <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-                      <div 
-                        className={`font-bold text-slate-900 leading-relaxed ${fontSizeClass}`}
-                        dangerouslySetInnerHTML={{ __html: currentQ.question }}
-                      />
+                      <div className={`font-bold text-slate-900 leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: currentQ.question }} />
 
-                      {/* Opsi PG */}
+                      {/* PG Tunggal */}
                       {currentQ.type === "single" && (
                         <div className="space-y-3">
                           {currentQ.options.map((opt, idx) => {
                             const isSelected = userAnswers[currentQ.id] === idx;
                             const optImg = currentQ.optionImages && currentQ.optionImages[idx];
                             return (
-                              <div
-                                key={idx}
-                                onClick={() => handleSingleSelect(currentQ.id, idx)}
-                                className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
-                                  isSelected
-                                    ? "border-blue-600 bg-blue-50/50 shadow-sm"
-                                    : "border-slate-100 hover:border-blue-200 hover:bg-slate-50"
-                                }`}
-                              >
-                                <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold text-sm rounded-xl transition-colors ${
-                                  isSelected ? "bg-blue-600 text-white shadow-md shadow-blue-500/30" : "bg-slate-100 text-slate-600"
-                                }`}>
-                                  {String.fromCharCode(65 + idx)}
-                                </span>
+                              <div key={idx} onClick={() => handleSingleSelect(currentQ.id, idx)} className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${isSelected ? "border-blue-600 bg-blue-50/50 shadow-sm" : "border-slate-100 hover:border-blue-200 hover:bg-slate-50"}`}>
+                                <span className={`w-8 h-8 flex-shrink-0 flex items-center justify-center font-bold text-sm rounded-xl transition-colors ${isSelected ? "bg-blue-600 text-white shadow-md shadow-blue-500/30" : "bg-slate-100 text-slate-600"}`}>{String.fromCharCode(65 + idx)}</span>
                                 <div className="flex-1 space-y-3">
                                   {optImg && (
                                     <div className="rounded-xl overflow-hidden border border-slate-200 bg-white p-2 w-full max-w-sm">
-                                      <img 
-                                        src={optImg} 
-                                        alt={`Pilihan ${String.fromCharCode(65 + idx)}`} 
-                                        className="w-full h-auto object-contain cursor-zoom-in hover:scale-105 transition-transform duration-300 rounded-lg"
-                                        onClick={(e) => { e.stopPropagation(); setZoomImage(optImg); }}
-                                        onError={(e) => { e.target.style.display = "none"; }}
-                                      />
+                                      <img src={optImg} alt={`Pilihan ${String.fromCharCode(65 + idx)}`} className="w-full h-auto object-contain cursor-zoom-in hover:scale-105 transition-transform duration-300 rounded-lg" onClick={(e) => { e.stopPropagation(); setZoomImage(optImg); }} onError={(e) => { e.target.style.display = "none"; }} />
                                     </div>
                                   )}
                                   <div className={`text-slate-700 font-medium leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
@@ -1432,28 +1168,14 @@
                         </div>
                       )}
 
-                      {/* Opsi MCMA */}
+                      {/* MCMA */}
                       {currentQ.type === "mcma" && (
                         <div className="space-y-3">
                           {currentQ.options.map((opt, idx) => {
                             const isChecked = Array.isArray(userAnswers[currentQ.id]) && userAnswers[currentQ.id].includes(idx);
                             return (
-                              <div
-                                key={idx}
-                                onClick={() => handleMcmaToggle(currentQ.id, idx)}
-                                className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
-                                  isChecked
-                                    ? "border-indigo-500 bg-indigo-50/50 shadow-sm"
-                                    : "border-slate-100 hover:border-indigo-200 hover:bg-slate-50"
-                                }`}
-                              >
-                                <div className={`w-6 h-6 mt-0.5 rounded-lg flex items-center justify-center border-2 transition-colors ${
-                                  isChecked ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/30" : "border-slate-300 bg-white"
-                                }`}>
-                                  {isChecked && (
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
-                                  )}
-                                </div>
+                              <div key={idx} onClick={() => handleMcmaToggle(currentQ.id, idx)} className={`flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${isChecked ? "border-indigo-500 bg-indigo-50/50 shadow-sm" : "border-slate-100 hover:border-indigo-200 hover:bg-slate-50"}`}>
+                                <div className={`w-6 h-6 mt-0.5 rounded-lg flex items-center justify-center border-2 transition-colors ${isChecked ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/30" : "border-slate-300 bg-white"}`}>{isChecked && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>}</div>
                                 <div className={`text-slate-700 font-medium flex-1 leading-relaxed ${fontSizeClass}`} dangerouslySetInnerHTML={{ __html: opt }} />
                               </div>
                             );
@@ -1461,18 +1183,12 @@
                         </div>
                       )}
 
-                      {/* Opsi Matrix */}
+                      {/* Matriks */}
                       {currentQ.type === "matrix" && (
                         <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
                           <table className="w-full text-left text-sm">
                             <thead className="bg-slate-50 text-slate-800 font-extrabold border-b border-slate-200">
-                              <tr>
-                                <th className="p-4 w-10 text-center">#</th>
-                                <th className="p-4">Pernyataan</th>
-                                {currentQ.matrixColumns.map((col, cIdx) => (
-                                  <th key={cIdx} className="p-4 text-center min-w-[90px]">{col}</th>
-                                ))}
-                              </tr>
+                              <tr><th className="p-4 w-10 text-center">#</th><th className="p-4">Pernyataan</th>{currentQ.matrixColumns.map((col, cIdx) => (<th key={cIdx} className="p-4 text-center min-w-[90px]">{col}</th>))}</tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 bg-white">
                               {currentQ.statements.map((stmt, sIdx) => (
@@ -1483,14 +1199,7 @@
                                     const isChosen = Array.isArray(userAnswers[currentQ.id]) && userAnswers[currentQ.id][sIdx] === col;
                                     return (
                                       <td key={cIdx} className="p-4 text-center align-middle">
-                                        <div 
-                                          onClick={() => handleMatrixSelect(currentQ.id, sIdx, col)}
-                                          className={`w-6 h-6 mx-auto rounded-full border-2 flex items-center justify-center cursor-pointer transition-all ${
-                                            isChosen ? "border-blue-600 bg-blue-600" : "border-slate-300 hover:border-blue-400 bg-white"
-                                          }`}
-                                        >
-                                          {isChosen && <div className="w-2.5 h-2.5 rounded-full bg-white"></div>}
-                                        </div>
+                                        <div onClick={() => handleMatrixSelect(currentQ.id, sIdx, col)} className={`w-6 h-6 mx-auto rounded-full border-2 flex items-center justify-center cursor-pointer transition-all ${isChosen ? "border-blue-600 bg-blue-600" : "border-slate-300 hover:border-blue-400 bg-white"}`}>{isChosen && <div className="w-2.5 h-2.5 rounded-full bg-white"></div>}</div>
                                       </td>
                                     );
                                   })}
@@ -1502,66 +1211,29 @@
                       )}
                     </div>
 
-                    {/* Navigasi Soal Bawah */}
                     <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-wrap gap-4 items-center justify-between">
-                      <button
-                        disabled={currentIndex === 0}
-                        onClick={() => setCurrentIndex(prev => prev - 1)}
-                        className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${
-                          currentIndex === 0
-                            ? "bg-slate-50 text-slate-400 cursor-not-allowed"
-                            : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
-                        }`}
-                      >
-                        ← <span className="hidden sm:inline">Sebelumnya</span>
-                      </button>
-
-                      <div className="text-sm font-black text-slate-400 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                        {currentIndex + 1} / {activeQuestions.length}
-                      </div>
-
+                      <button disabled={currentIndex === 0} onClick={() => setCurrentIndex(prev => prev - 1)} className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 ${currentIndex === 0 ? "bg-slate-50 text-slate-400 cursor-not-allowed" : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"}`}>← <span className="hidden sm:inline">Sebelumnya</span></button>
+                      <div className="text-sm font-black text-slate-400 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">{currentIndex + 1} / {activeQuestions.length}</div>
                       {currentIndex < activeQuestions.length - 1 ? (
-                        <button
-                          onClick={() => setCurrentIndex(prev => prev + 1)}
-                          className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                        >
-                          <span className="hidden sm:inline">Selanjutnya</span> →
-                        </button>
+                        <button onClick={() => setCurrentIndex(prev => prev + 1)} className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"><span className="hidden sm:inline">Selanjutnya</span> →</button>
                       ) : (
-                        <button
-                          onClick={() => setShowConfirmModal(true)}
-                          className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-black shadow-lg shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                        >
-                          Selesaikan Tes ✓
-                        </button>
+                        <button onClick={() => setShowConfirmModal(true)} className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-black shadow-lg shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">Selesaikan Tes ✓</button>
                       )}
                     </div>
 
-                    {/* Palet Nomor */}
                     <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                      <h4 className="font-extrabold text-sm text-slate-800 flex items-center gap-2">
-                        Peta Navigasi Soal
-                      </h4>
+                      <h4 className="font-extrabold text-sm text-slate-800 flex items-center gap-2">Peta Navigasi Soal</h4>
                       <div className="grid grid-cols-7 sm:grid-cols-10 gap-2.5">
                         {activeQuestions.map((q, idx) => {
                           const isAnswered = userAnswers[q.id] !== undefined;
                           const isCurrent = currentIndex === idx;
                           const isFlag = flagged[q.id];
-
                           let badgeColor = "bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300";
                           if (isFlag) badgeColor = "bg-amber-400 text-amber-950 border-amber-500 font-black shadow-inner";
                           else if (isAnswered) badgeColor = "bg-blue-600 text-white border-blue-600 font-bold shadow-md shadow-blue-500/20";
 
                           return (
-                            <button
-                              key={idx}
-                              onClick={() => setCurrentIndex(idx)}
-                              className={`h-10 rounded-xl text-sm border-2 flex items-center justify-center transition-all duration-200 ${badgeColor} ${
-                                isCurrent ? "ring-2 ring-slate-900 ring-offset-2 scale-110 z-10" : ""
-                              }`}
-                            >
-                              {idx + 1}
-                            </button>
+                            <button key={idx} onClick={() => setCurrentIndex(idx)} className={`h-10 rounded-xl text-sm border-2 flex items-center justify-center transition-all duration-200 ${badgeColor} ${isCurrent ? "ring-2 ring-slate-900 ring-offset-2 scale-110 z-10" : ""}`}>{idx + 1}</button>
                           );
                         })}
                       </div>
@@ -1571,38 +1243,25 @@
               </div>
             )}
 
-            {}
             {/* TAB HASIL UJIAN */}
             {currentTab === "result" && (
               <div className="space-y-8 animate-fadeIn max-w-5xl mx-auto">
                 <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-8 sm:p-14 shadow-2xl text-center space-y-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
-                  
                   <div className="relative z-10">
                     <div className="w-28 h-28 mx-auto rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-1 shadow-lg shadow-blue-500/30">
-                      <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center font-black text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
-                        {scoreCalculation.totalScore}
-                      </div>
+                      <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center font-black text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">{scoreCalculation.totalScore}</div>
                     </div>
                     <h2 className="text-3xl sm:text-4xl font-black text-white mt-6 tracking-tight">Hasil Evaluasi Tes Anda</h2>
-                    <p className="text-base text-slate-300 max-w-md mx-auto mt-3 font-medium">
-                      Anda berhasil menjawab benar <strong className="text-white">{scoreCalculation.correctCount}</strong> dari total <strong className="text-white">{scoreCalculation.total}</strong> butir soal.
-                    </p>
+                    <p className="text-base text-slate-300 max-w-md mx-auto mt-3 font-medium">Anda berhasil menjawab benar <strong className="text-white">{scoreCalculation.correctCount}</strong> dari total <strong className="text-white">{scoreCalculation.total}</strong> butir soal.</p>
                     <div className="pt-6 flex justify-center">
-                      <button
-                        onClick={() => { setCurrentTab("home"); window.scrollTo(0,0); }}
-                        className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-                      >
-                        Kembali ke Menu Utama
-                      </button>
+                      <button onClick={() => { setCurrentTab("home"); window.scrollTo(0,0); }} className="px-6 py-3 bg-white text-slate-900 font-bold text-sm rounded-xl shadow-lg hover:-translate-y-0.5 transition-all duration-300">Kembali ke Menu Utama</button>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <h3 className="font-black text-slate-900 text-2xl tracking-tight flex items-center gap-3">
-                    <span className="w-2 h-8 bg-blue-600 rounded-full"></span> Tinjauan dan Pembahasan Lengkap
-                  </h3>
+                  <h3 className="font-black text-slate-900 text-2xl tracking-tight flex items-center gap-3"><span className="w-2 h-8 bg-blue-600 rounded-full"></span> Tinjauan dan Pembahasan Lengkap</h3>
                   
                   {activeQuestions.map((q, idx) => {
                     const ans = userAnswers[q.id];
@@ -1611,7 +1270,7 @@
 
                     if (q.type === "single") {
                       isCorrect = ans === q.correctAnswer;
-                      strKey = String.fromCharCode(65 + q.correctAnswer); // 0 -> A, 1 -> B, dst.
+                      strKey = String.fromCharCode(65 + q.correctAnswer);
                     } else if (q.type === "mcma") {
                       if (Array.isArray(ans) && Array.isArray(q.correctAnswer)) {
                         isCorrect = ans.length === q.correctAnswer.length && ans.every((v, i) => v === q.correctAnswer[i]);
@@ -1627,35 +1286,19 @@
                     return (
                       <div key={idx} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5 relative overflow-hidden">
                         <div className={`absolute top-0 left-0 w-1.5 h-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}`}></div>
-                        
                         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                          <span className="text-sm font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200">
-                            Soal Nomor {q.noSoal}
-                          </span>
-                          <span className={`text-sm font-black px-4 py-1.5 rounded-lg shadow-sm ${
-                            isCorrect ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-rose-100 text-rose-800 border border-rose-200"
-                          }`}>
-                            {isCorrect ? "Jawaban Anda Benar ✓" : "Jawaban Anda Salah ✕"}
-                          </span>
+                          <span className="text-sm font-black px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200">Soal Nomor {q.noSoal}</span>
+                          <span className={`text-sm font-black px-4 py-1.5 rounded-lg shadow-sm ${isCorrect ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-rose-100 text-rose-800 border border-rose-200"}`}>{isCorrect ? "Jawaban Anda Benar ✓" : "Jawaban Anda Salah ✕"}</span>
                         </div>
-
                         <div className="text-sm text-slate-500 font-medium flex flex-wrap gap-4">
                           <span><strong>Kompetensi:</strong> <span className="text-slate-700">{q.kompetensi}</span></span>
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 hidden sm:block"></span>
                           <span><strong>Bentuk:</strong> <span className="text-slate-700">{q.bentukSoal}</span></span>
                         </div>
-
                         <div className="font-bold text-slate-900 text-base leading-relaxed" dangerouslySetInnerHTML={{ __html: q.question }} />
-
-                        {/* Penjelasan Kunci Jawaban */}
                         <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-3">
-                          <h5 className="font-extrabold text-sm text-blue-900 flex items-center gap-2">
-                            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Kunci Jawaban Resmi: {strKey}
-                          </h5>
-                          <div className="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
-                            {q.explanation}
-                          </div>
+                          <h5 className="font-extrabold text-sm text-blue-900 flex items-center gap-2"><svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Kunci Jawaban Resmi: {strKey}</h5>
+                          <div className="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">{q.explanation}</div>
                         </div>
                       </div>
                     );
@@ -1665,14 +1308,11 @@
             )}
           </main>
 
-          {}
-          {/* CUSTOM CONFIRMATION MODAL PENGGANTI window.confirm */}
+          {/* CUSTOM CONFIRM MODAL */}
           {showConfirmModal && (
             <div className="fixed inset-0 z-[60] glass-modal flex items-center justify-center p-4 animate-fadeIn">
               <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl text-center">
-                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
+                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
                 <h3 className="text-xl font-black text-slate-900 mb-2">Selesaikan Tes?</h3>
                 <p className="text-slate-600 text-sm mb-8 font-medium">Apakah Anda yakin ingin menyelesaikan ujian dan melihat halaman hasil serta pembahasan?</p>
                 <div className="flex gap-3 justify-center">
@@ -1685,27 +1325,16 @@
 
           {/* MODAL ZOOM GAMBAR */}
           {zoomImage && (
-            <div 
-              className="fixed inset-0 z-[60] glass-modal flex items-center justify-center p-4 cursor-zoom-out animate-fadeIn"
-              onClick={() => setZoomImage(null)}
-            >
+            <div className="fixed inset-0 z-[60] glass-modal flex items-center justify-center p-4 cursor-zoom-out animate-fadeIn" onClick={() => setZoomImage(null)}>
               <div className="max-w-5xl max-h-[90vh] bg-white p-2 rounded-2xl shadow-2xl overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
-                <button
-                  onClick={() => setZoomImage(null)}
-                  className="absolute top-4 right-4 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg transition-colors z-10"
-                >
-                  ✕
-                </button>
+                <button onClick={() => setZoomImage(null)} className="absolute top-4 right-4 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg transition-colors z-10">✕</button>
                 <img src={zoomImage} alt="Perbesar Gambar" className="w-full h-auto max-h-[85vh] object-contain rounded-xl" />
               </div>
             </div>
           )}
 
-          {/* FOOTER */}
           <footer className="border-t border-slate-200 bg-white py-8 text-center mt-auto">
-            <p className="text-sm font-medium text-slate-500">
-              © 2026 Materi & Soal TKA Bahasa Indonesia SMA/SMK.<br className="sm:hidden" /> Sesuai Standar Pusmendik & KBBI.
-            </p>
+            <p className="text-sm font-medium text-slate-500">© 2026 Materi & Soal TKA Bahasa Indonesia SMA/SMK.<br className="sm:hidden" /> Sesuai Standar Pusmendik & KBBI.</p>
           </footer>
         </div>
       );
