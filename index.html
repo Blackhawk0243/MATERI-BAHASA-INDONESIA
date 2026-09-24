@@ -760,14 +760,38 @@
         const cleanText = textSource.replace(/<[^>]+>/g, '').replace(/\n/g, ' ');
         const wordsArray = cleanText.split(/\s+/).filter(w => w.trim() !== "");
         
-        // Memecah menjadi per frasa (2 kata per layar)
+        // Memecah menjadi per frasa (kombinasi dinamis 2 hingga 3 kata, memperhatikan tanda baca)
         const phraseArray = [];
-        for (let i = 0; i < wordsArray.length; i += 2) {
+        let currentChunk = [];
+        let targetSize = 2; // Mulai dengan target 2 kata
+
+        for (let i = 0; i < wordsArray.length; i++) {
+          const word = wordsArray[i];
+          currentChunk.push(word);
+          
+          // Deteksi tanda baca di akhir kata (titik, koma, tanda tanya, seru, kutip)
+          const hasPunctuation = /[.,;:!?”"']$/.test(word);
+
+          // Potong menjadi frasa jika sudah mencapai target kata (2 atau 3), atau jika ada tanda baca
+          if (currentChunk.length >= targetSize || hasPunctuation) {
+            phraseArray.push({
+              text: currentChunk.join(" "),
+              wordCount: currentChunk.length
+            });
+            currentChunk = [];
+            // Bergantian antara 2 dan 3 kata agar ritme membaca lebih natural
+            targetSize = targetSize === 2 ? 3 : 2; 
+          }
+        }
+        
+        // Sisa kata jika ada
+        if (currentChunk.length > 0) {
           phraseArray.push({
-            text: wordsArray.slice(i, i + 2).join(" "),
-            wordCount: wordsArray.slice(i, i + 2).length
+            text: currentChunk.join(" "),
+            wordCount: currentChunk.length
           });
         }
+        
         return phraseArray;
       };
 
